@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">GiveAndGetApp</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="connection_string">jdbc:jtds:sqlserver://192.168.31.140;database=GiveAndGetDB;user=admin;password=123</string>
+</resources>
