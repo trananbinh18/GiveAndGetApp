@@ -7,8 +7,12 @@ import android.util.Log;
 
 import com.example.giveandgetapp.R;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -69,6 +73,48 @@ public class Database {
         }
 
         return rs;
+    }
+
+
+    public int saveImageIntoDatabase(Connection con, byte[] byteImageArray) {
+        try {
+            String query = "INSERT INTO [Image] (Image) VALUES (?);" +
+                    " SELECT SCOPE_IDENTITY()";
+            PreparedStatement pre = con.prepareStatement(query);
+            pre.setBytes(1, byteImageArray);
+
+            ResultSet rs = pre.executeQuery();
+            rs.next();
+
+            return rs.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+            return 0;
+        }
+
+    }
+
+
+
+    public byte[] convertImageInputStreamToBytes(InputStream inputStream)  {
+
+        try {
+            ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+            int bufferSize = 1024;
+            byte[] buffer = new byte[bufferSize];
+
+            int len = 0;
+            while ((len = inputStream.read(buffer)) != -1) {
+                byteBuffer.write(buffer, 0, len);
+            }
+
+            return byteBuffer.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+
+            return null;
+        }
     }
 
 
