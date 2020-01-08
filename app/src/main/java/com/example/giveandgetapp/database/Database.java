@@ -1,6 +1,8 @@
 package com.example.giveandgetapp.database;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.StrictMode;
 import android.util.Log;
@@ -10,6 +12,7 @@ import com.example.giveandgetapp.R;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -93,6 +96,28 @@ public class Database {
             return 0;
         }
 
+    }
+
+    public Bitmap getImageInDatabase(Connection con, int idImage) {
+        try {
+            String query = "SELECT Image FROM [Image] WHERE Id = "+idImage;
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            if(!rs.next()){
+                return null;
+            }
+
+            Blob blob = rs.getBlob("Image");
+            byte[] immAsBytes = blob.getBytes(1, (int)blob.length());
+            Bitmap img = BitmapFactory.decodeByteArray(immAsBytes, 0 ,immAsBytes.length);
+
+            return img;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 
