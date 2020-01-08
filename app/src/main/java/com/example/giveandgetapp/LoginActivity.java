@@ -57,7 +57,6 @@ public class LoginActivity extends Activity {
                 String email = _txtEmail.getText().toString().trim();
                 String password = _txtPassword.getText().toString().trim();
 
-
                 Connection con = _database.connectToDatabase();
                 String query = "SELECT * FROM [User] WHERE Email = '"+email+"' AND Password = '"+password+"'";
                 ResultSet resultSet = _database.excuteCommand(con, query);
