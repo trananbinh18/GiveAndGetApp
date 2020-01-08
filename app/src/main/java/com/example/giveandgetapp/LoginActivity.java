@@ -30,6 +30,7 @@ import java.sql.Statement;
 public class LoginActivity extends Activity {
     private Database _database;
     private Button _btnLogin;
+    private Button _btnCancel;
     private EditText _txtEmail;
     private EditText _txtPassword;
     private ProgressBar _progressBar;
@@ -44,9 +45,17 @@ public class LoginActivity extends Activity {
 
         //View element
         _btnLogin = findViewById(R.id.btn_login);
+        _btnCancel = findViewById(R.id.btn_cancel);
         _txtEmail = findViewById(R.id.txt_email);
         _txtPassword = findViewById(R.id.txt_password);
         _progressBar = findViewById(R.id.progressBar);
+
+        _btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         //Add Click listener for Login btn
         _btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -56,6 +65,7 @@ public class LoginActivity extends Activity {
 
                 String email = _txtEmail.getText().toString().trim();
                 String password = _txtPassword.getText().toString().trim();
+
 
                 Connection con = _database.connectToDatabase();
                 String query = "SELECT * FROM [User] WHERE Email = '"+email+"' AND Password = '"+password+"'";
