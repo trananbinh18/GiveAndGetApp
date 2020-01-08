@@ -1,5 +1,6 @@
 package com.example.giveandgetapp;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.icu.text.SymbolTable;
@@ -26,7 +27,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends Activity {
     private Database _database;
     private Button _btnLogin;
     private EditText _txtEmail;
@@ -73,13 +74,9 @@ public class LoginActivity extends AppCompatActivity {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
-
                 _progressBar.setVisibility(View.INVISIBLE);
-
             }
         });
-
-
     }
 
     private void moveToMainActivity(){
