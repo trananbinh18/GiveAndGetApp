@@ -86,11 +86,11 @@ public class LoginActivity extends Activity {
                 ResultSet resultSet = _database.excuteCommand(con, query);
                 try {
                     if(resultSet.next()){
-//                        if(createSessionForUser(con, resultSet)) {
-//                            con.close();
-//                            moveToMainActivity();
-//                            return;
-//                        }
+                        if(createSessionForUser(con, resultSet)) {
+                            con.close();
+                            moveToMainActivity();
+                            return;
+                        }
 
                         con.close();
                         moveToMainActivity();
