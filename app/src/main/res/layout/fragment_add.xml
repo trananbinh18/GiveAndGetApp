@@ -49,6 +49,11 @@
                     app:srcCompat="@drawable/ic_add_black_24dp" />
             </LinearLayout>
 
+            <Spinner
+                android:id="@+id/cbxCatalogy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
             <LinearLayout
                 android:id="@+id/linearLayout2"
                 android:layout_width="match_parent"
@@ -58,7 +63,7 @@
                 android:padding="20dp">
 
                 <EditText
-                    android:id="@+id/editText"
+                    android:id="@+id/txtTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
@@ -66,7 +71,7 @@
                     android:inputType="textPersonName" />
 
                 <EditText
-                    android:id="@+id/editText2"
+                    android:id="@+id/txtContent"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:ems="10"
@@ -90,17 +95,18 @@
                     android:text="Hình thức cho" />
 
                 <RadioGroup
+                    android:id="@+id/rdoGroupPickType"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
                     <RadioButton
-                        android:id="@+id/radioButton2"
+                        android:id="@+id/rdoPick"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Tự chọn" />
 
                     <RadioButton
-                        android:id="@+id/radioButton"
+                        android:id="@+id/rdoRandom"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Ngẫu nhiên" />
@@ -122,23 +128,24 @@
                     android:text="Hạn bài đăng" />
 
                 <RadioGroup
+                    android:id="@+id/rdoGroupExpireType"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
                     <RadioButton
-                        android:id="@+id/radioButton3"
+                        android:id="@+id/rdo3Day"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="3 ngày" />
 
                     <RadioButton
-                        android:id="@+id/radioButto4"
+                        android:id="@+id/rdo5Day"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="5 ngày" />
 
                     <RadioButton
-                        android:id="@+id/radioButton4"
+                        android:id="@+id/rdo7Day"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="7 ngày" />
@@ -146,7 +153,7 @@
             </LinearLayout>
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/btnAdd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
