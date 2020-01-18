@@ -22,24 +22,30 @@
                 android:padding="20dp">
 
                 <ImageButton
-                    android:id="@+id/imageButton4"
+                    android:id="@+id/imgPicker1"
                     android:layout_width="wrap_content"
                     android:layout_height="100dp"
                     android:layout_weight="1"
+                    android:scaleType="fitCenter"
+                    android:adjustViewBounds="true"
                     app:srcCompat="@drawable/ic_add_black_24dp" />
 
                 <ImageButton
-                    android:id="@+id/imageButton3"
+                    android:id="@+id/imgPicker2"
                     android:layout_width="wrap_content"
                     android:layout_height="100dp"
                     android:layout_weight="1"
+                    android:scaleType="fitCenter"
+                    android:adjustViewBounds="true"
                     app:srcCompat="@drawable/ic_add_black_24dp" />
 
                 <ImageButton
-                    android:id="@+id/imageButton2"
+                    android:id="@+id/imgPicker3"
                     android:layout_width="wrap_content"
                     android:layout_height="100dp"
                     android:layout_weight="1"
+                    android:scaleType="fitCenter"
+                    android:adjustViewBounds="true"
                     app:srcCompat="@drawable/ic_add_black_24dp" />
             </LinearLayout>
 
