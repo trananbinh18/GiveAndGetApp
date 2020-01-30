@@ -121,6 +121,16 @@ public class Database {
     }
 
 
+    public byte[] convertBitmapToBytes(Bitmap bitmap){
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        bitmap.recycle();
+
+        return byteArray;
+    }
+
+
 
     public byte[] convertImageInputStreamToBytes(InputStream inputStream)  {
 

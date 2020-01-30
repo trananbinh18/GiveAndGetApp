@@ -47,6 +47,7 @@ public class LoginActivity extends Activity {
 
         _sessionManager = new SessionManager(this);
 
+//        _sessionManager.logout();
         //Check is Login
         boolean isLogin = _sessionManager.isLogin();
         if(isLogin){
