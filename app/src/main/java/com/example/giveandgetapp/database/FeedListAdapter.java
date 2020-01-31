@@ -18,6 +18,8 @@ import com.example.giveandgetapp.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.relex.circleindicator.CircleIndicator;
+
 public class FeedListAdapter extends BaseAdapter {
     private Activity activity;
     private LayoutInflater inflater;
@@ -58,6 +60,8 @@ public class FeedListAdapter extends BaseAdapter {
         TextView content = (TextView) convertView.findViewById(R.id.txtContent);
 //        ImageButton feedImage = (ImageButton) convertView.findViewById(R.id.feedImage1);
         ViewPager pageImage = (ViewPager) convertView.findViewById(R.id.pageImage);
+        CircleIndicator indicator = (CircleIndicator) convertView.findViewById(R.id.indicator);
+
 
         FeedItem item = feedItems.get(position);
         //Image Paging
@@ -67,15 +71,16 @@ public class FeedListAdapter extends BaseAdapter {
         }
 
         if(item.image2 != null) {
-            listImage.add(item.image);
+            listImage.add(item.image2);
         }
 
         if(item.image3 != null) {
-            listImage.add(item.image);
+            listImage.add(item.image3);
         }
 
         ImageSlideAdapter imageSlideAdapter = new ImageSlideAdapter(convertView.getContext(),listImage);
         pageImage.setAdapter(imageSlideAdapter);
+        indicator.setViewPager(pageImage);
 
 
         actorImage.setImageBitmap(item.actorImage);

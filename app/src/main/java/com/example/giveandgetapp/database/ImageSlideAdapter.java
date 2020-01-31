@@ -35,13 +35,19 @@ public class ImageSlideAdapter extends PagerAdapter {
         return view.equals(object);
     }
 
+    @Override
+    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+
+    }
+
+
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         View myImageLayout = inflater.inflate(R.layout.image_slide, container, false);
         ImageView myImage = (ImageView) myImageLayout.findViewById(R.id.image);
         myImage.setImageBitmap(listImage.get(position));
-        container.addView(myImageLayout, 0);
+        container.addView(myImageLayout, position);
         return myImageLayout;
     }
 }
