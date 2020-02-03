@@ -19,38 +19,48 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <ImageButton
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="300dp"
-                    android:layout_marginTop="40dp"
-                    android:src="@drawable/ic_search_black_24dp">
-
-                </ImageButton>
-
                 <Spinner
                     android:id="@+id/searchtypecatalogi"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="-300dp"
+                    android:layout_width="150dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="20dp"
                     android:layout_marginTop="50dp">
-
                 </Spinner>
 
                 <EditText
                     android:id="@+id/searchtypetitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="100dp"
-                    android:layout_marginTop="50dp">
-
+                    android:layout_width="160dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginTop="50dp"
+                    android:hint="Tiêu đề bài viết">
                 </EditText>
+
+                <ImageButton
+                    android:id="@+id/imgbtnsearch"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginTop="50dp"
+                    android:clickable="true"
+                    android:onClick="onClick"
+                    android:src="@drawable/ic_search_black_24dp">
+                </ImageButton>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearsearchfragment2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ListView
+                    android:id="@+id/listviewSearch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </ListView>
 
             </LinearLayout>
         </LinearLayout>
-
     </ScrollView>
-
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
