@@ -9,7 +9,7 @@
         android:id="@+id/listViewMain"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="-93dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -18,6 +18,8 @@ import com.example.giveandgetapp.R;
 import com.example.giveandgetapp.database.Database;
 import com.example.giveandgetapp.database.FeedItem;
 import com.example.giveandgetapp.database.FeedListAdapter;
+import com.example.giveandgetapp.database.SessionManager;
+import com.example.giveandgetapp.database.User;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -29,12 +31,17 @@ public class DashboardFragment extends Fragment {
 
     private DashboardViewModel dashboardViewModel;
     private Database _database;
+    private SessionManager _sessionManager;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         dashboardViewModel =
                 ViewModelProviders.of(this).get(DashboardViewModel.class);
         View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
+
+
+        _sessionManager = new SessionManager(root.getContext());
+        User currentUser = _sessionManager.getUserDetail();
 
         _database = new Database(root.getContext());
         Connection con = _database.connectToDatabase();
@@ -44,9 +51,9 @@ public class DashboardFragment extends Fragment {
                 " INNER JOIN [User] a" +
                 " ON p.Actor = a.Id" +
                 " LEFT JOIN [Like] l" +
-                " ON p.Id = l.PostId  AND l.UserId = 1" +
+                " ON p.Id = l.PostId  AND l.UserId = " + currentUser.id +
                 " LEFT JOIN [Receive] r" +
-                " ON p.Id = r.PostId  AND r.UserId = 1";
+                " ON p.Id = r.PostId  AND r.UserId = " + currentUser.id;
 
         ResultSet result = _database.excuteCommand(con, query);
         List<FeedItem> listFeedItem = new ArrayList<FeedItem>();
@@ -58,8 +65,8 @@ public class DashboardFragment extends Fragment {
              String actorName = result.getString("ActorName");
              String title = result.getString("Title");
              String content = result.getString("Contents");
-             boolean isLiked = (result.getInt("IsLiked")==1)?true:false;
-             boolean isReceived = (result.getInt("IsReceived")==1)?true:false;
+             boolean isLiked = (result.getInt("IsLiked")==currentUser.id)?true:false;
+             boolean isReceived = (result.getInt("IsReceived")==currentUser.id)?true:false;
              Bitmap actorImage = _database.getImageInDatabase(con,result.getInt("ActorImage"));
              Bitmap Image = _database.getImageInDatabase(con,result.getInt("Image"));
              Bitmap Image2 = _database.getImageInDatabase(con,result.getInt("Image2"));
