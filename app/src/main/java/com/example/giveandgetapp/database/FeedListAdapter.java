@@ -81,8 +81,6 @@ public class FeedListAdapter extends BaseAdapter {
         ImageSlideAdapter imageSlideAdapter = new ImageSlideAdapter(convertView.getContext(),listImage);
         pageImage.setAdapter(imageSlideAdapter);
         indicator.setViewPager(pageImage);
-
-
         actorImage.setImageBitmap(item.actorImage);
         actorName.setText(item.actorName);
         title.setText(item.title);

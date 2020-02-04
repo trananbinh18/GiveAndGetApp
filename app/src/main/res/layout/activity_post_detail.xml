@@ -27,7 +27,7 @@
                     app:cardElevation="0dp">
 
                     <ImageView
-                        android:id="@+id/avataruser"
+                        android:id="@+id/avatarActor"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="0dp"
@@ -43,7 +43,7 @@
                     android:layout_marginTop="20dp" />
 
                 <TextView
-                    android:id="@+id/username"
+                    android:id="@+id/actornamedetail"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:layout_marginLeft="-81dp"
@@ -58,19 +58,61 @@
 
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/txtcatalogipost"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:paddingBottom="5dp" />
+
+            <TextView
+                android:id="@+id/txttitlepost"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:linksClickable="true"
+                android:paddingBottom="10dp" />
 
             <androidx.viewpager.widget.ViewPager
-                android:id="@+id/pageImageDetail"
+                android:id="@+id/imagedetailpost"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
                 android:layout_gravity="center"
                 android:scaleType="centerInside"
                 android:adjustViewBounds="true" />
 
+            <me.relex.circleindicator.CircleIndicator
+                android:id="@+id/indicatordetail"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                app:ci_drawable="@drawable/ic_selected_1_yellow_24dp"
+                app:ci_drawable_unselected="@drawable/ic_unselect_1_black_24dp" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+                <ImageButton
+                    android:id="@+id/imageButton2"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginLeft="24dp"
+                    android:background="@null"
+                    android:scaleType="fitXY"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:srcCompat="@drawable/ic_heart_foreground" />
+
+                <ImageButton
+                    android:id="@+id/imageButton3"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginLeft="24dp"
+                    android:background="@null"
+                    android:scaleType="fitXY"
+                    app:layout_constraintStart_toEndOf="@+id/imageButton2"
+                    app:srcCompat="@drawable/ic_hand_foreground"
+                    tools:layout_editor_absoluteY="0dp" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
-
     </ScrollView>
-
-
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

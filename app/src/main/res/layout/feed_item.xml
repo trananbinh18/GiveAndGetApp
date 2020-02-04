@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
@@ -8,7 +9,7 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -19,13 +20,12 @@
                 android:id="@+id/actorImage"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:scaleType="fitCenter" >
-            </ImageButton>
+                android:scaleType="fitCenter"></ImageButton>
 
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" >
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/actorName"
@@ -58,9 +58,8 @@
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:layout_gravity="center"
-            android:scaleType="centerInside"
             android:adjustViewBounds="true"
-            />
+            android:scaleType="centerInside" />
 
         <me.relex.circleindicator.CircleIndicator
             android:id="@+id/indicator"
@@ -68,5 +67,34 @@
             android:layout_height="48dp"
             app:ci_drawable="@drawable/ic_selected_1_yellow_24dp"
             app:ci_drawable_unselected="@drawable/ic_unselect_1_black_24dp" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <ImageButton
+                android:id="@+id/imageButton2"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginLeft="24dp"
+                android:background="@null"
+                android:scaleType="fitXY"
+                app:layout_constraintStart_toStartOf="parent"
+                app:srcCompat="@drawable/ic_heart_foreground" />
+
+            <ImageButton
+                android:id="@+id/imageButton3"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginLeft="24dp"
+                android:background="@null"
+                android:scaleType="fitXY"
+                app:layout_constraintStart_toEndOf="@+id/imageButton2"
+                app:srcCompat="@drawable/ic_hand_foreground"
+                tools:layout_editor_absoluteY="0dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </LinearLayout>
 </LinearLayout>

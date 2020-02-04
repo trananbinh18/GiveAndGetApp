@@ -28,4 +28,5 @@ public class FeedItem {
     public Bitmap image3;
     public boolean isLiked;
     public boolean isReceiver;
+
 }
