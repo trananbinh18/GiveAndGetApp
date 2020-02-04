@@ -2,6 +2,7 @@ package com.example.giveandgetapp;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import com.example.giveandgetapp.database.Database;
@@ -29,13 +30,14 @@ public class PostDetailActivity extends AppCompatActivity {
 
     private Database _database;
     private ImageView _imageActor;
+    private ImageView _imageMore;
     private TextView _txtTimePost;
     private TextView _txtActorName;
-    private TextView _txtCatalogiPost;
+    private TextView _txtContentPost;
     private TextView _txtTitlePost;
     private CircleIndicator _indicatorDetail;
     private ViewPager _imageDetailPost;
-
+    private FeedItem item;
 
 
     @Override
@@ -44,10 +46,12 @@ public class PostDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_post_detail);
         _txtTimePost = findViewById(R.id.timelogin);
         _txtActorName = findViewById(R.id.actornamedetail);
-        _txtCatalogiPost = findViewById(R.id.txtcatalogipost);
+        _txtContentPost = findViewById(R.id.txtcontenpost);
         _txtTitlePost = findViewById(R.id.txttitlepost);
         _imageDetailPost = findViewById(R.id.imagedetailpost);
         _indicatorDetail = findViewById(R.id.indicatordetail);
+        _imageMore = findViewById(R.id.iconmoredetail);
+        _imageActor = findViewById(R.id.avatarActor);
 
         _database = new Database(this);
         Connection con = _database.connectToDatabase();
@@ -69,15 +73,15 @@ public class PostDetailActivity extends AppCompatActivity {
                 int postId = result.getInt("Id");
                 int actorId = result.getInt("ActorId");
                 String actorName = result.getString("ActorName");
-                String title = result.getString("Title");
-                String content = result.getString("Contents");
+                final String title = result.getString("Title");
+                String contents = result.getString("Contents");
                 boolean isLiked = (result.getInt("IsLiked")==1)?true:false;
                 boolean isReceived = (result.getInt("IsReceived")==1)?true:false;
                 Bitmap actorImage = _database.getImageInDatabase(con,result.getInt("ActorImage"));
                 Bitmap Image = _database.getImageInDatabase(con,result.getInt("Image"));
                 Bitmap Image2 = _database.getImageInDatabase(con,result.getInt("Image2"));
                 Bitmap Image3 = _database.getImageInDatabase(con,result.getInt("Image3"));
-                FeedItem item = new FeedItem(postId,actorId,actorImage,actorName,title,content,Image,Image2,Image3,isLiked,isReceived);
+                item = new FeedItem(postId,actorId,actorImage,actorName,title,contents,Image,Image2,Image3,isLiked,isReceived);
 
                 ArrayList<Bitmap> listImage = new ArrayList<Bitmap>();
                 if(item.image != null) {
@@ -95,12 +99,30 @@ public class PostDetailActivity extends AppCompatActivity {
                 ImageSlideAdapter imageSlideAdapter = new ImageSlideAdapter(this,listImage);
                 _imageDetailPost.setAdapter(imageSlideAdapter);
                 _indicatorDetail.setViewPager(_imageDetailPost);
+                _txtActorName.setText(item.actorName);
+                _imageActor.setImageBitmap(item.actorImage);
+                _txtTitlePost.setText(item.title);
+                _txtContentPost.setText(item.contents);
             }
 
         }catch (Exception e)
         {
             e.printStackTrace();
         }
-
             }
+
+    @Override
+    protected void onDestroy() {
+        item.actorImage.recycle();
+        if(item.image != null){
+            item.image.recycle();
         }
+        if(item.image2 != null){
+            item.image2.recycle();
+        }
+        if(item.image3 != null){
+            item.image3.recycle();
+        }
+        super.onDestroy();
+    }
+}

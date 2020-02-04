@@ -89,7 +89,6 @@ public class ProfileFragment extends Fragment {
 
 
         //Load thông tin user
-
         _lbllop.setText("Lớp: " + user.clazz);
         _lblmssv.setText("MSSV: " + user.studentId);
         _lblsdt.setText("SĐT: " + user.phone);
