@@ -29,6 +29,8 @@ public class FeedListAdapter extends BaseAdapter {
     private SessionManager sessionManager;
     private User currentUser;
     private Database database;
+    public int maxIdPost;
+    public int minIdPost;
 
     public FeedListAdapter(Activity activity, List<FeedItem> feedItems){
         this.activity = activity;
@@ -90,6 +92,7 @@ public class FeedListAdapter extends BaseAdapter {
         ImageSlideAdapter imageSlideAdapter = new ImageSlideAdapter(convertView.getContext(),listImage);
         pageImage.setAdapter(imageSlideAdapter);
         indicator.setViewPager(pageImage);
+
 
 
         actorImage.setImageBitmap(item.actorImage);
