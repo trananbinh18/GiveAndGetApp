@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.icu.text.SymbolTable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,6 +47,7 @@ public class LoginActivity extends Activity {
 
         _sessionManager = new SessionManager(this);
 
+//        _sessionManager.logout();
         //Check is Login
         boolean isLogin = _sessionManager.isLogin();
         if(isLogin){

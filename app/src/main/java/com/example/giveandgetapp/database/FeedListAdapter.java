@@ -93,8 +93,6 @@ public class FeedListAdapter extends BaseAdapter {
         pageImage.setAdapter(imageSlideAdapter);
         indicator.setViewPager(pageImage);
 
-
-
         actorImage.setImageBitmap(item.actorImage);
         actorName.setText(item.actorName);
         title.setText(item.title);
@@ -189,10 +187,5 @@ public class FeedListAdapter extends BaseAdapter {
             e.printStackTrace();
         }
     }
-
-
-
-
-
 
 }

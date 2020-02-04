@@ -22,7 +22,7 @@
         android:drawablePadding="10dp"
         android:singleLine="true"
         android:background="@android:color/holo_orange_light"
-        android:drawableLeft="@drawable/ic_email_black_24dp"
+        android:drawableLeft="@drawable/ic_email"
         android:focusable="true"
         android:textColor="#ffffff" />
 
@@ -44,7 +44,7 @@
         android:layout_alignParentLeft="true"
         android:layout_marginTop="20dp"
         android:background="@android:color/holo_orange_light"
-        android:drawableLeft="@drawable/ic_lock_black_24dp"
+        android:drawableLeft="@drawable/ic_lock"
         android:drawablePadding="10dp"
         android:singleLine="true"
         android:inputType="textPassword"
