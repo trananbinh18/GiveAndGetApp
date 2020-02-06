@@ -57,7 +57,6 @@
                     android:layout_height="30dp"
                     android:layout_marginLeft="80dp"
                     android:layout_marginTop="20dp"/>
-
             </LinearLayout>
 
             <TextView

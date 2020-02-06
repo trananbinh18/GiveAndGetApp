@@ -1,5 +1,6 @@
 package com.example.giveandgetapp.ui.profile;
 
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,6 +18,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.giveandgetapp.LoginActivity;
+import com.example.giveandgetapp.MainActivity;
 import com.example.giveandgetapp.R;
 import com.example.giveandgetapp.database.Database;
 import com.example.giveandgetapp.database.SessionManager;
@@ -42,6 +45,7 @@ public class ProfileFragment extends Fragment {
     private TextView _sobaidang;
     private TextView _sodanhgia;
     private TextView _sobaocao;
+    private Button _btnLogout;
     private ProfileViewModel profileViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -59,6 +63,7 @@ public class ProfileFragment extends Fragment {
         _sobaidang = root.findViewById(R.id.sobaidang);
         _sodanhgia = root.findViewById(R.id.sodanhgia);
         _sobaocao = root.findViewById(R.id.sobaocao);
+        _btnLogout = root.findViewById(R.id.btnlogout);
 
         //Load bài đăng + báo cáo
         _database = new Database(root.getContext());
@@ -87,7 +92,6 @@ public class ProfileFragment extends Fragment {
 
         }
 
-
         //Load thông tin user
         _lbllop.setText("Lớp: " + user.clazz);
         _lblmssv.setText("MSSV: " + user.studentId);
@@ -100,6 +104,14 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
+            }
+        });
+
+        //Button logout
+        _btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               _sessionManager.logout();
             }
         });
         _tabHost.setup();

@@ -192,6 +192,14 @@
                     </LinearLayout>
                 </TabHost>
             </LinearLayout>
+            <Button
+                android:id="@+id/btnlogout"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="Đăng xuất"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="10dp">
+            </Button>
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

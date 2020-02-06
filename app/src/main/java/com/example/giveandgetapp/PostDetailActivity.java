@@ -109,7 +109,7 @@ public class PostDetailActivity extends AppCompatActivity {
         {
             e.printStackTrace();
         }
-            }
+    }
 
     @Override
     protected void onDestroy() {
