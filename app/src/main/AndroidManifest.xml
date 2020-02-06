@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".EditProfileActivity"
-            android:label="@string/title_activity_edit_profile"
+            android:label="EditProfileActivity"
             android:theme="@style/AppTheme.NoActionBar">
 
             <intent-filter>

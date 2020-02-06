@@ -164,7 +164,6 @@
                         android:layout_marginLeft="80dp"
                         android:layout_marginTop="10dp"/>
                 </LinearLayout>
-
             </LinearLayout>
         </ScrollView>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

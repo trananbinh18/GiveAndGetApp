@@ -93,7 +93,7 @@ public class EditProfileActivity extends AppCompatActivity {
         _btnHuy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                
+
             }
         });
 

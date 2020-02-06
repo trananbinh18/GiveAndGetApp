@@ -9,6 +9,7 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.giveandgetapp.R;
 
@@ -37,7 +38,7 @@ public class ImageSlideAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-
+        ((ViewPager) container).removeView((View) object);
     }
 
 
@@ -50,4 +51,6 @@ public class ImageSlideAdapter extends PagerAdapter {
         container.addView(myImageLayout, position);
         return myImageLayout;
     }
+
+
 }
