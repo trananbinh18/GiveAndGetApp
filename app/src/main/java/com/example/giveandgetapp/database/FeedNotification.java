@@ -2,7 +2,7 @@ package com.example.giveandgetapp.database;
 
 import net.sourceforge.jtds.jdbc.DateTime;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class FeedNotification {
     public int postId;

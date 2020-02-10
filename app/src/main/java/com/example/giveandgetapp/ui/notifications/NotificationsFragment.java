@@ -62,7 +62,12 @@ public class NotificationsFragment extends Fragment {
         _notificationsViewModel.getListNotification().observe(this, new Observer<ArrayList<FeedNotification>>() {
             @Override
             public void onChanged(ArrayList<FeedNotification> feedNotifications) {
-                _adapter.notifyDataSetChanged();
+                try{
+                    _adapter.setFeedNotifications(feedNotifications);
+                    _adapter.notifyDataSetChanged();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -92,7 +97,11 @@ public class NotificationsFragment extends Fragment {
             while (rs.next()){
                 int postId = rs.getInt("PostId");
                 int status = rs.getInt("Status");
-                Date createDate = rs.getDate("CreateDate");
+                Timestamp tsCreateDate = rs.getTimestamp("CreateDate");
+                Date createDate = null;
+                if(tsCreateDate != null){
+                    createDate = new Date(tsCreateDate.getTime());
+                }
                 String title = rs.getString("Title");
                 String content = rs.getString("Contents");
                 int type = rs.getInt("Type");

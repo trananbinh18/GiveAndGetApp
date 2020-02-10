@@ -10,6 +10,10 @@ import android.widget.TextView;
 
 import com.example.giveandgetapp.R;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class NotificationAdapter extends BaseAdapter {
@@ -19,6 +23,10 @@ public class NotificationAdapter extends BaseAdapter {
 
     public NotificationAdapter(Activity activity, List<FeedNotification> feedNotifications){
         this.activity = activity;
+        this.feedNotifications = feedNotifications;
+    }
+
+    public void setFeedNotifications(List<FeedNotification> feedNotifications) {
         this.feedNotifications = feedNotifications;
     }
 
@@ -52,6 +60,31 @@ public class NotificationAdapter extends BaseAdapter {
         FeedNotification item = this.feedNotifications.get(position);
         txtTitle.setText(item.title);
         txtContent.setText(item.contents);
+
+        //Set time to notification
+        String timeStr = "";
+        if(item.createDate != null){
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(item.createDate);
+            long DAY_IN_MS = 1000 * 60 * 60 * 24;
+            Date currentDate = new Date(System.currentTimeMillis() - (1 * DAY_IN_MS));
+            if(currentDate.before(item.createDate)){
+                Calendar calendar1 = Calendar.getInstance();
+                calendar1.setTime(new Date());
+                int hourBefore = calendar1.get(Calendar.HOUR_OF_DAY) - calendar.get(Calendar.HOUR_OF_DAY);
+                if(hourBefore != 0){
+                    timeStr = hourBefore+" giờ trước";
+                }else{
+                    timeStr = "gần đây";
+                }
+
+            }else{
+                int month = calendar.get(Calendar.MONTH)+1;
+                timeStr = "Ngày "+ calendar.get(Calendar.DAY_OF_MONTH)+" Tháng "+ month;
+            }
+        }
+
+        txtTime.setText(timeStr);
 
         return convertView;
     }

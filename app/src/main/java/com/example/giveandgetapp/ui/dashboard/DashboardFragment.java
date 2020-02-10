@@ -28,8 +28,10 @@ import com.example.giveandgetapp.database.SessionManager;
 import com.example.giveandgetapp.database.User;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -63,7 +65,7 @@ public class DashboardFragment extends Fragment {
         _database = new Database(root.getContext());
         Connection con = _database.connectToDatabase();
 
-        String query = "SELECT p.Id, a.Id as ActorId, a.Name as ActorName, p.Title, p.Contents, l.UserId as IsLiked, r.UserId as IsReceived, a.Avatar as ActorImage, p.Image, p.Image2, p.Image3" +
+        String query = "SELECT p.Id, a.Id as ActorId, a.Name as ActorName, p.Title, p.Contents, l.UserId as IsLiked, r.UserId as IsReceived, a.Avatar as ActorImage, p.CreateDate, p.Image, p.Image2, p.Image3" +
                 " FROM [Post] p" +
                 " INNER JOIN [User] a" +
                 " ON p.Actor = a.Id" +
@@ -108,8 +110,13 @@ public class DashboardFragment extends Fragment {
                 Bitmap Image = _database.getImageInDatabase(con,result.getInt("Image"));
                 Bitmap Image2 = _database.getImageInDatabase(con,result.getInt("Image2"));
                 Bitmap Image3 = _database.getImageInDatabase(con,result.getInt("Image3"));
+                Timestamp tsCreateDate = result.getTimestamp("CreateDate");
+                Date createDate = null;
+                if(tsCreateDate != null){
+                    createDate = new Date(tsCreateDate.getTime());
+                }
 
-                FeedItem item = new FeedItem(postId,actorId,actorImage,actorName,title,content,Image,Image2,Image3,isLiked,isReceived);
+                FeedItem item = new FeedItem(postId,actorId,actorImage,actorName,title,content,Image,Image2,Image3,isLiked,isReceived,createDate);
                 _listFeedItem.add(item);
 
             }
@@ -218,8 +225,13 @@ public class DashboardFragment extends Fragment {
                 Bitmap Image = _database.getImageInDatabase(con,result.getInt("Image"));
                 Bitmap Image2 = _database.getImageInDatabase(con,result.getInt("Image2"));
                 Bitmap Image3 = _database.getImageInDatabase(con,result.getInt("Image3"));
+                Timestamp tsCreateDate = result.getTimestamp("CreateDate");
+                Date createDate = null;
+                if(tsCreateDate != null){
+                    createDate = new Date(tsCreateDate.getTime());
+                }
 
-                FeedItem item = new FeedItem(postId,actorId,actorImage,actorName,title,content,Image,Image2,Image3,isLiked,isReceived);
+                FeedItem item = new FeedItem(postId,actorId,actorImage,actorName,title,content,Image,Image2,Image3,isLiked,isReceived,createDate);
                 _listFeedItem.add(item);
                 countRow++;
 

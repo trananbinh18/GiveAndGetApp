@@ -18,6 +18,8 @@ import com.example.giveandgetapp.R;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import me.relex.circleindicator.CircleIndicator;
@@ -97,6 +99,32 @@ public class FeedListAdapter extends BaseAdapter {
         actorName.setText(item.actorName);
         title.setText(item.title);
         content.setText(item.contents);
+
+        //Set Time post
+        String timeStr = "";
+        if(item.createDate != null){
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(item.createDate);
+            long DAY_IN_MS = 1000 * 60 * 60 * 24;
+            Date currentDate = new Date(System.currentTimeMillis() - (1 * DAY_IN_MS));
+            if(currentDate.before(item.createDate)){
+                Calendar calendar1 = Calendar.getInstance();
+                calendar1.setTime(new Date());
+                int hourBefore = calendar1.get(Calendar.HOUR_OF_DAY) - calendar.get(Calendar.HOUR_OF_DAY);
+                if(hourBefore != 0){
+                    timeStr = hourBefore+" giờ trước";
+                }else{
+                    timeStr = "gần đây";
+                }
+
+            }else{
+                int month = calendar.get(Calendar.MONTH)+1;
+                timeStr = "Ngày "+ calendar.get(Calendar.DAY_OF_MONTH)+" Tháng "+ month;
+            }
+        }
+
+        createPostTime.setText(timeStr);
+
 
         if(item.isLiked){
             imgLike.setImageResource(R.drawable.ic_heart_fill_foreground);

@@ -129,7 +129,7 @@ public class AddFragment extends Fragment {
                        User user = sessionManager.getUserDetail();
 
                        //Setup addition data
-                       SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                       SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                        Date date = new Date();
                        Calendar calendar = Calendar.getInstance();
                        calendar.setTime(date);
