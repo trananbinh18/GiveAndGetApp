@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.giveandgetapp.EditProfileActivity;
 import com.example.giveandgetapp.LoginActivity;
 import com.example.giveandgetapp.MainActivity;
 import com.example.giveandgetapp.R;
@@ -103,7 +104,8 @@ public class ProfileFragment extends Fragment {
         _btnEditProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(getContext(), EditProfileActivity.class);
+                startActivityForResult(intent,0);
             }
         });
 

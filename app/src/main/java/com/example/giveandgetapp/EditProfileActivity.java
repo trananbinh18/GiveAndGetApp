@@ -1,5 +1,6 @@
 package com.example.giveandgetapp;
 
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
@@ -9,9 +10,11 @@ import com.example.giveandgetapp.database.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -52,7 +55,12 @@ public class EditProfileActivity extends AppCompatActivity {
         _txtLop = findViewById(R.id.txtlopedit);
         _txtMssv = findViewById(R.id.txtmssvedit);
         _txtSdt = findViewById(R.id.txtsdtedit);
+
         _txtEmail = findViewById(R.id.txtemailedit);
+        _txtEmail.setFocusable(true);
+        _txtEmail.setFocusableInTouchMode(true);
+        _txtEmail.setInputType(InputType.TYPE_NULL);
+
         _btnLuu = findViewById(R.id.btnluuedit);
         _btnHuy = findViewById(R.id.btnhuyedit);
 
@@ -93,7 +101,7 @@ public class EditProfileActivity extends AppCompatActivity {
         _btnHuy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                EditProfileActivity.super.onBackPressed();
             }
         });
 
