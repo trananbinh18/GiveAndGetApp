@@ -2,14 +2,18 @@ package com.example.giveandgetapp.database;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.giveandgetapp.R;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -20,10 +24,12 @@ public class NotificationAdapter extends BaseAdapter {
     private LayoutInflater inflater;
     private Activity activity;
     private List<FeedNotification> feedNotifications;
+    private Database database;
 
     public NotificationAdapter(Activity activity, List<FeedNotification> feedNotifications){
         this.activity = activity;
         this.feedNotifications = feedNotifications;
+        this.database = new Database(activity.getApplicationContext());
     }
 
     public void setFeedNotifications(List<FeedNotification> feedNotifications) {
@@ -56,8 +62,9 @@ public class NotificationAdapter extends BaseAdapter {
         TextView txtTitle = convertView.findViewById(R.id.txtTitle);
         TextView txtContent = convertView.findViewById(R.id.txtContent);
         TextView txtTime = convertView.findViewById(R.id.txtTime);
+        LinearLayout parentLayout = convertView.findViewById(R.id.parentLayout);
 
-        FeedNotification item = this.feedNotifications.get(position);
+        final FeedNotification item = this.feedNotifications.get(position);
         txtTitle.setText(item.title);
         txtContent.setText(item.contents);
 
@@ -84,8 +91,39 @@ public class NotificationAdapter extends BaseAdapter {
             }
         }
 
+        //Set background by status
+        if(item.status == 1){
+            parentLayout.setBackgroundColor(Color.parseColor("#EDA600"));
+        }
+
+        parentLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setNotificationAlreadyRead(item.id);
+            }
+        });
+
+
         txtTime.setText(timeStr);
 
         return convertView;
     }
+
+    private void setNotificationAlreadyRead(int notificationId) {
+        try {
+            Connection con = database.connectToDatabase();
+            String query = "UPDATE [Notification] " +
+                    " SET Status = 2" +
+                    " WHERE Id = "+ notificationId;
+            database.excuteCommand(con,query);
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+
+
 }
