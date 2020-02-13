@@ -24,6 +24,7 @@ import com.example.giveandgetapp.R;
 import com.example.giveandgetapp.database.Database;
 import com.example.giveandgetapp.database.FeedItem;
 import com.example.giveandgetapp.database.FeedListAdapter;
+import com.example.giveandgetapp.database.FeedNotification;
 import com.example.giveandgetapp.database.SessionManager;
 import com.example.giveandgetapp.database.User;
 
@@ -41,97 +42,43 @@ import java.util.concurrent.TimeUnit;
 
 public class DashboardFragment extends Fragment {
 
-    private DashboardViewModel dashboardViewModel;
+    private DashboardViewModel _dashboardViewModel;
     private Database _database;
     private SessionManager _sessionManager;
     private int _countCurrent = 1;
     private FeedListAdapter _adapter;
-    private List<FeedItem> _listFeedItem;
     private final int _numberPostLoad = 5;
     private ProgressBar _progressBar;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        dashboardViewModel =
+        _dashboardViewModel =
                 ViewModelProviders.of(this).get(DashboardViewModel.class);
         View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
         _progressBar = root.findViewById(R.id.progressBar);
-
-
         _sessionManager = new SessionManager(root.getContext());
-        User currentUser = _sessionManager.getUserDetail();
 
-        _database = new Database(root.getContext());
-        Connection con = _database.connectToDatabase();
-
-        String query = "SELECT p.Id, a.Id as ActorId, a.Name as ActorName, p.Title, p.Contents, l.UserId as IsLiked, r.UserId as IsReceived, a.Avatar as ActorImage, p.CreateDate, p.Image, p.Image2, p.Image3" +
-                " FROM [Post] p" +
-                " INNER JOIN [User] a" +
-                " ON p.Actor = a.Id" +
-                " LEFT JOIN [Like] l" +
-                " ON p.Id = l.PostId  AND l.UserId = " + currentUser.id +
-                " LEFT JOIN [Receive] r" +
-                " ON p.Id = r.PostId  AND r.UserId = " + currentUser.id +
-                " ORDER BY p.Id DESC" +
-                " OFFSET 0 ROWS " +
-                " FETCH NEXT 5 ROWS ONLY";
-
-        ResultSet result = _database.excuteCommand(con, query);
-        _listFeedItem = new ArrayList<FeedItem>();
-        int maxPostId = 0;
-        int minPostId = 0;
-
-        try {
-            while (result.next()){
-                int postId = result.getInt("Id");
-
-                //Set for max min post id
-                if(result.isFirst()){
-                    maxPostId = postId;
-                    minPostId = postId;
-                }
-
-                if(postId > maxPostId){
-                    maxPostId = postId;
-                }
-
-                if(postId < minPostId){
-                    minPostId = postId;
-                }
-
-                int actorId = result.getInt("ActorId");
-                String actorName = result.getString("ActorName");
-                String title = result.getString("Title");
-                String content = result.getString("Contents");
-                boolean isLiked = (result.getInt("IsLiked")==currentUser.id)?true:false;
-                boolean isReceived = (result.getInt("IsReceived")==currentUser.id)?true:false;
-                Bitmap actorImage = _database.getImageInDatabase(con,result.getInt("ActorImage"));
-                Bitmap Image = _database.getImageInDatabase(con,result.getInt("Image"));
-                Bitmap Image2 = _database.getImageInDatabase(con,result.getInt("Image2"));
-                Bitmap Image3 = _database.getImageInDatabase(con,result.getInt("Image3"));
-                Timestamp tsCreateDate = result.getTimestamp("CreateDate");
-                Date createDate = null;
-                if(tsCreateDate != null){
-                    createDate = new Date(tsCreateDate.getTime());
-                }
-
-                FeedItem item = new FeedItem(postId,actorId,actorImage,actorName,title,content,Image,Image2,Image3,isLiked,isReceived,createDate);
-                _listFeedItem.add(item);
-
-            }
-
-            con.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if(_dashboardViewModel.getListFeedItem().getValue() == null){
+            initListPost();
         }
+
+        _dashboardViewModel.getListFeedItem().observe(this, new Observer<ArrayList<FeedItem>>() {
+            @Override
+            public void onChanged(ArrayList<FeedItem> feedItems) {
+                try{
+                    _adapter.setFeedItems(feedItems);
+                    _adapter.notifyDataSetChanged();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        });
 
 
 
         ListView listViewMain = root.findViewById(R.id.listViewMain);
-        _adapter = new FeedListAdapter(this.getActivity(),_listFeedItem);
-        _adapter .maxIdPost = maxPostId;
-        _adapter .minIdPost = minPostId;
+        _adapter = new FeedListAdapter(this.getActivity(), _dashboardViewModel.getListFeedItem().getValue());
         listViewMain.setAdapter(_adapter);
 
         listViewMain.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -160,6 +107,7 @@ public class DashboardFragment extends Fragment {
 
                     }else if(_countCurrent != -1){
                         _progressBar.setVisibility(View.VISIBLE);
+
                         _countCurrent = loadMorePost();
                         _progressBar.setVisibility(View.INVISIBLE);
 
@@ -184,7 +132,7 @@ public class DashboardFragment extends Fragment {
         Connection con = _database.connectToDatabase();
         User currentUser = _sessionManager.getUserDetail();
 
-        String query = "SELECT p.Id, a.Id as ActorId, a.Name as ActorName, p.Title, p.Contents, l.UserId as IsLiked, r.UserId as IsReceived, a.Avatar as ActorImage, p.Image, p.Image2, p.Image3" +
+        String query = "SELECT p.Id, a.Id as ActorId, a.Name as ActorName, p.Title, p.Contents, l.UserId as IsLiked, r.UserId as IsReceived, a.Avatar as ActorImage, p.Image, p.Image2, p.Image3, p.CreateDate" +
                 " FROM [Post] p" +
                 " INNER JOIN [User] a" +
                 " ON p.Actor = a.Id" +
@@ -193,9 +141,9 @@ public class DashboardFragment extends Fragment {
                 " LEFT JOIN [Receive] r" +
                 " ON p.Id = r.PostId  AND r.UserId = " + currentUser.id +
                 " WHERE" +
-                " p.Id > "+_adapter.maxIdPost+
+                " p.Id > "+_dashboardViewModel.getMaxPostId().getValue().intValue()+
                 " OR" +
-                " p.Id < "+_adapter.minIdPost+
+                " p.Id < "+_dashboardViewModel.getMinPostId().getValue().intValue()+
                 " ORDER BY p.Id DESC" +
                 " OFFSET 0 ROWS " +
                 " FETCH NEXT 5 ROWS ONLY";
@@ -207,12 +155,12 @@ public class DashboardFragment extends Fragment {
             while (result.next()){
                 int postId = result.getInt("Id");
 
-                if(postId > _adapter.maxIdPost){
-                    _adapter.maxIdPost = postId;
+                if(postId > _dashboardViewModel.getMaxPostId().getValue().intValue()){
+                    _dashboardViewModel.getMaxPostId().setValue(postId);
                 }
 
-                if(postId < _adapter.minIdPost){
-                    _adapter.minIdPost = postId;
+                if(postId < _dashboardViewModel.getMinPostId().getValue().intValue()){
+                    _dashboardViewModel.getMinPostId().setValue(postId);
                 }
 
                 int actorId = result.getInt("ActorId");
@@ -221,10 +169,10 @@ public class DashboardFragment extends Fragment {
                 String content = result.getString("Contents");
                 boolean isLiked = (result.getInt("IsLiked")==currentUser.id)?true:false;
                 boolean isReceived = (result.getInt("IsReceived")==currentUser.id)?true:false;
-                Bitmap actorImage = _database.getImageInDatabase(con,result.getInt("ActorImage"));
-                Bitmap Image = _database.getImageInDatabase(con,result.getInt("Image"));
-                Bitmap Image2 = _database.getImageInDatabase(con,result.getInt("Image2"));
-                Bitmap Image3 = _database.getImageInDatabase(con,result.getInt("Image3"));
+                int actorImage = result.getInt("ActorImage");
+                int Image = result.getInt("Image");
+                int Image2 = result.getInt("Image2");
+                int Image3 = result.getInt("Image3");
                 Timestamp tsCreateDate = result.getTimestamp("CreateDate");
                 Date createDate = null;
                 if(tsCreateDate != null){
@@ -232,7 +180,7 @@ public class DashboardFragment extends Fragment {
                 }
 
                 FeedItem item = new FeedItem(postId,actorId,actorImage,actorName,title,content,Image,Image2,Image3,isLiked,isReceived,createDate);
-                _listFeedItem.add(item);
+                _dashboardViewModel.getListFeedItem().getValue().add(item);
                 countRow++;
 
             }
@@ -251,20 +199,77 @@ public class DashboardFragment extends Fragment {
         return countRow;
     }
 
-    @Override
-    public void onStop() {
-        for (FeedItem item: _listFeedItem) {
-            item.actorImage.recycle();
-            item.actorImage = null;
-            if(item.image != null)
-                item.image.recycle();
-            if(item.image2 != null)
-                item.image2.recycle();
-            if(item.image3 != null)
-                item.image3.recycle();
-        }
 
-        super.onStop();
+    private void initListPost(){
+        User currentUser = _sessionManager.getUserDetail();
+
+        _database = new Database(getContext());
+        Connection con = _database.connectToDatabase();
+
+        String query = "SELECT p.Id, a.Id as ActorId, a.Name as ActorName, p.Title, p.Contents, l.UserId as IsLiked, r.UserId as IsReceived, a.Avatar as ActorImage, p.CreateDate, p.Image, p.Image2, p.Image3" +
+                " FROM [Post] p" +
+                " INNER JOIN [User] a" +
+                " ON p.Actor = a.Id" +
+                " LEFT JOIN [Like] l" +
+                " ON p.Id = l.PostId  AND l.UserId = " + currentUser.id +
+                " LEFT JOIN [Receive] r" +
+                " ON p.Id = r.PostId  AND r.UserId = " + currentUser.id +
+                " ORDER BY p.Id DESC" +
+                " OFFSET 0 ROWS " +
+                " FETCH NEXT 5 ROWS ONLY";
+
+        ResultSet result = _database.excuteCommand(con, query);
+        ArrayList<FeedItem> listFeedItem = new ArrayList<FeedItem>();
+        int maxPostId = 0;
+        int minPostId = 0;
+
+        try {
+            while (result.next()){
+                int postId = result.getInt("Id");
+
+                //Set for max min post id
+                if(result.isFirst()){
+                    maxPostId = postId;
+                    minPostId = postId;
+                }
+
+                if(postId > maxPostId){
+                    maxPostId = postId;
+                }
+
+                if(postId < minPostId){
+                    minPostId = postId;
+                }
+
+                int actorId = result.getInt("ActorId");
+                String actorName = result.getString("ActorName");
+                String title = result.getString("Title");
+                String content = result.getString("Contents");
+                boolean isLiked = (result.getInt("IsLiked")==currentUser.id)?true:false;
+                boolean isReceived = (result.getInt("IsReceived")==currentUser.id)?true:false;
+                int actorImage = result.getInt("ActorImage");
+                int Image = result.getInt("Image");
+                int Image2 = result.getInt("Image2");
+                int Image3 = result.getInt("Image3");
+                Timestamp tsCreateDate = result.getTimestamp("CreateDate");
+                Date createDate = null;
+                if(tsCreateDate != null){
+                    createDate = new Date(tsCreateDate.getTime());
+                }
+
+                FeedItem item = new FeedItem(postId,actorId,actorImage,actorName,title,content,Image,Image2,Image3,isLiked,isReceived,createDate);
+                listFeedItem.add(item);
+
+            }
+
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        _dashboardViewModel.setListFeedItem(listFeedItem);
+        _dashboardViewModel.setMaxPostId(maxPostId);
+        _dashboardViewModel.setMinPostId(minPostId);
     }
+
 
 }

@@ -8,6 +8,8 @@ import android.os.Bundle;
 import com.example.giveandgetapp.database.Database;
 import com.example.giveandgetapp.database.FeedItem;
 import com.example.giveandgetapp.database.ImageSlideAdapter;
+import com.example.giveandgetapp.database.SessionManager;
+import com.example.giveandgetapp.database.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -38,12 +40,15 @@ public class PostDetailActivity extends AppCompatActivity {
     private CircleIndicator _indicatorDetail;
     private ViewPager _imageDetailPost;
     private FeedItem item;
+    private int postId;
+    private SessionManager _sessionManager;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_detail);
+        this.postId = getIntent().getIntExtra("Post_Id",0);
         _txtTimePost = findViewById(R.id.timelogin);
         _txtActorName = findViewById(R.id.actornamedetail);
         _txtContentPost = findViewById(R.id.txtcontenpost);
@@ -54,16 +59,18 @@ public class PostDetailActivity extends AppCompatActivity {
         _imageActor = findViewById(R.id.avatarActor);
 
         _database = new Database(this);
+        _sessionManager = new SessionManager(this);
+        User currentUser = _sessionManager.getUserDetail();
         Connection con = _database.connectToDatabase();
         String query = "SELECT p.Id, a.Id as ActorId, a.Name as ActorName, p.Title, p.Contents, l.UserId as IsLiked, r.UserId as IsReceived, a.Avatar as ActorImage, p.Image, p.Image2, p.Image3" +
                 " FROM [Post] p" +
                 " INNER JOIN [User] a" +
                 " ON p.Actor = a.Id" +
                 " LEFT JOIN [Like] l" +
-                " ON p.Id = l.PostId  AND l.UserId = 1" +
+                " ON p.Id = l.PostId  AND l.UserId = " + currentUser.id +
                 " LEFT JOIN [Receive] r" +
-                " ON p.Id = r.PostId  AND r.UserId = 1" +
-                " WHERE p.id = 1";
+                " ON p.Id = r.PostId  AND r.UserId = " + currentUser.id +
+                " WHERE p.id = "+ postId;
 
         ResultSet result = _database.excuteCommand(con, query);
 
@@ -96,7 +103,7 @@ public class PostDetailActivity extends AppCompatActivity {
                     listImage.add(item.image3);
                 }
 
-                ImageSlideAdapter imageSlideAdapter = new ImageSlideAdapter(this,listImage);
+                ImageSlideAdapter imageSlideAdapter = new ImageSlideAdapter(this,listImage,null);
                 _imageDetailPost.setAdapter(imageSlideAdapter);
                 _indicatorDetail.setViewPager(_imageDetailPost);
                 _txtActorName.setText(item.actorName);
