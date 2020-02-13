@@ -1,6 +1,7 @@
 package com.example.giveandgetapp;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -13,13 +14,18 @@ import com.example.giveandgetapp.database.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 import me.relex.circleindicator.CircleIndicator;
 
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.giveandgetapp.R;
@@ -30,6 +36,7 @@ import java.util.ArrayList;
 
 public class PostDetailActivity extends AppCompatActivity {
 
+    private SessionManager _sessionManager;
     private Database _database;
     private ImageView _imageActor;
     private ImageView _imageMore;
@@ -39,9 +46,9 @@ public class PostDetailActivity extends AppCompatActivity {
     private TextView _txtTitlePost;
     private CircleIndicator _indicatorDetail;
     private ViewPager _imageDetailPost;
+    private LinearLayout _dialogLayout;
     private FeedItem item;
     private int postId;
-    private SessionManager _sessionManager;
 
 
     @Override
@@ -49,6 +56,9 @@ public class PostDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_detail);
         this.postId = getIntent().getIntExtra("Post_Id",0);
+
+        _sessionManager = new SessionManager(this);
+        final User user = _sessionManager.getUserDetail();
         _txtTimePost = findViewById(R.id.timelogin);
         _txtActorName = findViewById(R.id.actornamedetail);
         _txtContentPost = findViewById(R.id.txtcontenpost);
@@ -57,9 +67,8 @@ public class PostDetailActivity extends AppCompatActivity {
         _indicatorDetail = findViewById(R.id.indicatordetail);
         _imageMore = findViewById(R.id.iconmoredetail);
         _imageActor = findViewById(R.id.avatarActor);
-
+        _dialogLayout = findViewById(R.id.dialog);
         _database = new Database(this);
-        _sessionManager = new SessionManager(this);
         User currentUser = _sessionManager.getUserDetail();
         Connection con = _database.connectToDatabase();
         String query = "SELECT p.Id, a.Id as ActorId, a.Name as ActorName, p.Title, p.Contents, l.UserId as IsLiked, r.UserId as IsReceived, a.Avatar as ActorImage, p.Image, p.Image2, p.Image3" +
@@ -72,7 +81,7 @@ public class PostDetailActivity extends AppCompatActivity {
                 " ON p.Id = r.PostId  AND r.UserId = " + currentUser.id +
                 " WHERE p.id = "+ postId;
 
-        ResultSet result = _database.excuteCommand(con, query);
+        final ResultSet result = _database.excuteCommand(con, query);
 
         try
         {
@@ -116,6 +125,69 @@ public class PostDetailActivity extends AppCompatActivity {
         {
             e.printStackTrace();
         }
+
+        _imageMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder _dialogPost = new AlertDialog.Builder(PostDetailActivity.this);
+                View abc = getLayoutInflater().inflate(R.layout.postdetail_dialog,null);
+                _dialogPost.setView(abc);
+                final AlertDialog dialog = _dialogPost.create();
+
+                final Button _baocao = (Button) abc.findViewById(R.id.btnBaocao);
+//                  _baocao.setVisibility(View.INVISIBLE);
+                final Button _tuychon = (Button) abc.findViewById(R.id.btntuychon);
+                final Button _luunoidungbaocao = (Button) abc.findViewById(R.id.luunoidungbaocao);
+                final EditText _noidungbaocao = (EditText) abc.findViewById(R.id.txtnoidungbaocao);
+                Button _huyDialog = (Button) abc.findViewById(R.id.tatdialog);
+
+                if(item.actorId == user.id)
+                {
+//                    _baocao.setVisibility(View.GONE);
+                    _baocao.setText("Xóa bài viết");
+                    _tuychon.setText("Chỉnh sửa bài viết");
+
+                }else {
+                    _baocao.setText("Báo cáo");
+                    _tuychon.setVisibility(View.GONE);
+                }
+
+                //Button báo cáo
+                _baocao.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        _baocao.setVisibility(View.INVISIBLE);
+                        _noidungbaocao.setVisibility(View.VISIBLE);
+                        _luunoidungbaocao.setVisibility(View.VISIBLE);
+                        _luunoidungbaocao.setText("Lưu");
+                        _luunoidungbaocao.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                            }
+                        });
+                    }
+                });
+
+                //Button tùy chọn tùy theo Activity
+                _tuychon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                });
+
+                //Button Hủy
+                _huyDialog.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialog.cancel();
+                        }
+                    });
+
+                dialog.show();
+            }
+        });
     }
 
     @Override
