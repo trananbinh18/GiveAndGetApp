@@ -1,10 +1,18 @@
 package com.example.giveandgetapp;
 
 import android.app.Activity;
+import android.content.res.ColorStateList;
+import android.opengl.EGLExt;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.giveandgetapp.database.RunableGetNotification;
 import com.example.giveandgetapp.ui.notifications.NotificationsViewModel;
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
@@ -31,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
@@ -42,12 +51,20 @@ public class MainActivity extends AppCompatActivity {
 
         //get notification interval in background
         _notificationsViewModel = ViewModelProviders.of(this).get(NotificationsViewModel.class);
-        getNotificationsInterval(_notificationsViewModel);
+        BottomNavigationMenuView bottomNavigationMenuView = (BottomNavigationMenuView) navView.getChildAt(0);
+        View v = bottomNavigationMenuView.getChildAt(1);
+        BottomNavigationItemView itemView = (BottomNavigationItemView) v;
+        View badge = LayoutInflater.from(this)
+                .inflate(R.layout.item_notification_tab, itemView, true);
+        TextView txtNumberNotifyCount = badge.findViewById(R.id.notifications_badge);
+
+
+        getNotificationsInterval(_notificationsViewModel, txtNumberNotifyCount);
     }
 
-    private void getNotificationsInterval(NotificationsViewModel modelNotification){
+    private void getNotificationsInterval(NotificationsViewModel modelNotification, TextView txtNumberNotifyCount){
         ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-        executorService.scheduleAtFixedRate(new RunableGetNotification(modelNotification, getApplicationContext()),
+        executorService.scheduleAtFixedRate(new RunableGetNotification(modelNotification ,txtNumberNotifyCount ,getApplicationContext(),this),
                 0, 5, TimeUnit.SECONDS);
     }
 

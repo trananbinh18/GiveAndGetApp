@@ -80,7 +80,8 @@ public class NotificationsFragment extends Fragment {
         Connection con = _database.connectToDatabase();
         User currentUser = _sessionManager.getUserDetail();
         String query = "SELECT TOP(5) " +
-                " PostId" +
+                " Id" +
+                ",PostId" +
                 ",Status" +
                 ",CreateDate" +
                 ",Title" +
@@ -95,6 +96,7 @@ public class NotificationsFragment extends Fragment {
         try {
 
             while (rs.next()){
+                int id = rs.getInt("Id");
                 int postId = rs.getInt("PostId");
                 int status = rs.getInt("Status");
                 Timestamp tsCreateDate = rs.getTimestamp("CreateDate");
@@ -106,7 +108,7 @@ public class NotificationsFragment extends Fragment {
                 String content = rs.getString("Contents");
                 int type = rs.getInt("Type");
 
-                FeedNotification item = new FeedNotification(postId,status,createDate,title,content,type);
+                FeedNotification item = new FeedNotification(id,postId,status,createDate,title,content,type);
                 result.add(item);
             }
 
