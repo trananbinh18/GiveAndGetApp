@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TabWidget;
 import android.widget.TextView;
@@ -47,6 +48,8 @@ public class ProfileFragment extends Fragment {
     private TextView _sodanhgia;
     private TextView _sobaocao;
     private Button _btnLogout;
+    private TabWidget _tabWidget;
+    private LinearLayout _linearLayoutTabs;
     private ProfileViewModel profileViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -56,6 +59,7 @@ public class ProfileFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
         _sessionManager = new SessionManager(root.getContext());
         User user = _sessionManager.getUserDetail();
+
 
         _lbllop = root.findViewById(R.id.lbllopuser);
         _lblmssv = root.findViewById(R.id.lblmssvuser);
@@ -77,7 +81,6 @@ public class ProfileFragment extends Fragment {
             if(resultSet.next()){
                 int rpc = resultSet.getInt("ReportCount");
                 int rtc = resultSet.getInt("RatingCount");
-
                 _sodanhgia.setText(rpc+"");
                 _sobaocao.setText(rtc+"");
 
@@ -129,6 +132,17 @@ public class ProfileFragment extends Fragment {
         spec.setContent(R.id.tab2);
         spec.setIndicator("Những bài viết đã nhận");
         _tabHost.addTab(spec);
+
+        TabWidget tw = (TabWidget)_tabHost.findViewById(android.R.id.tabs);
+        View tabView = tw.getChildTabViewAt(0);
+        TextView tv = (TextView)tabView.findViewById(android.R.id.title);
+        tv.setTextSize(10);
+
+
+        View tabView1 = tw.getChildTabViewAt(1);
+        TextView tv1 = (TextView)tabView1.findViewById(android.R.id.title);
+        tv1.setTextSize(10);
+
         return root;
     }
 }
