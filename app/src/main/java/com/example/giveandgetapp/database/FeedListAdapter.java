@@ -4,14 +4,17 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.giveandgetapp.PostDetailActivity;
@@ -25,6 +28,8 @@ import java.util.Date;
 import java.util.List;
 
 import me.relex.circleindicator.CircleIndicator;
+
+import static android.app.Activity.RESULT_OK;
 
 public class FeedListAdapter extends BaseAdapter {
     private Activity activity;
@@ -80,6 +85,7 @@ public class FeedListAdapter extends BaseAdapter {
         CircleIndicator indicator = (CircleIndicator) convertView.findViewById(R.id.indicator);
         ImageButton imgLike = (ImageButton) convertView.findViewById(R.id.imgLike);
         ImageButton imgReceive = (ImageButton) convertView.findViewById(R.id.imgReceive);
+        ImageView imgMore  = convertView.findViewById(R.id.iconMoreDashboard);
 
 
         final FeedItem item = feedItems.get(position);
@@ -197,6 +203,8 @@ public class FeedListAdapter extends BaseAdapter {
 
         pageImage.setOnClickListener(getListenerForPostDetailActivity(item.postId));
         title.setOnClickListener(getListenerForPostDetailActivity(item.postId));
+        content.setOnClickListener(getListenerForPostDetailActivity(item.postId));
+        imgMore.setOnClickListener(getListenerForPostDetailActivity(item.postId));
 
 
         return convertView;
@@ -250,12 +258,13 @@ public class FeedListAdapter extends BaseAdapter {
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(activity.getBaseContext(), PostDetailActivity.class);
+                Intent intent = new Intent(activity.getApplicationContext(), PostDetailActivity.class);
                 intent.putExtra("Post_Id",postId);
-                activity.startActivity(intent);
+                activity.startActivityForResult(intent,10);
             }
         };
         return listener;
     }
+
 
 }

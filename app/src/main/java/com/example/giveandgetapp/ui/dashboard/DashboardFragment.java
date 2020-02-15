@@ -1,6 +1,7 @@
 package com.example.giveandgetapp.ui.dashboard;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,6 +41,8 @@ import java.util.TimerTask;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import static android.app.Activity.RESULT_OK;
+
 public class DashboardFragment extends Fragment {
 
     private DashboardViewModel _dashboardViewModel;
@@ -53,7 +56,7 @@ public class DashboardFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         _dashboardViewModel =
-                ViewModelProviders.of(this).get(DashboardViewModel.class);
+                ViewModelProviders.of(this.getActivity()).get(DashboardViewModel.class);
         View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
         _progressBar = root.findViewById(R.id.progressBar);

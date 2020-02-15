@@ -1,6 +1,7 @@
 package com.example.giveandgetapp;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.opengl.EGLExt;
 import android.os.Bundle;
@@ -9,7 +10,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.giveandgetapp.database.FeedItem;
 import com.example.giveandgetapp.database.RunableGetNotification;
+import com.example.giveandgetapp.ui.dashboard.DashboardViewModel;
 import com.example.giveandgetapp.ui.notifications.NotificationsViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
@@ -25,6 +28,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import java.util.ArrayList;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -33,6 +37,7 @@ import java.util.concurrent.TimeUnit;
 public class MainActivity extends AppCompatActivity {
 
     private NotificationsViewModel _notificationsViewModel;
+    private DashboardViewModel _dashboardViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +54,10 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
+
         //get notification interval in background
         _notificationsViewModel = ViewModelProviders.of(this).get(NotificationsViewModel.class);
+
         BottomNavigationMenuView bottomNavigationMenuView = (BottomNavigationMenuView) navView.getChildAt(0);
         View v = bottomNavigationMenuView.getChildAt(1);
         BottomNavigationItemView itemView = (BottomNavigationItemView) v;
@@ -68,5 +75,26 @@ public class MainActivity extends AppCompatActivity {
                 0, 5, TimeUnit.SECONDS);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(requestCode == 10){
+            switch (resultCode){
+                //On delete
+                case RESULT_OK:
+                    _dashboardViewModel = ViewModelProviders.of(this).get(DashboardViewModel.class);
+                    ArrayList<FeedItem> currentFeedItems = _dashboardViewModel.getListFeedItem().getValue();
+                    ArrayList<FeedItem> newFeedItems = new ArrayList<FeedItem>();
+                    final int postId = Integer.parseInt(data.getData().toString());
+                    for (FeedItem item:_dashboardViewModel.getListFeedItem().getValue()) {
+                        if(item.postId != postId){
+                            newFeedItems.add(item);
+                        }
+                    }
+                    _dashboardViewModel.setListFeedItem(newFeedItems);
+            }
+
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 }
 
