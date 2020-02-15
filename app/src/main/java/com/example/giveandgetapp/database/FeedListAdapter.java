@@ -2,17 +2,22 @@ package com.example.giveandgetapp.database;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.giveandgetapp.PostDetailActivity;
 import com.example.giveandgetapp.R;
 
 import java.sql.Connection;
@@ -24,6 +29,8 @@ import java.util.List;
 
 import me.relex.circleindicator.CircleIndicator;
 
+import static android.app.Activity.RESULT_OK;
+
 public class FeedListAdapter extends BaseAdapter {
     private Activity activity;
     private LayoutInflater inflater;
@@ -31,8 +38,7 @@ public class FeedListAdapter extends BaseAdapter {
     private SessionManager sessionManager;
     private User currentUser;
     private Database database;
-    public int maxIdPost;
-    public int minIdPost;
+    public ArrayList<Bitmap> listImagesInAllItems;
 
     public FeedListAdapter(Activity activity, List<FeedItem> feedItems){
         this.activity = activity;
@@ -40,6 +46,11 @@ public class FeedListAdapter extends BaseAdapter {
         this.sessionManager = new SessionManager(activity.getApplicationContext());
         this.currentUser = this.sessionManager.getUserDetail();
         this.database = new Database(activity.getApplicationContext());
+        this.listImagesInAllItems = new ArrayList<Bitmap>();
+    }
+
+    public void setFeedItems(List<FeedItem> feedItems) {
+        this.feedItems = feedItems;
     }
 
     @Override
@@ -74,28 +85,50 @@ public class FeedListAdapter extends BaseAdapter {
         CircleIndicator indicator = (CircleIndicator) convertView.findViewById(R.id.indicator);
         ImageButton imgLike = (ImageButton) convertView.findViewById(R.id.imgLike);
         ImageButton imgReceive = (ImageButton) convertView.findViewById(R.id.imgReceive);
+        ImageView imgMore  = convertView.findViewById(R.id.iconMoreDashboard);
 
 
         final FeedItem item = feedItems.get(position);
         //Image Paging
         ArrayList<Bitmap> listImage = new ArrayList<Bitmap>();
-        if(item.image != null) {
-            listImage.add(item.image);
+        Connection con = database.connectToDatabase();
+        Bitmap imageActor = null;
+
+        try{
+            if(item.actorImageId != 0){
+                Bitmap img = database.getImageInDatabase(con, item.actorImageId);
+                this.listImagesInAllItems.add(img);
+                imageActor = img;
+            }
+
+            if(item.imageId != 0) {
+                Bitmap img = database.getImageInDatabase(con, item.imageId);
+                this.listImagesInAllItems.add(img);
+                listImage.add(img);
+            }
+
+            if(item.image2Id != 0) {
+                Bitmap img = database.getImageInDatabase(con, item.image2Id);
+                this.listImagesInAllItems.add(img);
+                listImage.add(img);
+            }
+
+            if(item.image3Id != 0) {
+                Bitmap img = database.getImageInDatabase(con, item.image3Id);
+                this.listImagesInAllItems.add(img);
+                listImage.add(img);
+            }
+            con.close();
+        }catch (SQLException e) {
+            e.printStackTrace();
         }
 
-        if(item.image2 != null) {
-            listImage.add(item.image2);
-        }
 
-        if(item.image3 != null) {
-            listImage.add(item.image3);
-        }
-
-        ImageSlideAdapter imageSlideAdapter = new ImageSlideAdapter(convertView.getContext(),listImage);
+        ImageSlideAdapter imageSlideAdapter = new ImageSlideAdapter(convertView.getContext(),listImage,imageActor);
         pageImage.setAdapter(imageSlideAdapter);
         indicator.setViewPager(pageImage);
 
-        actorImage.setImageBitmap(item.actorImage);
+        actorImage.setImageBitmap(imageActor);
         actorName.setText(item.actorName);
         title.setText(item.title);
         content.setText(item.contents);
@@ -168,6 +201,11 @@ public class FeedListAdapter extends BaseAdapter {
             }
         });
 
+        pageImage.setOnClickListener(getListenerForPostDetailActivity(item.postId));
+        title.setOnClickListener(getListenerForPostDetailActivity(item.postId));
+        content.setOnClickListener(getListenerForPostDetailActivity(item.postId));
+        imgMore.setOnClickListener(getListenerForPostDetailActivity(item.postId));
+
 
         return convertView;
     }
@@ -215,5 +253,18 @@ public class FeedListAdapter extends BaseAdapter {
             e.printStackTrace();
         }
     }
+
+    private View.OnClickListener getListenerForPostDetailActivity(final int postId){
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(activity.getApplicationContext(), PostDetailActivity.class);
+                intent.putExtra("Post_Id",postId);
+                activity.startActivityForResult(intent,10);
+            }
+        };
+        return listener;
+    }
+
 
 }

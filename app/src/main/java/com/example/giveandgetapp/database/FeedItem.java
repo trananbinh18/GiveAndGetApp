@@ -34,8 +34,27 @@ public class FeedItem {
         this.isReceiver = isReceiver;
     }
 
+    public FeedItem(int postId, int actorId, int actorImageId, String actorName, String title, String contents, int imageId, int image2Id, int image3Id, boolean isLiked, boolean isReceiver, Date createDate){
+        this.postId = postId;
+        this.actorId = actorId;
+        this.actorImageId = actorImageId;
+        this.actorName = actorName;
+        this.title = title;
+        this.contents = contents;
+        this.imageId = imageId;
+        this.image2Id = image2Id;
+        this.image3Id = image3Id;
+        this.isLiked = isLiked;
+        this.isReceiver = isReceiver;
+        this.createDate = createDate;
+    }
+
     public int postId;
     public int actorId;
+    public int actorImageId;
+    public int imageId;
+    public int image2Id;
+    public int image3Id;
     public Bitmap actorImage;
     public String actorName;
     public String title;

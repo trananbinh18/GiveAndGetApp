@@ -19,10 +19,12 @@ public class ImageSlideAdapter extends PagerAdapter {
     private Context context;
     private ArrayList<Bitmap> listImage;
     private LayoutInflater inflater;
+    private Bitmap actorImage;
 
-    public ImageSlideAdapter(Context context, ArrayList<Bitmap> listImage){
+    public ImageSlideAdapter(Context context, ArrayList<Bitmap> listImage, Bitmap actorImage){
         this.context = context;
         this.listImage = listImage;
+        this.actorImage = actorImage;
         inflater = LayoutInflater.from(context);
     }
 
@@ -38,6 +40,11 @@ public class ImageSlideAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+        for (Bitmap img: listImage) {
+            img.recycle();
+        }
+        actorImage.recycle();
+
         ((ViewPager) container).removeView((View) object);
     }
 
