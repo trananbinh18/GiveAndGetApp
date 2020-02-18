@@ -164,12 +164,17 @@
                                 android:background="#dadada"
                                 android:orientation="vertical">
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Lêu lêu mấy thằng ngu">
+                                <GridView
+                                    android:id="@+id/gridActorPost"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center"
+                                    android:columnWidth="100dp"
+                                    android:numColumns="auto_fit"
+                                    android:verticalSpacing="10dp"
+                                    android:horizontalSpacing="10dp"
+                                    android:stretchMode="columnWidth"/>
 
-                                </TextView>
                             </LinearLayout>
 
                             //tab2
@@ -181,12 +186,17 @@
                                 android:background="#dadada"
                                 android:orientation="vertical">
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Lêu lêu mấy thằng bấm qua tab 2">
+                                <GridView
+                                    android:id="@+id/gridReceivePost"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center"
+                                    android:columnWidth="100dp"
+                                    android:numColumns="auto_fit"
+                                    android:verticalSpacing="10dp"
+                                    android:horizontalSpacing="10dp"
+                                    android:stretchMode="columnWidth"/>
 
-                                </TextView>
                             </LinearLayout>
                         </FrameLayout>
                     </LinearLayout>

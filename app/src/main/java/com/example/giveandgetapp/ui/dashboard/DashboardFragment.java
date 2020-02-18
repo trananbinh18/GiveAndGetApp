@@ -132,6 +132,9 @@ public class DashboardFragment extends Fragment {
     }
 
     private int loadMorePost(){
+        if(_database == null){
+            _database = new Database(getContext());
+        }
         Connection con = _database.connectToDatabase();
         User currentUser = _sessionManager.getUserDetail();
 
@@ -274,5 +277,13 @@ public class DashboardFragment extends Fragment {
         _dashboardViewModel.setMinPostId(minPostId);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
 }

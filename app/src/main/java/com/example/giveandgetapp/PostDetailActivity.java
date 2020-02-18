@@ -156,6 +156,7 @@ public class PostDetailActivity extends AppCompatActivity {
             public void onClick(View view) {
                 AlertDialog.Builder _dialogPost = new AlertDialog.Builder(PostDetailActivity.this);
                 View abc = getLayoutInflater().inflate(R.layout.postdetail_dialog,null);
+
                 _dialogPost.setView(abc);
                 final AlertDialog dialog = _dialogPost.create();
 
