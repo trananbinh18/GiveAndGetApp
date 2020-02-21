@@ -176,6 +176,18 @@ public class Database {
         }
     }
 
+    public Bitmap getBimapByBlob(Blob blob){
+        try{
+            byte[] immAsBytes = blob.getBytes(1, (int)blob.length());
+            Bitmap img = BitmapFactory.decodeByteArray(immAsBytes, 0 ,immAsBytes.length);
+
+            return img;
+        }catch (SQLException e){
+            return null;
+        }
+
+    }
+
 
 
 
