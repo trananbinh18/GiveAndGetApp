@@ -12,30 +12,39 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".EditPostActivity"
-            android:label="@string/title_activity_edit_post"
+            android:name=".RatingActivity"
+            android:label="@string/title_activity_rating"
             android:theme="@style/AppTheme.NoActionBar">
+
 <!--             <intent-filter>-->
 <!--             <action android:name="android.intent.action.MAIN" />-->
 <!--             <category android:name="android.intent.category.LAUNCHER" />-->
 <!--             </intent-filter>-->
         </activity>
+        <activity
+            android:name=".EditPostActivity"
+            android:label="@string/title_activity_edit_post"
+            android:theme="@style/AppTheme.NoActionBar">
 
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+        </activity>
         <activity
             android:name=".GiveActivity"
             android:label="@string/title_activity_give"
             android:theme="@style/AppTheme.NoActionBar">
-
-<!--             <intent-filter>-->
-<!--             <action android:name="android.intent.action.MAIN" />-->
-<!--             <category android:name="android.intent.category.LAUNCHER" />-->
-<!--             </intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".EditProfileActivity"
             android:label="EditProfileActivity"
             android:theme="@style/AppTheme.NoActionBar">
-
+ss
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
@@ -45,10 +54,11 @@
             android:name=".PostDetailActivity"
             android:label="@string/title_activity_post_detail"
             android:theme="@style/AppTheme.NoActionBar">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".LoginActivity"
