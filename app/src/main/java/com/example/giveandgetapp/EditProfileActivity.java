@@ -67,16 +67,7 @@ public class EditProfileActivity extends AppCompatActivity {
         //Load data
         _database = new Database(this);
         Connection con = _database.connectToDatabase();
-//        String query = "SELECT Name, Gender, Class, StudentId, Phone, Email FROM [User] WHERE Id = "+ user.id;
-//        ResultSet resultSet = _database.excuteCommand(con, query);
-//        try {
-//            if(resultSet.next()){
-//            }
-//            con.close();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//
-//        }
+
         _imageUser.setImageBitmap(BitmapFactory.decodeFile(user.avatar));
         _txtName.setText(user.name);
         if(user.gender == 1){

@@ -80,9 +80,6 @@ public class GiveActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-
-
-
         _adapter = new UserGivenAdapter(this,_listFeedItemGiveActivity);
         _listviewUserGiveActivity.setAdapter(_adapter);
         _postImageGiveActivity.setImageBitmap(_postImage);

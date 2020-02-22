@@ -194,7 +194,6 @@ public class PostDetailActivity extends AppCompatActivity {
                             setResult(RESULT_OK, data);
                             finish();
                         }
-
                     });
 
                     //Button chinh sua bai viet

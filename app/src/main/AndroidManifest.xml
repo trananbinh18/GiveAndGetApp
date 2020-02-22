@@ -16,37 +16,30 @@
             android:label="@string/title_activity_rating"
             android:theme="@style/AppTheme.NoActionBar">
 
-             <intent-filter>
-             <action android:name="android.intent.action.MAIN" />
-             <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>
+<!--             <intent-filter>-->
+<!--             <action android:name="android.intent.action.MAIN" />-->
+<!--             <category android:name="android.intent.category.LAUNCHER" />-->
+<!--             </intent-filter>-->
         </activity>
         <activity
             android:name=".EditPostActivity"
             android:label="@string/title_activity_edit_post"
             android:theme="@style/AppTheme.NoActionBar">
 
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
+<!--             <intent-filter>-->
+<!--             <action android:name="android.intent.action.MAIN" />-->
+<!--             <category android:name="android.intent.category.LAUNCHER" />-->
+<!--             </intent-filter>-->
         </activity>
         <activity
             android:name=".GiveActivity"
             android:label="@string/title_activity_give"
             android:theme="@style/AppTheme.NoActionBar">
 
-<<<<<<< HEAD
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
-=======
 <!--             <intent-filter>-->
 <!--             <action android:name="android.intent.action.MAIN" />-->
 <!--             <category android:name="android.intent.category.LAUNCHER" />-->
 <!--             </intent-filter>-->
->>>>>>> 5d70da4b1ddda4dd13add99c213732639f06e8c9
         </activity>
         <activity
             android:name=".EditProfileActivity"
