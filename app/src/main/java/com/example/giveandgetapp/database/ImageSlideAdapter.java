@@ -40,10 +40,18 @@ public class ImageSlideAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-        for (Bitmap img: listImage) {
-            img.recycle();
+        boolean isShowed = container.isShown();
+
+        if(!isShowed) {
+            if(listImage.get(position) != null){
+                listImage.get(position).recycle();
+            }
+
+            if(actorImage !=null){
+                actorImage.recycle();
+            }
         }
-        actorImage.recycle();
+
 
         ((ViewPager) container).removeView((View) object);
     }
