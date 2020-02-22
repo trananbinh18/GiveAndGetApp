@@ -121,9 +121,63 @@ public class MainActivity extends AppCompatActivity {
 
                     _profileViewModel.setListPostProfileActor(newPostProfiles);
 
+                    break;
+
 
             }
 
+        }else if (requestCode == 11){
+            //On give
+            switch (resultCode){
+                //On given
+                case RESULT_OK:
+                    final int postId = Integer.parseInt(data.getData().toString());
+                    //edit Post in profile view model
+                    _profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
+
+                    if(_profileViewModel.getListPostProfileActor().getValue() == null){
+                        _profileViewModel.setListPostProfileActor(getInitListPostProfileActor(_profileViewModel));
+                    }
+                    ArrayList<PostProfile> currentPostProfiles = _profileViewModel.getListPostProfileActor().getValue();
+                    ArrayList<PostProfile> newPostProfiles = new ArrayList<PostProfile>();
+
+                    for (PostProfile item: currentPostProfiles) {
+                        if(item.postId == postId){
+                            item.status = 3;
+                        }
+                        newPostProfiles.add(item);
+                    }
+
+
+                    break;
+
+            }
+        }else if (requestCode == 12){
+            //On rating
+            switch (resultCode){
+                //On rating
+                case RESULT_OK:
+                    final int postId = Integer.parseInt(data.getData().toString());
+                    //edit Post in profile view model
+                    _profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
+
+                    if(_profileViewModel.getListPostProfileActor().getValue() == null){
+                        _profileViewModel.setListPostProfileActor(getInitListPostProfileActor(_profileViewModel));
+                    }
+                    ArrayList<PostProfile> currentPostProfiles = _profileViewModel.getListPostProfileActor().getValue();
+                    ArrayList<PostProfile> newPostProfiles = new ArrayList<PostProfile>();
+
+                    for (PostProfile item: currentPostProfiles) {
+                        if(item.postId == postId){
+                            item.status = 4;
+                        }
+                        newPostProfiles.add(item);
+                    }
+
+
+                    break;
+
+            }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -150,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
                 int status = result.getInt("Status");
                 int imageId = result.getInt("Image");
 
-                PostProfile postProfile = new PostProfile(postId, currentUser.id, title, status, imageId);
+                PostProfile postProfile = new PostProfile(postId, currentUser.id, title, status, imageId,0);
                 listPostProfile.add(postProfile);
                 if(postId > maxIdPostProfileActor){
                     maxIdPostProfileActor = postId;

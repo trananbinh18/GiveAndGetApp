@@ -2,6 +2,7 @@ package com.example.giveandgetapp.database;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +11,10 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.giveandgetapp.GiveActivity;
+import com.example.giveandgetapp.PostDetailActivity;
 import com.example.giveandgetapp.R;
+import com.example.giveandgetapp.RatingActivity;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -100,6 +104,23 @@ public class NotificationAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 setNotificationAlreadyRead(item.id);
+                switch (item.type){
+                    case 1:
+                        Intent intent = new Intent(activity.getApplicationContext(), PostDetailActivity.class);
+                        intent.putExtra("Post_Id",item.postId);
+                        activity.startActivityForResult(intent,10);
+                        break;
+                    case 2:
+                        Intent intent1 = new Intent(activity.getApplicationContext(), GiveActivity.class);
+                        intent1.putExtra("Post_Id",item.postId);
+                        activity.startActivityForResult(intent1,11);
+                        break;
+                    case 3:
+                        Intent intent2 = new Intent(activity.getApplicationContext(), RatingActivity.class);
+                        intent2.putExtra("Post_Id",item.postId);
+                        activity.startActivityForResult(intent2,12);
+                        break;
+                }
             }
         });
 

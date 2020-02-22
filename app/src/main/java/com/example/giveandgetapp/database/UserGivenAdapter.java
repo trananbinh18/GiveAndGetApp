@@ -21,11 +21,14 @@ public class UserGivenAdapter extends BaseAdapter {
     public ArrayList<UserGiven> _listUserGiven;
     private LayoutInflater inflater;
     private double _pecent;
+    private int _giveType;
+    public int _idUserChoosed;
 
-    public UserGivenAdapter(Context context, ArrayList<UserGiven> listUserGiven){
+    public UserGivenAdapter(Context context, ArrayList<UserGiven> listUserGiven, int giveType){
         this._context = context;
         this._listUserGiven = listUserGiven;
-        _pecent = 100/ (_listUserGiven.size());
+        this._giveType = giveType;
+        this._pecent = (_listUserGiven.size() != 0)?100/ (_listUserGiven.size()):0;
 
     }
 
@@ -57,10 +60,37 @@ public class UserGivenAdapter extends BaseAdapter {
         TextView txtPercent = view.findViewById(R.id.percentusergiveactivity);
         ImageButton imageGiven = view.findViewById(R.id.iconGiven);
 
+        //If it is random
+        if(this._giveType != 1){
+            imageGiven.setVisibility(View.GONE);
+        }else{
+            txtPercent.setVisibility(View.GONE);
+            UserGiven userGiven = _listUserGiven.get(i);
+            imageGiven.setOnClickListener(getGiveClickListener(userGiven, viewGroup));
+        }
+
         UserGiven userGiven = _listUserGiven.get(i);
         txtUserName.setText(userGiven.userName);
         imgAvatarUser.setImageBitmap(userGiven.userImage);
         txtPercent.setText(String.format("%.2f",_pecent));
         return view;
+    }
+
+    private View.OnClickListener getGiveClickListener(UserGiven userGiven, ViewGroup parrent) {
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (int i = 0 ;i<parrent.getChildCount();i++){
+                    ImageButton imgBtn = parrent.getChildAt(i).findViewById(R.id.iconGiven);
+                    imgBtn.setImageResource(R.drawable.ic_hand_foreground);
+                }
+
+                ImageButton imageButton = (ImageButton)v;
+                _idUserChoosed = userGiven.userId;
+                imageButton.setImageResource(R.drawable.ic_hand_fill_foreground);
+            }
+        };
+
+        return listener;
     }
 }
