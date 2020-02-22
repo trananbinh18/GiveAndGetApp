@@ -55,9 +55,9 @@
                 android:orientation="vertical">
 
                 <ListView
-                    android:id="@+id/listviewSearch"
+                    android:id="@+id/listviewResultSearch"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="500dp">
                 </ListView>
 
             </LinearLayout>

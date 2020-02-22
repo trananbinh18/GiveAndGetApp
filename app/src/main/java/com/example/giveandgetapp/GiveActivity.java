@@ -105,6 +105,7 @@ public class GiveActivity extends AppCompatActivity {
 
 
         _adapter = new UserGivenAdapter(this,_listFeedItemGiveActivity, _giveType);
+
         _listviewUserGiveActivity.setAdapter(_adapter);
         _postImageGiveActivity.setImageBitmap(_postImage);
         _postTitleGiveActivity.setText(_postTitle);
@@ -153,8 +154,8 @@ public class GiveActivity extends AppCompatActivity {
                             "           ,"+_postId +
                             "           ,1" +
                             "           ," + "CONVERT(datetime,'" +create_date+"',120)"+
-                            "           ,'Bạn đã nhận được một món đồ'" +
-                            "           ,'Bạn nhận được một món đồ của từ bài post "+_postTitle+"'" +
+                            "           ,N'Bạn đã nhận được một món đồ'" +
+                            "           ,N'Bạn nhận được một món đồ của từ bài post "+_postTitle+"'" +
                             "           ,3)";
 
                     Connection con = _database.connectToDatabase();

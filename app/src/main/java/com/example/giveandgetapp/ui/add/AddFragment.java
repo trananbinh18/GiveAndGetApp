@@ -106,7 +106,6 @@ public class AddFragment extends Fragment {
                 arrayData.add(element);
             }
             con.close();
-
             ArrayAdapter<Catalog> adapterSpiner = new ArrayAdapter<Catalog>(root.getContext(), android.R.layout.simple_spinner_dropdown_item, arrayData);
             adapterSpiner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             _cbxCatalogy.setAdapter(adapterSpiner);
@@ -192,13 +191,9 @@ public class AddFragment extends Fragment {
                    } catch (SQLException e) {
                        e.printStackTrace();
                    }
-
-
                }
-
             }
         });
-
         return root;
     }
 
@@ -248,7 +243,6 @@ public class AddFragment extends Fragment {
             int imageId = _database.saveImageIntoDatabase(con, arrayByte);
             arrayImageId[0] = imageId;
             con.close();
-
         }
 
         if(_isPickImage[1] == true){

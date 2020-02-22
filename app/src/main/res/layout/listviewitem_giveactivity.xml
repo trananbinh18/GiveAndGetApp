@@ -56,6 +56,4 @@
                                 android:src="@drawable/ic_hand_foreground" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
                     </LinearLayout>
-
-
 </LinearLayout>

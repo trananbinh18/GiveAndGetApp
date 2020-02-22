@@ -112,8 +112,8 @@ public class RatingActivity extends AppCompatActivity {
                                 "           ,"+_postId +
                                 "           ,1" +
                                 "           ," + "CONVERT(datetime,'" +create_date+"',120)"+
-                                "           ,'Bạn đã được đánh giá'" +
-                                "           ,'Bạn đã được đánh giá "+star+" sao bài: "+_postTitle+"'" +
+                                "           ,N'Bạn đã được đánh giá'" +
+                                "           ,N'Bạn đã được đánh giá "+star+" sao bài: "+_postTitle+"'" +
                                 "           ,0)";
 
                         _database.excuteCommand(con,queryNotification);

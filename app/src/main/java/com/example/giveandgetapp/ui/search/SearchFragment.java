@@ -1,5 +1,6 @@
 package com.example.giveandgetapp.ui.search;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +23,10 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.giveandgetapp.R;
 import com.example.giveandgetapp.database.Catalog;
 import com.example.giveandgetapp.database.Database;
+import com.example.giveandgetapp.database.ResultSearch;
+import com.example.giveandgetapp.database.ResultSearchAdapter;
+import com.example.giveandgetapp.database.UserGiven;
+import com.example.giveandgetapp.database.UserGivenAdapter;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -33,25 +39,27 @@ public class SearchFragment extends Fragment {
     private Database _database;
     private Spinner _spinnerSelectCatalogi;
     private ImageButton _imgbtnSearch;
-    private EditText _txtTypeTitle;
-
+    private EditText _txtTypeTitleSearch;
+    private ListView _listviewSearch;
     private SearchViewModel searchViewModel;
+    private ResultSearchAdapter _adapter;
+    private ArrayList<ResultSearch> _listResultSearchFragment;
+    private Bitmap _postImage;
+    private String _postTitle;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        searchViewModel =
-                ViewModelProviders.of(this).get(SearchViewModel.class);
-        final View root = inflater.inflate(R.layout.fragment_search, container, false);
+        searchViewModel = ViewModelProviders.of(this).get(SearchViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_search, container, false);
         _spinnerSelectCatalogi = root.findViewById(R.id.searchtypecatalogi);
-        _txtTypeTitle = root.findViewById(R.id.searchtypetitle);
+        _txtTypeTitleSearch = root.findViewById(R.id.searchtypetitle);
         _imgbtnSearch = root.findViewById(R.id.imgbtnsearch);
+        _listviewSearch = root.findViewById(R.id.listviewResultSearch);
         _database = new Database(root.getContext());
 
         //Get text from Spinner and EditText
-        //String spinnerText = _spinnerSelectCatalogi.getSelectedItem().toString();
-        String editText = _txtTypeTitle.getText().toString();
 
-        final Connection con = _database.connectToDatabase();
+        Connection con = _database.connectToDatabase();
 
         //Load catalogi in spinner
         String query = "SELECT * FROM [Catalog]";
@@ -70,8 +78,6 @@ public class SearchFragment extends Fragment {
                 Catalog element = new Catalog(id, name);
                 arrayData.add(element);
             }
-
-
             ArrayAdapter<Catalog> adapterSpiner = new ArrayAdapter<Catalog>(root.getContext(), android.R.layout.simple_spinner_dropdown_item, arrayData);
             adapterSpiner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             _spinnerSelectCatalogi.setAdapter(adapterSpiner);
@@ -80,33 +86,60 @@ public class SearchFragment extends Fragment {
             e.printStackTrace();
         }
 
-        String catalogId = ((Catalog)_spinnerSelectCatalogi.getSelectedItem()).id+"";
-        String queryAllPost = "SELECT * FROM [Post] LIKE '%"+editText+"%'";
-        String querySearch = "SELECT * FROM [Post] WHERE CatalogId = "+catalogId+" and Title LIKE '%"+editText+"%' ";
-        final ResultSet rsAllPost = _database.excuteCommand(con, queryAllPost);
-        ResultSet rsSearch = _database.excuteCommand(con, querySearch);
+        String editText = _txtTypeTitleSearch.getText().toString();
+        _listResultSearchFragment = new ArrayList<ResultSearch>();
         //Action Search
-        _imgbtnSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    while (rsAllPost.next()){
-                        Toast.makeText(getActivity(), "Your Text Here!", Toast.LENGTH_SHORT).show();
-                    }
-                    con.close();
-                }catch (SQLException e){
-                    e.printStackTrace();
-                }
+       _imgbtnSearch.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View view) {
+               if(_spinnerSelectCatalogi.getSelectedItem().toString().contains("Tất cả")){
+                   String queryAllPost = "SELECT * FROM [Post] WHERE [Post].Title LIKE '%"+editText+"%'";
+                   ResultSet rsAllPost = _database.excuteCommand(con, queryAllPost);
+                   try{
+                       while (rsAllPost.next()){
+                           int _postid = rsAllPost.getInt("Id");
+                           String _posttitle = rsAllPost.getString("Title");
+                           Bitmap _postimage = _database.getImageInDatabase(con,rsAllPost.getInt("Image"));
+                           ResultSearch item = new ResultSearch(_postid,_posttitle,_postimage);
+                           _listResultSearchFragment.add(item);
+                       }
 
-            }
-        });
+                   }catch (SQLException e){
+                       e.printStackTrace();
+                   }
+               }
 
-        searchViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-
-            }
-        });
+               else {
+                   String catalogId = ((Catalog)_spinnerSelectCatalogi.getSelectedItem()).id+"";
+                   String querySearch = "SELECT * FROM [Post] WHERE CatalogId = "+catalogId+" and Title LIKE '%"+editText+"%' ";
+                   ResultSet rsSearch = _database.excuteCommand(con, querySearch);
+                   //Get Post
+                   try{
+                       while (rsSearch.next()){
+                           int _postid = rsSearch.getInt("Id");
+                           String _posttitle = rsSearch.getString("Title");
+                           Bitmap _postimage = _database.getImageInDatabase(con,rsSearch.getInt("Image"));
+                           ResultSearch item = new ResultSearch(_postid,_posttitle,_postimage);
+                           _listResultSearchFragment.add(item);
+                       }
+                       con.close();
+                   }catch (SQLException e){
+                       e.printStackTrace();
+                   }
+               }
+               _adapter = new ResultSearchAdapter(root.getContext(), _listResultSearchFragment);
+               _listviewSearch.setAdapter(_adapter);
+           }
+       });
         return root;
+    }
+    @Override
+    public void onDestroy() {
+        for (ResultSearch resultSearch: _listResultSearchFragment) {
+            if(resultSearch.postImage != null){
+                resultSearch.postImage.recycle();
+            }
+        }
+        super.onDestroy();
     }
 }
