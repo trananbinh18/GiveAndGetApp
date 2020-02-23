@@ -18,6 +18,7 @@ import com.example.giveandgetapp.ui.dashboard.DashboardViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -200,7 +201,9 @@ public class PostDetailActivity extends AppCompatActivity {
                     _tuychon.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-
+                            Intent intent = new Intent(getApplicationContext(), EditPostActivity.class);
+                            intent.putExtra("Post_Id",postId);
+                            startActivityForResult(intent,13);
                         }
                     });
 
@@ -258,7 +261,9 @@ public class PostDetailActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        item.actorImage.recycle();
+        if(item.actorImage != null){
+            item.actorImage.recycle();
+        }
         if(item.image != null){
             item.image.recycle();
         }
@@ -269,5 +274,22 @@ public class PostDetailActivity extends AppCompatActivity {
             item.image3.recycle();
         }
         super.onDestroy();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        //Edit post
+        if(requestCode == 13){
+            switch (resultCode) {
+                //On edit post
+                case RESULT_OK:
+                    data.setData(Uri.parse(item.postId+""));
+                    setResult(RESULT_FIRST_USER, data);
+                    finish();
+            }
+
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

@@ -34,8 +34,10 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -122,6 +124,26 @@ public class MainActivity extends AppCompatActivity {
                     _profileViewModel.setListPostProfileActor(newPostProfiles);
 
                     break;
+                //On Edit
+                case RESULT_FIRST_USER:
+                    final int postId1 = Integer.parseInt(data.getData().toString());
+
+                    //Delete Post in dashboard view model
+                    _dashboardViewModel = ViewModelProviders.of(this).get(DashboardViewModel.class);
+                    ArrayList<FeedItem> currentFeedItems1 = _dashboardViewModel.getListFeedItem().getValue();
+                    ArrayList<FeedItem> newFeedItems1 = new ArrayList<FeedItem>();
+
+                    for (FeedItem item:currentFeedItems1) {
+                        if(item.postId == postId1){
+                            newFeedItems1.add(getFeedItemById(postId1));
+                        }else{
+                            newFeedItems1.add(item);
+                        }
+                    }
+                    _dashboardViewModel.setListFeedItem(newFeedItems1);
+
+
+                    break;
 
 
             }
@@ -179,6 +201,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }
+
         super.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -221,5 +244,57 @@ public class MainActivity extends AppCompatActivity {
 
         return listPostProfile;
     }
+
+    private FeedItem getFeedItemById(int postId){
+        FeedItem item = null;
+
+        Database database = new Database(this);
+        Connection con = database.connectToDatabase();
+        SessionManager sessionManager = new SessionManager(this);
+
+        User currentUser = sessionManager.getUserDetail();
+
+        String query = "SELECT p.Id, a.Id as ActorId, a.Name as ActorName, p.Title, p.Contents, l.UserId as IsLiked, r.UserId as IsReceived, a.Avatar as ActorImage, p.CreateDate, p.Image, p.Image2, p.Image3" +
+                " FROM [Post] p" +
+                " INNER JOIN [User] a" +
+                " ON p.Actor = a.Id" +
+                " LEFT JOIN [Like] l" +
+                " ON p.Id = l.PostId  AND l.UserId = " + currentUser.id +
+                " LEFT JOIN [Receive] r" +
+                " ON p.Id = r.PostId  AND r.UserId = " + currentUser.id +
+                " WHERE p.Id ="+postId;
+
+        ResultSet rs = database.excuteCommand(con,query);
+        try {
+            if(rs.next()){
+                int actorId = rs.getInt("ActorId");
+                String actorName = rs.getString("ActorName");
+                String title = rs.getString("Title");
+                String content = rs.getString("Contents");
+                boolean isLiked = (rs.getInt("IsLiked")==currentUser.id)?true:false;
+                boolean isReceived = (rs.getInt("IsReceived")==currentUser.id)?true:false;
+                int actorImage = rs.getInt("ActorImage");
+                int Image = rs.getInt("Image");
+                int Image2 = rs.getInt("Image2");
+                int Image3 = rs.getInt("Image3");
+                Timestamp tsCreateDate = rs.getTimestamp("CreateDate");
+                Date createDate = null;
+                if(tsCreateDate != null){
+                    createDate = new Date(tsCreateDate.getTime());
+                }
+
+                item = new FeedItem(postId,actorId,actorImage,actorName,title,content,Image,Image2,Image3,isLiked,isReceived,createDate);
+
+                con.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return item;
+
+
+    }
+
 }
 

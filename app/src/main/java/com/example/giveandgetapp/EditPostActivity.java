@@ -1,9 +1,13 @@
 package com.example.giveandgetapp;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.icu.text.CaseMap;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.example.giveandgetapp.database.Catalog;
@@ -22,14 +26,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.giveandgetapp.R;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class EditPostActivity extends AppCompatActivity {
 
@@ -50,6 +59,16 @@ public class EditPostActivity extends AppCompatActivity {
     private Button _btnHuyEditPost;
     private ArrayAdapter<Catalog> adapterSpiner;
     private ArrayList<Catalog> arrayData;
+    private int _postId;
+    private ArrayList<Bitmap> listImage;
+    private boolean[] _isPickImage;
+    private int[] _oldImageListId;
+    private RadioGroup _rdoGroupExpireType;
+    private RadioGroup _rdoGroupPickType;
+
+    public final int PICK_IMAGE_ONE = 1;
+    public final int PICK_IMAGE_TWO = 2;
+    public final int PICK_IMAGE_THREE = 3;
 
 
     @Override
@@ -71,11 +90,28 @@ public class EditPostActivity extends AppCompatActivity {
         _rbtn7ngayEditPost = findViewById(R.id.rdo7Dayeditpost);
         _btnLuuEditPost = findViewById(R.id.btnLuueditpost);
         _btnHuyEditPost = findViewById(R.id.btnHuyeditpost);
+        _rdoGroupExpireType = findViewById(R.id.rdoGroupExpireType);
+        _rdoGroupPickType = findViewById(R.id.rdoGroupPickType);
+
+
+        _oldImageListId = new int[3];
+
+        _isPickImage = new boolean[]{
+                false,false,false
+        };
+
+        listImage = new ArrayList<Bitmap>();
+
+        _imgbtnPic1EditPost.setOnClickListener(getListenerForImagePicker(PICK_IMAGE_ONE));
+        _imgbtnPic2EditPost.setOnClickListener(getListenerForImagePicker(PICK_IMAGE_TWO));
+        _imgbtnPic3EditPost.setOnClickListener(getListenerForImagePicker(PICK_IMAGE_THREE));
+
+        this._postId = getIntent().getIntExtra("Post_Id",0);
 
         //Load Data
         _database = new Database(this);
         Connection con = _database.connectToDatabase();
-        String query = "SELECT * FROM Post WHERE Id = 1";
+        String query = "SELECT * FROM Post WHERE Id = "+_postId;
 
         //Load data to spinner
         String queryCatalogy = "SELECT * FROM Catalog";
@@ -99,9 +135,25 @@ public class EditPostActivity extends AppCompatActivity {
         ResultSet resultSet = _database.excuteCommand(con, query);
         try {
             if(resultSet.next()){
-                _imgbtnPic1EditPost.setImageBitmap(_database.getImageInDatabase(con,resultSet.getInt("Image")));
-                _imgbtnPic2EditPost.setImageBitmap(_database.getImageInDatabase(con,resultSet.getInt("Image2")));
-                _imgbtnPic3EditPost.setImageBitmap(_database.getImageInDatabase(con,resultSet.getInt("Image3")));
+                Bitmap img = _database.getImageInDatabase(con,resultSet.getInt("Image"));
+                _imgbtnPic1EditPost.setImageBitmap(img);
+                listImage.add(img);
+                _oldImageListId[0] = resultSet.getInt("Image");
+
+                Bitmap img2 = _database.getImageInDatabase(con,resultSet.getInt("Image2"));
+                if(img2 != null){
+                    _imgbtnPic2EditPost.setImageBitmap(img2);
+                    listImage.add(img2);
+                    _oldImageListId[1] = resultSet.getInt("Image2");
+                }
+
+                Bitmap img3 = _database.getImageInDatabase(con,resultSet.getInt("Image3"));
+                if(img3 != null){
+                    _imgbtnPic3EditPost.setImageBitmap(img3);
+                    listImage.add(img3);
+                    _oldImageListId[2] = resultSet.getInt("Image3");
+                }
+
                 int catalogId = resultSet.getInt("CatalogId");
                 for(int i=0;i<arrayData.size();i++)
                 {
@@ -126,7 +178,7 @@ public class EditPostActivity extends AppCompatActivity {
                 } else if(resultSet.getInt("ExpireType")== 5)
                 {
                     _rbtn5ngayEditPost.setChecked(true);
-                }else if(resultSet.getInt("ExpireType")== 7)
+                } else if(resultSet.getInt("ExpireType")== 7)
                 {
                     _rbtn7ngayEditPost.setChecked(true);
                 }
@@ -144,6 +196,182 @@ public class EditPostActivity extends AppCompatActivity {
             }
         });
 
+        _btnLuuEditPost.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if(checkIsValid(getApplicationContext())){
+                    Connection con = _database.connectToDatabase();
+                    try{
+                        int[] arrayImageId = uploadImage();
+
+                        //Get User session
+                        SessionManager sessionManager = new SessionManager(getApplicationContext());
+                        User user = sessionManager.getUserDetail();
+
+                        //Setup addition data
+                        SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        Date date = new Date();
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(date);
+
+                        int amountDay = (_rdoGroupExpireType.getCheckedRadioButtonId() == R.id.rdo3Dayeditpost)?3:
+                                (_rdoGroupExpireType.getCheckedRadioButtonId() == R.id.rdo5Dayeditpost)?5:7;
+                        calendar.add(Calendar.DAY_OF_MONTH, amountDay);
+
+                        //Setup Data
+                        String catalogId = ((Catalog)_cbxCatalogyEditPost.getSelectedItem()).id+"";
+                        String image = (arrayImageId[0]==0)?"NULL":arrayImageId[0]+"";
+                        String image2 = (arrayImageId[1]==0)?"NULL":arrayImageId[1]+"";
+                        String image3 = (arrayImageId[2]==0)?"NULL":arrayImageId[2]+"";
+                        String title = _txtTitleEditPost.getText().toString();
+                        String content = _txtContentEditPost.getText().toString();
+                        String expire_date = formater.format(calendar.getTime());
+                        String given_type = (_rdoGroupPickType.getCheckedRadioButtonId() == R.id.rdoPickeditpost)?"1":"2";
+                        String expireType = amountDay+"";
+
+                        String query = "UPDATE [Post]" +
+                                "   SET CatalogId = "+catalogId +
+                                "      ,Image = " + image+
+                                "      ,Image2 = " + image2+
+                                "      ,Image3 = " + image3+
+                                "      ,Title = " + "'" +title+ "'" +
+                                "      ,Contents = " + "'" +content+ "'" +
+                                "      ,ExpireDate = " + "CONVERT(datetime,'" +expire_date+ "',120)"+
+                                "      ,GiveType = " +given_type+
+                                "      ,ExpireType = " +expireType+
+                                " WHERE Id = "+_postId;
+
+
+                        _database.excuteCommand(con, query);
+                        con.close();
+                        Toast.makeText(getApplicationContext(), "Bài đăng đã hoàn tất" , Toast.LENGTH_LONG).show();
+
+
+
+                    }catch (SQLException e) {
+
+                    }finally {
+                        try {
+                            con.close();
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    Intent data = new Intent();
+                    data.setData(Uri.parse(_postId+""));
+                    setResult(RESULT_OK, data);
+
+                    finish();
+                }
+            }
+        });
+
+
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        for (Bitmap img: listImage){
+            if(img != null){
+                img.recycle();
+            }
+        }
+        super.onDestroy();
+    }
+
+    private View.OnClickListener getListenerForImagePicker(final int imagePickerIndex){
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Chọn Ảnh"), imagePickerIndex);
+            }
+        };
+        return listener;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case PICK_IMAGE_ONE:
+                if(resultCode == Activity.RESULT_OK){
+                    Uri imgURI = data.getData();
+                    _imgbtnPic1EditPost.setImageURI(imgURI);
+                    _isPickImage[0] = true;
+                }
+                break;
+            case PICK_IMAGE_TWO:
+                if(resultCode == Activity.RESULT_OK){
+                    Uri imgURI = data.getData();
+                    _imgbtnPic2EditPost.setImageURI(imgURI);
+                    _isPickImage[1] = true;
+                }
+                break;
+            case PICK_IMAGE_THREE:
+                if(resultCode == Activity.RESULT_OK){
+                    Uri imgURI = data.getData();
+                    _imgbtnPic3EditPost.setImageURI(imgURI);
+                    _isPickImage[2] = true;
+                }
+                break;
+        }
+
+        super.onActivityResult(requestCode,resultCode,data);
+    }
+
+    private boolean checkIsValid(Context context) {
+       if(_txtTitleEditPost.getText().toString().length() == 0){
+            Toast.makeText( context, "Không thể đăng bài: Không được để trống Tiêu đề" , Toast.LENGTH_LONG).show();
+            return false;
+        }else if(_txtContentEditPost.getText().toString().length() == 0){
+            Toast.makeText( context, "Không thể đăng bài: Không được để trống Nội dung" , Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        return true;
+    }
+
+    private int[] uploadImage() throws SQLException {
+        int[] arrayImageId = new int[3];
+        if(_isPickImage[0] == true){
+            Bitmap bitmap = ((BitmapDrawable)_imgbtnPic1EditPost.getDrawable()).getBitmap();
+            byte[] arrayByte = _database.convertBitmapToBytes(bitmap);
+            Connection con = _database.connectToDatabase();
+            int imageId = _database.saveImageIntoDatabase(con, arrayByte);
+            arrayImageId[0] = imageId;
+            con.close();
+        }else{
+            arrayImageId[0] = _oldImageListId[0];
+        }
+
+        if(_isPickImage[1] == true){
+            Bitmap bitmap = ((BitmapDrawable)_imgbtnPic2EditPost.getDrawable()).getBitmap();
+            byte[] arrayByte = _database.convertBitmapToBytes(bitmap);
+            Connection con = _database.connectToDatabase();
+            int imageId = _database.saveImageIntoDatabase(con, arrayByte);
+            arrayImageId[1] = imageId;
+            con.close();
+        }else {
+            arrayImageId[1] = _oldImageListId[1];
+        }
+
+        if(_isPickImage[2] == true){
+            Bitmap bitmap = ((BitmapDrawable)_imgbtnPic3EditPost.getDrawable()).getBitmap();
+            byte[] arrayByte = _database.convertBitmapToBytes(bitmap);
+            Connection con = _database.connectToDatabase();
+            int imageId = _database.saveImageIntoDatabase(con, arrayByte);
+            arrayImageId[2] = imageId;
+            con.close();
+        }else {
+            arrayImageId[2] = _oldImageListId[2];
+        }
+
+        return arrayImageId;
     }
 }
 
