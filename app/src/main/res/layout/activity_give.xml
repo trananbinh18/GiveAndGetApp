@@ -68,7 +68,7 @@
                     android:id="@+id/rollgiveactivity"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
-                    android:src="@drawable/ic_dice1"/>
+                    android:src="@drawable/ic_dice1" />
 
             </LinearLayout>
         </LinearLayout>
