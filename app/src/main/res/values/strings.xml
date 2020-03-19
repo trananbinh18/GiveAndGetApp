@@ -5,7 +5,7 @@
     <string name="title_notifications">Thông báo</string>
     <string name="title_search">Tìm kiếm</string>
     <string name="title_profile">Thông tin cá nhân</string>
-    <string name="connection_string">jdbc:jtds:sqlserver://192.168.0.102;database=GiveAndGetDB;user=admin;password=123</string>
+    <string name="connection_string">jdbc:jtds:sqlserver://192.168.0.125;database=GiveAndGetDB;user=admin;password=123</string>
     <string name="title_activity_post_detail">PostDetailActivity</string>
     <string name="title_activity_give">GiveActivity</string>
     <string name="title_activity_edit_post">EditPostActivity</string>

@@ -26,10 +26,12 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.giveandgetapp.EditProfileActivity;
+import com.example.giveandgetapp.GiveActivity;
 import com.example.giveandgetapp.LoginActivity;
 import com.example.giveandgetapp.MainActivity;
 import com.example.giveandgetapp.PostDetailActivity;
 import com.example.giveandgetapp.R;
+import com.example.giveandgetapp.RatingActivity;
 import com.example.giveandgetapp.database.ActorPostAdapter;
 import com.example.giveandgetapp.database.Database;
 import com.example.giveandgetapp.database.PostProfile;
@@ -115,9 +117,9 @@ public class ProfileFragment extends Fragment {
         try {
             if(resultSet.next()){
                 int rpc = resultSet.getInt("ReportCount");
-                int rtc = resultSet.getInt("RatingCount");
-                _sodanhgia.setText(rpc+"");
-                _sobaocao.setText(rtc+"");
+                float rtc = resultSet.getFloat("RatingCount");
+                _sodanhgia.setText(rtc+"");
+                _sobaocao.setText(rpc+"");
 
             }
 
@@ -261,6 +263,9 @@ public class ProfileFragment extends Fragment {
                 //Are Post is expire
                 else if(item.status == 2){
                     btnGiveActor.setVisibility(View.VISIBLE);
+
+                    //Add action listener
+                    btnGiveActor.setOnClickListener(getButtonGiveClickListener(item.postId));
                 }
 
                 dlogPostActor.show();
@@ -309,8 +314,11 @@ public class ProfileFragment extends Fragment {
                 }
 
                 //Are Post is expire
-                else if(item.status == 2){
+                else if(item.status == 3 && _sessionManager.getUserDetail().id == item.receiveId){
                     btnRatingReceive.setVisibility(View.VISIBLE);
+                    
+                    //Add action listener
+                    btnRatingReceive.setOnClickListener(getButtonRatingClickListener(item.postId));
                 }
 
                 dlogPostReceive.show();
@@ -323,6 +331,37 @@ public class ProfileFragment extends Fragment {
 
         return root;
     }
+
+    private View.OnClickListener getButtonRatingClickListener(int postId) {
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), RatingActivity.class);
+                intent.putExtra("Post_Id",postId);
+                getActivity().startActivityForResult(intent,12);
+
+                _isRedirectToActivity = true;
+            }
+        };
+
+        return listener;
+    }
+
+    private View.OnClickListener getButtonGiveClickListener(int postId) {
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), GiveActivity.class);
+                intent.putExtra("Post_Id",postId);
+                getActivity().startActivityForResult(intent,11);
+
+                _isRedirectToActivity = true;
+            }
+        };
+
+        return listener;
+    }
+
 
     private View.OnClickListener getButtonReviewClickListener(int postId) {
         View.OnClickListener listener = new View.OnClickListener() {
@@ -381,7 +420,7 @@ public class ProfileFragment extends Fragment {
                 int status = result.getInt("Status");
                 int imageId = result.getInt("Image");
 
-                PostProfile postProfile = new PostProfile(postId, currentUser.id, title, status, imageId);
+                PostProfile postProfile = new PostProfile(postId, currentUser.id, title, status, imageId,0);
                 profileViewModel.getListPostProfileActor().getValue().add(postProfile);
                 if(postId > maxIdPostProfileActor){
                     maxIdPostProfileActor = postId;
@@ -405,7 +444,7 @@ public class ProfileFragment extends Fragment {
             Connection con = _database.connectToDatabase();
             User currentUser = _sessionManager.getUserDetail();
 
-            String query = "SELECT p.Id, p.Image, p.Title, p.Status" +
+            String query = "SELECT p.Id, p.Image, p.Title, p.Status, p.Receiver" +
                     " FROM [Post] p " +
                     " INNER JOIN Receive r ON r.PostId = p.Id AND r.UserId = "+currentUser.id;
             ResultSet result = _database.excuteCommand(con, query);
@@ -415,8 +454,9 @@ public class ProfileFragment extends Fragment {
                 String title = result.getString("Title");
                 int status = result.getInt("Status");
                 int imageId = result.getInt("Image");
+                int receiverId = result.getInt("Receiver");
 
-                PostProfile postProfile = new PostProfile(postId, currentUser.id, title, status, imageId);
+                PostProfile postProfile = new PostProfile(postId, currentUser.id, title, status, imageId,receiverId);
                 listPostProfile.add(postProfile);
             }
 
@@ -449,7 +489,7 @@ public class ProfileFragment extends Fragment {
                 int status = result.getInt("Status");
                 int imageId = result.getInt("Image");
 
-                PostProfile postProfile = new PostProfile(postId, currentUser.id, title, status, imageId);
+                PostProfile postProfile = new PostProfile(postId, currentUser.id, title, status, imageId,0);
                 listPostProfile.add(postProfile);
                 if(postId > maxIdPostProfileActor){
                     maxIdPostProfileActor = postId;

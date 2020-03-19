@@ -62,7 +62,7 @@ public class ActorPostAdapter extends BaseAdapter {
         TextView txtStatus = convertView.findViewById(R.id.txtStatus);
         TextView txtTitle = convertView.findViewById(R.id.txtTitle);
 
-        String statusStr = (item.status == 1)?"Chưa hết hạn":"Đã hết hạn";
+        String statusStr = (item.status == 1)?"Chưa hết hạn":(item.status == 2)?"Đã hết hạn":(item.status == 3)?"Đang chờ đánh giá":"Đóng";
         txtStatus.setText(statusStr);
         txtTitle.setText(item.title);
         layoutItem.setBackground(new BitmapDrawable(_context.getResources(), _listImage.get(position)));
