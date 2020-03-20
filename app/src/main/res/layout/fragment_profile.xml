@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+            <LinearLayout
                 android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -40,52 +40,75 @@
                         android:scaleType="centerCrop" />
                 </androidx.cardview.widget.CardView>
 
-                <TextView
-                    android:id="@+id/lblbaidang"
-                    android:layout_width="80dp"
-                    android:layout_height="30dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="60dp"
-                    android:text="Bài đăng" />
 
-                <TextView
-                    android:id="@+id/lbldanhgia"
-                    android:layout_width="80dp"
-                    android:layout_height="30dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="60dp"
-                    android:text="Đánh giá" />
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/sobaidang"
+                        android:layout_width="80dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="25dp"
+                        android:gravity="center_horizontal" />
 
-                <TextView
-                    android:id="@+id/lblbaocao"
-                    android:layout_width="80dp"
-                    android:layout_height="30dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="60dp"
-                    android:text="Báo cáo" />
+                    <TextView
+                        android:id="@+id/lblbaidang"
+                        android:layout_width="80dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="60dp"
+                        android:text="Bài đăng"
+                        android:gravity="center_horizontal"/>
+                </RelativeLayout>
 
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/sobaidang"
-                    android:layout_width="80dp"
-                    android:layout_height="30dp"
-                    android:layout_marginLeft="-260dp"
-                    android:layout_marginTop="20dp" />
+                    <TextView
+                        android:id="@+id/sodanhgia"
+                        android:layout_width="80dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="25dp"
+                        android:gravity="center_horizontal"/>
 
-                <TextView
-                    android:id="@+id/sodanhgia"
-                    android:layout_width="80dp"
-                    android:layout_height="30dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="20dp" />
+                    <TextView
+                        android:id="@+id/lbldanhgia"
+                        android:layout_width="80dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="60dp"
+                        android:text="Đánh giá"
+                        android:gravity="center_horizontal"/>
+                </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/sobaocao"
-                    android:layout_width="80dp"
-                    android:layout_height="30dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="20dp" />
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
+                    <TextView
+                        android:id="@+id/sobaocao"
+                        android:layout_width="80dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="25dp"
+                        android:gravity="center_horizontal"/>
+
+                    <TextView
+                        android:id="@+id/lblbaocao"
+                        android:layout_width="80dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="60dp"
+                        android:text="Báo cáo"
+                        android:gravity="center_horizontal"/>
+
+                </RelativeLayout>
             </LinearLayout>
 
             <LinearLayout

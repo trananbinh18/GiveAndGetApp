@@ -73,6 +73,18 @@ public class ProfileFragment extends Fragment {
     private ActorPostAdapter _actorPostAdapter;
     private ReceivePostAdapter _receivePostAdapter;
 
+    public static double roundHalf(double number) {
+        double diff = number - (int)number;
+        if (diff < 0.25) {
+            return (int)number;
+        }
+        else if (diff < 0.75) {
+            return (int)number + 0.5;
+        } else {
+            return (int)number + 1;
+        }
+    }
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         profileViewModel =
@@ -96,7 +108,6 @@ public class ProfileFragment extends Fragment {
 
         User user = _sessionManager.getUserDetail();
 
-
         _lbllop = root.findViewById(R.id.lbllopuser);
         _lblmssv = root.findViewById(R.id.lblmssvuser);
         _lblsdt = root.findViewById(R.id.lblsdtuser);
@@ -108,6 +119,8 @@ public class ProfileFragment extends Fragment {
         _gridActorPost = root.findViewById(R.id.gridActorPost);
         _gridReceivePost = root.findViewById(R.id.gridReceivePost);
 
+
+
         //Load bài đăng + báo cáo
         Connection con = _database.connectToDatabase();
         String query = "SELECT ReportCount, RatingCount FROM [User] WHERE Id = "+ user.id;
@@ -118,9 +131,10 @@ public class ProfileFragment extends Fragment {
             if(resultSet.next()){
                 int rpc = resultSet.getInt("ReportCount");
                 float rtc = resultSet.getFloat("RatingCount");
-                _sodanhgia.setText(rtc+"");
+                double parsertcToDouble = rtc;
+                double rating = roundHalf(parsertcToDouble);
+                _sodanhgia.setText(rating+"");
                 _sobaocao.setText(rpc+"");
-
             }
 
             if(resultquerypost.next()){

@@ -6,18 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.giveandgetapp.R;
@@ -25,8 +20,6 @@ import com.example.giveandgetapp.database.Catalog;
 import com.example.giveandgetapp.database.Database;
 import com.example.giveandgetapp.database.ResultSearch;
 import com.example.giveandgetapp.database.ResultSearchAdapter;
-import com.example.giveandgetapp.database.UserGiven;
-import com.example.giveandgetapp.database.UserGivenAdapter;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -86,12 +79,14 @@ public class SearchFragment extends Fragment {
             e.printStackTrace();
         }
 
-        String editText = _txtTypeTitleSearch.getText().toString();
         _listResultSearchFragment = new ArrayList<ResultSearch>();
         //Action Search
        _imgbtnSearch.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View view) {
+               String editText = _txtTypeTitleSearch.getText().toString();
+
+               _listResultSearchFragment.clear();
                if(_spinnerSelectCatalogi.getSelectedItem().toString().contains("Tất cả")){
                    String queryAllPost = "SELECT * FROM [Post] WHERE [Post].Title LIKE '%"+editText+"%'";
                    ResultSet rsAllPost = _database.excuteCommand(con, queryAllPost);
@@ -115,19 +110,21 @@ public class SearchFragment extends Fragment {
                    ResultSet rsSearch = _database.excuteCommand(con, querySearch);
                    //Get Post
                    try{
-                       while (rsSearch.next()){
-                           int _postid = rsSearch.getInt("Id");
-                           String _posttitle = rsSearch.getString("Title");
-                           Bitmap _postimage = _database.getImageInDatabase(con,rsSearch.getInt("Image"));
-                           ResultSearch item = new ResultSearch(_postid,_posttitle,_postimage);
-                           _listResultSearchFragment.add(item);
+                       if(rsSearch != null){
+                           while (rsSearch.next()){
+                               int _postid = rsSearch.getInt("Id");
+                               String _posttitle = rsSearch.getString("Title");
+                               Bitmap _postimage = _database.getImageInDatabase(con,rsSearch.getInt("Image"));
+                               ResultSearch item = new ResultSearch(_postid,_posttitle,_postimage);
+                               _listResultSearchFragment.add(item);
+                           }
                        }
                        con.close();
                    }catch (SQLException e){
                        e.printStackTrace();
                    }
                }
-               _adapter = new ResultSearchAdapter(root.getContext(), _listResultSearchFragment);
+               _adapter = new ResultSearchAdapter(getActivity() ,root.getContext(), _listResultSearchFragment);
                _listviewSearch.setAdapter(_adapter);
            }
        });

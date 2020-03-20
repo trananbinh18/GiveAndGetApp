@@ -9,14 +9,14 @@
     <LinearLayout
         android:id="@+id/layout1searchfragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         android:orientation="horizontal">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/parent_layout0"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            app:cardCornerRadius="35dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:cardCornerRadius="25dp"
             app:cardElevation="0dp">
 
             <ImageView
@@ -29,7 +29,7 @@
         <TextView
             android:id="@+id/posttitleresultsearch"
             android:layout_width="100dp"
-            android:layout_height="30dp"
+            android:layout_height="50dp"
             android:layout_marginTop="30dp"
             android:layout_marginLeft="10dp"/>
 
