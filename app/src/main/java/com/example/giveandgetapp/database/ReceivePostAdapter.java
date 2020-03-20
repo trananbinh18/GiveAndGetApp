@@ -28,6 +28,11 @@ public class ReceivePostAdapter extends BaseAdapter {
         this._listImage = listImage;
     }
 
+    public void setListPostReceive(ArrayList<PostProfile> listPostReceive, ArrayList<Bitmap> listImage){
+        this._listPostReceive = listPostReceive;
+        this._listImage = listImage;
+    }
+
     @Override
     public int getCount() {
         return _listPostReceive.size();
@@ -59,7 +64,7 @@ public class ReceivePostAdapter extends BaseAdapter {
 
         String statusStr = (item.status == 1)?"Chưa hết hạn":(item.status == 2)?"Đã hết hạn":(item.status == 3)?"Đang chờ đánh giá":"Đóng";
         txtStatus.setText(statusStr);
-        txtTitle.setText(item.title);
+//        txtTitle.setText(item.title);
         layoutItem.setBackground(new BitmapDrawable(_context.getResources(), _listImage.get(position)));
 
 

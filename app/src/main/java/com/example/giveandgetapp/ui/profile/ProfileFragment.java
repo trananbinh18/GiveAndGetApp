@@ -181,6 +181,23 @@ public class ProfileFragment extends Fragment {
         tv1.setTextSize(10);
 
         //Set Adapter for Gridview receive
+        profileViewModel.getListPostProfileReceive().observe(this, new Observer<ArrayList<PostProfile>>() {
+            @Override
+            public void onChanged(ArrayList<PostProfile> postProfiles) {
+                Connection connection = _database.connectToDatabase();
+                _listImagePostReceive = new ArrayList<Bitmap>();
+
+                for (PostProfile item:postProfiles) {
+                    Bitmap img = _database.getImageInDatabaseInSquire(connection, item.imageId);
+                    _listImagePostReceive.add(img);
+                }
+
+                _receivePostAdapter.setListPostReceive(postProfiles, _listImagePostReceive);
+                _receivePostAdapter.notifyDataSetChanged();
+
+            }
+        });
+
         ArrayList<PostProfile> listProfileReceive= profileViewModel.getListPostProfileReceive().getValue();
         _listImagePostReceive = new ArrayList<Bitmap>();
 
@@ -196,6 +213,22 @@ public class ProfileFragment extends Fragment {
 
 
         //Set Adapter for Gridview actor
+        profileViewModel.getListPostProfileActor().observe(this, new Observer<ArrayList<PostProfile>>() {
+            @Override
+            public void onChanged(ArrayList<PostProfile> postProfiles) {
+                Connection connection = _database.connectToDatabase();
+                _listImagePostActor = new ArrayList<Bitmap>();
+
+                for (PostProfile item:postProfiles) {
+                    Bitmap img = _database.getImageInDatabaseInSquire(connection, item.imageId);
+                    _listImagePostActor.add(img);
+                }
+
+                _actorPostAdapter.setListPostActor(postProfiles,_listImagePostActor);
+                _actorPostAdapter.notifyDataSetChanged();
+            }
+        });
+
         ArrayList<PostProfile> listProfileActor= profileViewModel.getListPostProfileActor().getValue();
         _listImagePostActor = new ArrayList<Bitmap>();
 

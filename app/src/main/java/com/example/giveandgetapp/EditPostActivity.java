@@ -235,8 +235,8 @@ public class EditPostActivity extends AppCompatActivity {
                                 "      ,Image = " + image+
                                 "      ,Image2 = " + image2+
                                 "      ,Image3 = " + image3+
-                                "      ,Title = " + "'" +title+ "'" +
-                                "      ,Contents = " + "'" +content+ "'" +
+                                "      ,Title = " + "'N" +title+ "'" +
+                                "      ,Contents = " + "N'" +content+ "'" +
                                 "      ,ExpireDate = " + "CONVERT(datetime,'" +expire_date+ "',120)"+
                                 "      ,GiveType = " +given_type+
                                 "      ,ExpireType = " +expireType+

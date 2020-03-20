@@ -33,6 +33,11 @@ public class ActorPostAdapter extends BaseAdapter {
         this._listImage = listImage;
     }
 
+    public void setListPostActor(ArrayList<PostProfile> listPostActor, ArrayList<Bitmap> listImage){
+        this._listPostActor =  listPostActor;
+        this._listImage = listImage;
+    }
+
     @Override
     public int getCount() {
         return _listPostActor.size();
@@ -64,7 +69,7 @@ public class ActorPostAdapter extends BaseAdapter {
 
         String statusStr = (item.status == 1)?"Chưa hết hạn":(item.status == 2)?"Đã hết hạn":(item.status == 3)?"Đang chờ đánh giá":"Đóng";
         txtStatus.setText(statusStr);
-        txtTitle.setText(item.title);
+//        txtTitle.setText(item.title);
         layoutItem.setBackground(new BitmapDrawable(_context.getResources(), _listImage.get(position)));
 
 

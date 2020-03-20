@@ -8,6 +8,8 @@ import android.os.Bundle;
 import com.example.giveandgetapp.database.Database;
 import com.example.giveandgetapp.database.FeedItem;
 import com.example.giveandgetapp.database.FeedListAdapter;
+import com.example.giveandgetapp.database.SessionManager;
+import com.example.giveandgetapp.database.User;
 import com.example.giveandgetapp.database.UserGiven;
 import com.example.giveandgetapp.database.UserGivenAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -50,6 +52,8 @@ public class GiveActivity extends AppCompatActivity {
     private String _postTitle;
     private int _postId;
     private int _giveType;
+    private User _currentUser;
+    private SessionManager _sessionManager;
 
 
     @Override
@@ -61,6 +65,9 @@ public class GiveActivity extends AppCompatActivity {
         _postTitleGiveActivity = findViewById(R.id.posttitlegiveactivity);
         _btnRandom = findViewById(R.id.btnRandom);
         _btnApprove = findViewById(R.id.btnApprove);
+
+        _sessionManager = new SessionManager(this);
+        _currentUser = _sessionManager.getUserDetail();
 
         this._postId = getIntent().getIntExtra("Post_Id",0);
 
@@ -163,6 +170,13 @@ public class GiveActivity extends AppCompatActivity {
                     try {
                     _database.excuteCommand(con,query);
                     _database.excuteCommand(con,queryAddNotification);
+                    String queryEditNotification = "UPDATE [Notification]" +
+                                "   SET Status = 2"+
+                                "   WHERE UserId="+_currentUser.id+
+                                "       AND PostId="+_postId+
+                                "       AND Type = 2";
+
+                    _database.excuteCommand(con,queryEditNotification);
 
                     con.close();
                     } catch (SQLException e) {

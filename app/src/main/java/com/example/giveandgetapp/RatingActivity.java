@@ -54,7 +54,7 @@ public class RatingActivity extends AppCompatActivity {
         _btnHuyRating = findViewById(R.id.btnHuyRating);
         _sessionManager = new SessionManager(this);
         _database = new Database(this);
-        User _currentUser = _sessionManager.getUserDetail();
+        _currentUser = _sessionManager.getUserDetail();
         Connection con = _database.connectToDatabase();
         String queryPost = "SELECT * FROM Post WHERE Id = "+_postId;
         ResultSet rs = _database.excuteCommand(con,queryPost);
@@ -79,7 +79,7 @@ public class RatingActivity extends AppCompatActivity {
             public void onClick(View view) {
                 float star = _ratingBar.getRating();
                 Connection con = _database.connectToDatabase();
-                String queryGet = "SELECT RatingCount, NumberPostHadRated FROM [User] WHERE Id = "+_currentUser.id;
+                String queryGet = "SELECT RatingCount, NumberPostHadRated FROM [User] WHERE Id = "+_actorId;
                 ResultSet resultSet = _database.excuteCommand(con,queryGet);
                 try {
                     if(resultSet.next()){
@@ -92,7 +92,7 @@ public class RatingActivity extends AppCompatActivity {
                         String queryEdit = "UPDATE [User]" +
                                 "   SET RatingCount = "+newRatingCount +
                                 "      ,NumberPostHadRated = "+ newNumberPostHadRated +
-                                "   WHERE Id = " + _currentUser.id;
+                                "   WHERE Id = " + _actorId;
 
                         _database.excuteCommand(con,queryEdit);
 
@@ -118,6 +118,13 @@ public class RatingActivity extends AppCompatActivity {
 
                         _database.excuteCommand(con,queryNotification);
 
+                        String queryEditNotification = "UPDATE [Notification]" +
+                                "   SET Status = 2"+
+                                "   WHERE UserId="+_currentUser.id+
+                                "       AND PostId="+_postId+
+                                "       AND Type = 3";
+
+                        _database.excuteCommand(con,queryEditNotification);
 
                         con.close();
                     }
