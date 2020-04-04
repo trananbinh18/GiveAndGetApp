@@ -161,7 +161,7 @@ public class GiveActivity extends AppCompatActivity {
                             "           ,"+_postId +
                             "           ,1" +
                             "           ," + "CONVERT(datetime,'" +create_date+"',120)"+
-                            "           ,N'Bạn đã nhận được một món đồ'" +
+                            "           ,N'Xác bạn đã nhận được món đồ'" +
                             "           ,N'Bạn nhận được một món đồ của từ bài post "+_postTitle+"'" +
                             "           ,3)";
 
