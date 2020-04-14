@@ -211,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
                     if(_profileViewModel.getListPostProfileActor().getValue() == null){
                         _profileViewModel.setListPostProfileActor(getInitListPostProfileActor(_profileViewModel));
                     }
-                    ArrayList<PostProfile> currentPostProfiles = _profileViewModel.getListPostProfileActor().getValue();
+                    ArrayList<PostProfile> currentPostProfiles = _profileViewModel.getListPostProfileReceive().getValue();
                     ArrayList<PostProfile> newPostProfiles = new ArrayList<PostProfile>();
 
                     for (PostProfile item: currentPostProfiles) {
@@ -223,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
                         newPostProfiles.add(item);
                     }
 
-                    _profileViewModel.setListPostProfileActor(newPostProfiles);
+                    _profileViewModel.setListPostProfileReceive(newPostProfiles);
 
 
                     //Set for notification
