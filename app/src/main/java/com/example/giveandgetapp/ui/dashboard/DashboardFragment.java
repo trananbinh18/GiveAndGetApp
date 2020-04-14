@@ -146,9 +146,10 @@ public class DashboardFragment extends Fragment {
                 " LEFT JOIN [Receive] r" +
                 " ON p.Id = r.PostId  AND r.UserId = " + currentUser.id +
                 " WHERE" +
-                " p.Id > "+_dashboardViewModel.getMaxPostId().getValue().intValue()+
+                " (p.Id > "+_dashboardViewModel.getMaxPostId().getValue().intValue()+
                 " OR" +
                 " p.Id < "+_dashboardViewModel.getMinPostId().getValue().intValue()+
+                " ) AND p.Status = 1 " +
                 " ORDER BY p.Id DESC" +
                 " OFFSET 0 ROWS " +
                 " FETCH NEXT 5 ROWS ONLY";
@@ -219,6 +220,7 @@ public class DashboardFragment extends Fragment {
                 " ON p.Id = l.PostId  AND l.UserId = " + currentUser.id +
                 " LEFT JOIN [Receive] r" +
                 " ON p.Id = r.PostId  AND r.UserId = " + currentUser.id +
+                " WHERE p.Status = 1 " +
                 " ORDER BY p.Id DESC" +
                 " OFFSET 0 ROWS " +
                 " FETCH NEXT 5 ROWS ONLY";

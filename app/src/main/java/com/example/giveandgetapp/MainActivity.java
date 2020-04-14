@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.giveandgetapp.database.Database;
 import com.example.giveandgetapp.database.FeedItem;
+import com.example.giveandgetapp.database.FeedNotification;
 import com.example.giveandgetapp.database.PostProfile;
 import com.example.giveandgetapp.database.RunableGetNotification;
 import com.example.giveandgetapp.database.SessionManager;
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private NotificationsViewModel _notificationsViewModel;
     private DashboardViewModel _dashboardViewModel;
     private ProfileViewModel _profileViewModel;
+    private TextView txtNumberNotifyCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationItemView itemView = (BottomNavigationItemView) v;
         View badge = LayoutInflater.from(this)
                 .inflate(R.layout.item_notification_tab, itemView, true);
-        TextView txtNumberNotifyCount = badge.findViewById(R.id.notifications_badge);
+        txtNumberNotifyCount = badge.findViewById(R.id.notifications_badge);
 
 
         getNotificationsInterval(_notificationsViewModel, txtNumberNotifyCount);
@@ -169,6 +171,29 @@ public class MainActivity extends AppCompatActivity {
                         }
                         newPostProfiles.add(item);
                     }
+                    _profileViewModel.setListPostProfileActor(newPostProfiles);
+
+                    //Set for notification
+                    ArrayList<FeedNotification> currentNotifications = _notificationsViewModel.getListNotification().getValue();
+                    ArrayList<FeedNotification> newNotifications = new ArrayList<FeedNotification>();
+
+                    int countNotRead = 0;
+                    for (FeedNotification item: currentNotifications) {
+                        if(item.postId == postId && item.type ==2){
+                            item.status = 2;
+                        }
+
+                        if(item.status == 1){
+                            countNotRead++;
+                        }
+
+                        newNotifications.add(item);
+                    }
+
+                    txtNumberNotifyCount.setText(countNotRead+"");
+
+                    _notificationsViewModel.setListNotification(newNotifications);
+
 
 
                     break;
@@ -193,8 +218,33 @@ public class MainActivity extends AppCompatActivity {
                         if(item.postId == postId){
                             item.status = 4;
                         }
+
+
                         newPostProfiles.add(item);
                     }
+
+                    _profileViewModel.setListPostProfileActor(newPostProfiles);
+
+
+                    //Set for notification
+                    ArrayList<FeedNotification> currentNotifications = _notificationsViewModel.getListNotification().getValue();
+                    ArrayList<FeedNotification> newNotifications = new ArrayList<FeedNotification>();
+
+                    int countNotRead = 0;
+                    for (FeedNotification item: currentNotifications) {
+                        if(item.postId == postId && item.type ==3){
+                            item.status = 2;
+                        }
+                        if(item.status == 1){
+                            countNotRead++;
+                        }
+
+                        newNotifications.add(item);
+                    }
+
+                    txtNumberNotifyCount.setText(countNotRead+"");
+
+                    _notificationsViewModel.setListNotification(newNotifications);
 
 
                     break;

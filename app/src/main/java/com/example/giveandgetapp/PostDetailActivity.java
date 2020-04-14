@@ -211,7 +211,6 @@ public class PostDetailActivity extends AppCompatActivity {
 
                 }else {
                     //User không phải là actor
-
                     _baocao.setText("Báo cáo");
                     _tuychon.setVisibility(View.GONE);
                     //Button báo cáo
@@ -239,7 +238,6 @@ public class PostDetailActivity extends AppCompatActivity {
                                         e.printStackTrace();
                                     }
                                 }
-
                             });
                         }
                     });

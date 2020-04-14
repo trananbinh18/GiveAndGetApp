@@ -35,6 +35,9 @@ public class RatingActivity extends AppCompatActivity {
     private RatingBar _ratingBar;
     private Button _btnLuuRating;
     private Button _btnHuyRating;
+    private TextView _txtMain;
+    private Button _btnApprove;
+    private Button _btnDenied;
     private int _postId;
     private User _currentUser;
     private int _actorId;
@@ -52,9 +55,12 @@ public class RatingActivity extends AppCompatActivity {
         _ratingBar = findViewById(R.id.ratingBar);
         _btnLuuRating = findViewById(R.id.btnLuuRating);
         _btnHuyRating = findViewById(R.id.btnHuyRating);
+        _txtMain = findViewById(R.id.txtMain);
+        _btnApprove = findViewById(R.id.btnApprove);
+        _btnDenied = findViewById(R.id.btnDenied);
         _sessionManager = new SessionManager(this);
         _database = new Database(this);
-        User _currentUser = _sessionManager.getUserDetail();
+        _currentUser = _sessionManager.getUserDetail();
         Connection con = _database.connectToDatabase();
         String queryPost = "SELECT * FROM Post WHERE Id = "+_postId;
         ResultSet rs = _database.excuteCommand(con,queryPost);
@@ -72,6 +78,60 @@ public class RatingActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        //Button Approve
+        _btnApprove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                _txtMain.setText("Đánh giá bài viết này");
+                _ratingBar.setVisibility(View.VISIBLE);
+                _btnLuuRating.setVisibility(View.VISIBLE);
+                _btnApprove.setVisibility(View.INVISIBLE);
+                _btnDenied.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        //Button Denied
+        _btnDenied.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Connection con = _database.connectToDatabase();
+
+                String queryEditNotification = "UPDATE [Notification]" +
+                        "   SET Status = 2"+
+                        "   WHERE UserId="+_currentUser.id+
+                        "       AND PostId="+_postId+
+                        "       AND Type = 3";
+
+                _database.excuteCommand(con,queryEditNotification);
+
+                String queryEditPost = "UPDATE [Post]" +
+                        "   SET Status = 2" +
+                        "   WHERE Id = " + _postId;
+
+                _database.excuteCommand(con,queryEditPost);
+
+                SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date date = new Date();
+                String create_date = formater.format(date);
+                String queryNotification = "INSERT INTO [Notification]" +
+                        "           (UserId,PostId,Status,CreateDate,Title,Contents,Type)" +
+                        "     VALUES" +
+                        "           ("+_actorId +
+                        "           ,"+_postId +
+                        "           ,1" +
+                        "           ," + "CONVERT(datetime,'" +create_date+"',120)"+
+                        "           ,N'"+_currentUser.name+" đã từ chối xác nhận món đồ này'" +
+                        "           ,N'Hãy chọn lại người nhận'" +
+                        "           ,2)";
+
+                _database.excuteCommand(con,queryNotification);
+
+
+                finish();
+            }
+        });
+
 
         //Button Luu
         _btnLuuRating.setOnClickListener(new View.OnClickListener() {
@@ -79,7 +139,7 @@ public class RatingActivity extends AppCompatActivity {
             public void onClick(View view) {
                 float star = _ratingBar.getRating();
                 Connection con = _database.connectToDatabase();
-                String queryGet = "SELECT RatingCount, NumberPostHadRated FROM [User] WHERE Id = "+_currentUser.id;
+                String queryGet = "SELECT RatingCount, NumberPostHadRated FROM [User] WHERE Id = "+_actorId;
                 ResultSet resultSet = _database.excuteCommand(con,queryGet);
                 try {
                     if(resultSet.next()){
@@ -92,7 +152,7 @@ public class RatingActivity extends AppCompatActivity {
                         String queryEdit = "UPDATE [User]" +
                                 "   SET RatingCount = "+newRatingCount +
                                 "      ,NumberPostHadRated = "+ newNumberPostHadRated +
-                                "   WHERE Id = " + _currentUser.id;
+                                "   WHERE Id = " + _actorId;
 
                         _database.excuteCommand(con,queryEdit);
 
@@ -118,6 +178,13 @@ public class RatingActivity extends AppCompatActivity {
 
                         _database.excuteCommand(con,queryNotification);
 
+                        String queryEditNotification = "UPDATE [Notification]" +
+                                "   SET Status = 2"+
+                                "   WHERE UserId="+_currentUser.id+
+                                "       AND PostId="+_postId+
+                                "       AND Type = 3";
+
+                        _database.excuteCommand(con,queryEditNotification);
 
                         con.close();
                     }

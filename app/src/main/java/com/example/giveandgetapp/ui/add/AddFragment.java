@@ -172,8 +172,8 @@ public class AddFragment extends Fragment {
                                "           ," + image +
                                "           ," + image2 +
                                "           ," + image3 +
-                               "           ," + "'" +title+ "'"+
-                               "           ," + "'" +content+ "'" +
+                               "           ," + "N'" +title+ "'"+
+                               "           ," + "N'" +content+ "'" +
                                "           ," + "CONVERT(datetime,'" +create_date+"',120)" +
                                "           ," + "CONVERT(datetime,'" +expire_date+ "',120)" +
                                "           ," + given_type +

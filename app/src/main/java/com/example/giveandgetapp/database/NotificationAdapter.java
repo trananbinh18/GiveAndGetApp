@@ -98,28 +98,37 @@ public class NotificationAdapter extends BaseAdapter {
         //Set background by status
         if(item.status == 1){
             parentLayout.setBackgroundColor(Color.parseColor("#EDA600"));
+        }else{
+            parentLayout.setBackgroundColor(Color.WHITE);
         }
 
         parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setNotificationAlreadyRead(item.id);
                 switch (item.type){
                     case 1:
+                        setNotificationAlreadyRead(item.id);
                         Intent intent = new Intent(activity.getApplicationContext(), PostDetailActivity.class);
                         intent.putExtra("Post_Id",item.postId);
                         activity.startActivityForResult(intent,10);
                         break;
                     case 2:
-                        Intent intent1 = new Intent(activity.getApplicationContext(), GiveActivity.class);
-                        intent1.putExtra("Post_Id",item.postId);
-                        activity.startActivityForResult(intent1,11);
+                        if(item.status == 1){
+                            Intent intent1 = new Intent(activity.getApplicationContext(), GiveActivity.class);
+                            intent1.putExtra("Post_Id",item.postId);
+                            activity.startActivityForResult(intent1,11);
+                        }
                         break;
                     case 3:
-                        Intent intent2 = new Intent(activity.getApplicationContext(), RatingActivity.class);
-                        intent2.putExtra("Post_Id",item.postId);
-                        activity.startActivityForResult(intent2,12);
+                        if(item.status == 1){
+                            Intent intent2 = new Intent(activity.getApplicationContext(), RatingActivity.class);
+                            intent2.putExtra("Post_Id",item.postId);
+                            activity.startActivityForResult(intent2,12);
+                        }
                         break;
+
+                    default:
+                        setNotificationAlreadyRead(item.id);
                 }
             }
         });

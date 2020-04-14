@@ -57,11 +57,12 @@
                 android:layout_marginTop="10dp">
 
                 <TextView
+                    android:id="@+id/txtMain"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:text="Đánh giá cho bài viết này"
-                    android:textSize="23dp"
-                    android:layout_marginLeft="10dp"/>
+                    android:layout_height="80dp"
+                    android:layout_marginLeft="10dp"
+                    android:text="Bạn Đã được cho món đồ này bạn có xác nhận nhận món đồ này"
+                    android:textSize="23dp" />
 
             </LinearLayout>
 
@@ -76,7 +77,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:progressTint="#ffff00"/>
+                    android:progressTint="#ffff00"
+                    android:visibility="gone" />
             </LinearLayout>
 
             <LinearLayout
@@ -90,7 +92,22 @@
                     android:layout_width="130dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center_horizontal"
-                    android:text="Lưu"/>
+                    android:text="Lưu"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/btnApprove"
+                    android:layout_width="130dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Xác nhận"/>
+
+                <Button
+                    android:id="@+id/btnDenied"
+                    android:layout_width="130dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Hủy xác nhận"/>
 
                 <Button
                     android:id="@+id/btnHuyRating"
