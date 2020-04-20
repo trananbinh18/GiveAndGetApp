@@ -23,6 +23,7 @@
                         android:id="@+id/parent_layout"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
+                        android:layout_marginTop="10dp"
                         app:cardCornerRadius="50dp"
                         app:cardElevation="0dp">
 
@@ -147,21 +148,21 @@
 
                     <Button
                         android:id="@+id/btnluuedit"
-                        android:text="Lưu"
-                        android:textColor="#00ff00"
-                        android:layout_width="wrap_content"
+                        android:layout_width="80dp"
                         android:layout_height="40dp"
                         android:layout_marginLeft="80dp"
-                        android:layout_marginTop="10dp"/>
+                        android:layout_marginTop="10dp"
+                        android:text="Lưu"
+                        android:textColor="#00ff00" />
 
                     <Button
                         android:id="@+id/btnhuyedit"
-                        android:text="Hủy"
-                        android:textColor="#ff0000"
-                        android:layout_width="wrap_content"
+                        android:layout_width="80dp"
                         android:layout_height="40dp"
-                        android:layout_marginLeft="80dp"
-                        android:layout_marginTop="10dp"/>
+                        android:layout_marginLeft="88dp"
+                        android:layout_marginTop="10dp"
+                        android:text="Hủy"
+                        android:textColor="#00ff00" />
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
