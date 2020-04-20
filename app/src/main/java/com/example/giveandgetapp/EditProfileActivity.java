@@ -103,16 +103,16 @@ public class EditProfileActivity extends AppCompatActivity {
 
                     byte[] arrayByte = _database.convertBitmapToBytes(resizeBitmap);
                     int imageId = _database.saveImageIntoDatabase(con, arrayByte);
-                    strQueryAvatar = "Avatar = "+imageId+ ",";
+                    strQueryAvatar = " Avatar = "+imageId+ ",";
                 }
 
                 String strQueryUpdateUser = "" +
                         "UPDATE [User] " +
                         "   SET" + strQueryAvatar +
-                        "      StudentId = " + _txtMssv.getText().toString() +
-                        "      ,Name = " + _txtName.getText().toString()+
-                        "      ,Class = " + _txtLop.getText().toString()+
-                        "      ,Phone = " + _txtSdt.getText().toString()+
+                        "      StudentId = '" + _txtMssv.getText().toString() + "'"+
+                        "      ,Name = '" + _txtName.getText().toString()+ "'"+
+                        "      ,Class = '" + _txtLop.getText().toString()+ "'"+
+                        "      ,Phone = '" + _txtSdt.getText().toString()+ "'" +
                         " WHERE  Id = "+ _user.id;
 
                 _database.excuteCommand(con, strQueryUpdateUser);
