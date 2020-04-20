@@ -1,5 +1,6 @@
 package com.example.giveandgetapp.ui.profile;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -72,6 +73,8 @@ public class ProfileFragment extends Fragment {
     private int _maxIdPostProfileActor = 0;
     private ActorPostAdapter _actorPostAdapter;
     private ReceivePostAdapter _receivePostAdapter;
+
+    public final int REQUEST_CODE_EDIT_PROFILE = 100;
 
     public static double roundHalf(double number) {
         double diff = number - (int)number;
@@ -159,7 +162,7 @@ public class ProfileFragment extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), EditProfileActivity.class);
                 _isRedirectToActivity = true;
-                startActivityForResult(intent,0);
+                startActivityForResult(intent,REQUEST_CODE_EDIT_PROFILE);
             }
         });
 
@@ -517,6 +520,22 @@ public class ProfileFragment extends Fragment {
 
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        switch (requestCode){
+            case REQUEST_CODE_EDIT_PROFILE:
+                if(resultCode == Activity.RESULT_OK){
+                    User user = _sessionManager.getUserDetail();
+                    _lbllop.setText("Lớp: " + user.clazz);
+                    _lblmssv.setText("MSSV: " + user.studentId);
+                    _lblsdt.setText("SĐT: " + user.phone);
+                    _avatarUser.setImageBitmap(BitmapFactory.decodeFile(user.avatar));
+                }
+
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     private ArrayList<PostProfile> getInitListPostProfileActor() {
         ArrayList<PostProfile> listPostProfile = new ArrayList<PostProfile>();

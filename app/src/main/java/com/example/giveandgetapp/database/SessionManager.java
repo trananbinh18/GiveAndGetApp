@@ -39,6 +39,29 @@ public class SessionManager {
         editor = sharedPreferences.edit();
     }
 
+    public boolean updateSession(Bitmap avatar, String studentId, String name, String clazz, String phone){
+        if(avatar != null) {
+            String avatarPath = "";
+
+            try {
+                avatarPath = storeImageInInternalStorage(avatar);
+            } catch (Exception e){
+                return false;
+            }
+
+            editor.putString(AVATAR, avatarPath);
+        }
+
+        editor.putString(STUDENT_ID, studentId);
+        editor.putString(NAME, name);
+        editor.putString(CLASS,clazz);
+        editor.putString(PHONE, phone);
+
+        editor.apply();
+
+        return true;
+    }
+
 
     public boolean createSession (int id, Bitmap avatar, String studentId, String email, String name, String clazz, String phone, int gender) {
         String avatarPath = "";

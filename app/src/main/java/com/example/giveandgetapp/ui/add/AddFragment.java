@@ -10,6 +10,7 @@ import android.media.Image;
 import android.net.Uri;
 import android.opengl.EGLExt;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -201,10 +202,31 @@ public class AddFragment extends Fragment {
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Storage
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Chọn Ảnh"), imagePickerIndex);
+
+                //Camera
+                Intent[] intentArray = null;
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    if (takePictureIntent != null) {
+                        intentArray = new Intent[]{takePictureIntent};
+                    } else {
+                        intentArray = new Intent[0];
+                    }
+                }
+
+                Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
+                chooserIntent.putExtra(Intent.EXTRA_INTENT, intent);
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
+                chooserIntent.putExtra(Intent.EXTRA_TITLE, "Image Chooser");
+
+
+
+
+                startActivityForResult(Intent.createChooser(chooserIntent, "Chọn Ảnh"), imagePickerIndex);
             }
         };
         return listener;
@@ -238,7 +260,9 @@ public class AddFragment extends Fragment {
         int[] arrayImageId = new int[3];
         if(_isPickImage[0] == true){
             Bitmap bitmap = ((BitmapDrawable)_imgPicker1.getDrawable()).getBitmap();
-            byte[] arrayByte = _database.convertBitmapToBytes(bitmap);
+            Bitmap resizeBitmap =  Bitmap.createScaledBitmap(bitmap, 730, 430, false);
+
+            byte[] arrayByte = _database.convertBitmapToBytes(resizeBitmap);
             Connection con = _database.connectToDatabase();
             int imageId = _database.saveImageIntoDatabase(con, arrayByte);
             arrayImageId[0] = imageId;
@@ -247,7 +271,9 @@ public class AddFragment extends Fragment {
 
         if(_isPickImage[1] == true){
             Bitmap bitmap = ((BitmapDrawable)_imgPicker2.getDrawable()).getBitmap();
-            byte[] arrayByte = _database.convertBitmapToBytes(bitmap);
+            Bitmap resizeBitmap =  Bitmap.createScaledBitmap(bitmap, 730, 430, false);
+
+            byte[] arrayByte = _database.convertBitmapToBytes(resizeBitmap);
             Connection con = _database.connectToDatabase();
             int imageId = _database.saveImageIntoDatabase(con, arrayByte);
             arrayImageId[1] = imageId;
@@ -256,7 +282,9 @@ public class AddFragment extends Fragment {
 
         if(_isPickImage[2] == true){
             Bitmap bitmap = ((BitmapDrawable)_imgPicker3.getDrawable()).getBitmap();
-            byte[] arrayByte = _database.convertBitmapToBytes(bitmap);
+            Bitmap resizeBitmap =  Bitmap.createScaledBitmap(bitmap, 730, 430, false);
+
+            byte[] arrayByte = _database.convertBitmapToBytes(resizeBitmap);
             Connection con = _database.connectToDatabase();
             int imageId = _database.saveImageIntoDatabase(con, arrayByte);
             arrayImageId[2] = imageId;
@@ -285,23 +313,43 @@ public class AddFragment extends Fragment {
         switch (requestCode){
             case PICK_IMAGE_ONE:
                 if(resultCode == Activity.RESULT_OK){
-                    Uri imgURI = data.getData();
-                    _imgPicker1.setImageURI(imgURI);
-                    _isPickImage[0] = true;
+                    if(data.getDataString() != null){
+                        Uri imgURI = data.getData();
+                        _imgPicker1.setImageURI(imgURI);
+                        _isPickImage[0] = true;
+                    }else{
+                        Bitmap photo = (Bitmap) data.getExtras().get("data");
+                        _imgPicker1.setImageBitmap(photo);
+                        _isPickImage[0] = true;
+                    }
                 }
                 break;
             case PICK_IMAGE_TWO:
                 if(resultCode == Activity.RESULT_OK){
-                    Uri imgURI = data.getData();
-                    _imgPicker2.setImageURI(imgURI);
-                    _isPickImage[1] = true;
+                    if(data.getDataString() != null){
+                        Uri imgURI = data.getData();
+                        _imgPicker2.setImageURI(imgURI);
+                        _isPickImage[1] = true;
+                    }else{
+                        Bitmap photo = (Bitmap) data.getExtras().get("data");
+                        _imgPicker2.setImageBitmap(photo);
+                        _isPickImage[1] = true;
+                    }
+
                 }
                 break;
             case PICK_IMAGE_THREE:
                 if(resultCode == Activity.RESULT_OK){
-                    Uri imgURI = data.getData();
-                    _imgPicker3.setImageURI(imgURI);
-                    _isPickImage[2] = true;
+                    if(data.getDataString() != null) {
+                        Uri imgURI = data.getData();
+                        _imgPicker3.setImageURI(imgURI);
+                        _isPickImage[2] = true;
+                    }else{
+                        Bitmap photo = (Bitmap) data.getExtras().get("data");
+                        _imgPicker3.setImageBitmap(photo);
+                        _isPickImage[2] = true;
+                    }
+
                 }
                 break;
         }
