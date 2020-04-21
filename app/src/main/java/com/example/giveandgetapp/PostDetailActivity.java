@@ -104,8 +104,8 @@ public class PostDetailActivity extends AppCompatActivity {
                 String actorName = result.getString("ActorName");
                 final String title = result.getString("Title");
                 String contents = result.getString("Contents");
-                boolean isLiked = (result.getInt("IsLiked")==1)?true:false;
-                boolean isReceived = (result.getInt("IsReceived")==1)?true:false;
+                boolean isLiked = (result.getInt("IsLiked")==currentUser.id)?true:false;
+                boolean isReceived = (result.getInt("IsReceived")==currentUser.id)?true:false;
                 Bitmap actorImage = _database.getImageInDatabase(con,result.getInt("ActorImage"));
                 Bitmap Image = _database.getImageInDatabase(con,result.getInt("Image"));
                 Bitmap Image2 = _database.getImageInDatabase(con,result.getInt("Image2"));

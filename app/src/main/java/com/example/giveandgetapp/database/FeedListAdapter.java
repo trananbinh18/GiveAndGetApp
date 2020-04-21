@@ -22,10 +22,13 @@ import com.example.giveandgetapp.R;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import me.relex.circleindicator.CircleIndicator;
 
@@ -39,6 +42,8 @@ public class FeedListAdapter extends BaseAdapter {
     private User currentUser;
     private Database database;
     public ArrayList<Bitmap> listImagesInAllItems;
+    public Map<Integer,  ImageStoreEachPost> imageMap;
+
 
     public FeedListAdapter(Activity activity, List<FeedItem> feedItems){
         this.activity = activity;
@@ -47,10 +52,101 @@ public class FeedListAdapter extends BaseAdapter {
         this.currentUser = this.sessionManager.getUserDetail();
         this.database = new Database(activity.getApplicationContext());
         this.listImagesInAllItems = new ArrayList<Bitmap>();
+
+        //Get all image in database
+        this.imageMap = new HashMap<Integer, ImageStoreEachPost>();
+
+
+        Connection con = database.connectToDatabase();
+        for (FeedItem item: feedItems) {
+
+            ArrayList<Bitmap> imagesPost = new ArrayList<Bitmap>();
+            Bitmap imageActor = null;
+
+            if(item.actorImageId != 0){
+                Bitmap img = database.getImageInDatabase(con, item.actorImageId);
+                this.listImagesInAllItems.add(img);
+                imageActor  = img;
+            }
+
+            if(item.imageId != 0) {
+                Bitmap img = database.getImageInDatabase(con, item.imageId);
+                this.listImagesInAllItems.add(img);
+                imagesPost.add(img);
+            }
+
+            if(item.image2Id != 0) {
+                Bitmap img = database.getImageInDatabase(con, item.image2Id);
+                this.listImagesInAllItems.add(img);
+                imagesPost.add(img);
+            }
+
+            if(item.image3Id != 0) {
+                Bitmap img = database.getImageInDatabase(con, item.image3Id);
+                this.listImagesInAllItems.add(img);
+                imagesPost.add(img);
+            }
+
+            ImageStoreEachPost imgsPost = new ImageStoreEachPost(imagesPost, imageActor);
+
+            imageMap.put(item.postId, imgsPost);
+
+        }
+
+        try {
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     public void setFeedItems(List<FeedItem> feedItems) {
         this.feedItems = feedItems;
+
+        Connection con = database.connectToDatabase();
+        for (FeedItem item: feedItems) {
+            if(!imageMap.containsKey(item.postId)){
+                ArrayList<Bitmap> imagesPost = new ArrayList<Bitmap>();
+                Bitmap imageActor = null;
+
+                if(item.actorImageId != 0){
+                    Bitmap img = database.getImageInDatabase(con, item.actorImageId);
+                    this.listImagesInAllItems.add(img);
+                    imageActor  = img;
+                }
+
+                if(item.imageId != 0) {
+                    Bitmap img = database.getImageInDatabase(con, item.imageId);
+                    this.listImagesInAllItems.add(img);
+                    imagesPost.add(img);
+                }
+
+                if(item.image2Id != 0) {
+                    Bitmap img = database.getImageInDatabase(con, item.image2Id);
+                    this.listImagesInAllItems.add(img);
+                    imagesPost.add(img);
+                }
+
+                if(item.image3Id != 0) {
+                    Bitmap img = database.getImageInDatabase(con, item.image3Id);
+                    this.listImagesInAllItems.add(img);
+                    imagesPost.add(img);
+                }
+
+                ImageStoreEachPost imgsPost = new ImageStoreEachPost(imagesPost, imageActor);
+
+                imageMap.put(item.postId, imgsPost);
+            }
+        }
+
+        try {
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -76,59 +172,59 @@ public class FeedListAdapter extends BaseAdapter {
         if (convertView == null)
             convertView = inflater.inflate(R.layout.feed_item, null);
 
-        ImageButton actorImage  = (ImageButton) convertView.findViewById(R.id.actorImage);
-        TextView actorName = (TextView) convertView.findViewById(R.id.actorName);
-        TextView createPostTime = (TextView) convertView.findViewById(R.id.createPostTime);
-        TextView title = (TextView) convertView.findViewById(R.id.txtTitle);
-        TextView content = (TextView) convertView.findViewById(R.id.txtContent);
-        ViewPager pageImage = (ViewPager) convertView.findViewById(R.id.pageImage);
-        CircleIndicator indicator = (CircleIndicator) convertView.findViewById(R.id.indicator);
-        ImageButton imgLike = (ImageButton) convertView.findViewById(R.id.imgLike);
-        ImageButton imgReceive = (ImageButton) convertView.findViewById(R.id.imgReceive);
+        ImageButton actorImage  = convertView.findViewById(R.id.actorImage);
+        TextView actorName = convertView.findViewById(R.id.actorName);
+        TextView createPostTime = convertView.findViewById(R.id.createPostTime);
+        TextView title = convertView.findViewById(R.id.txtTitle);
+        TextView content = convertView.findViewById(R.id.txtContent);
+        ViewPager pageImage = convertView.findViewById(R.id.pageImage);
+        CircleIndicator indicator = convertView.findViewById(R.id.indicator);
+        ImageButton imgLike = convertView.findViewById(R.id.imgLike);
+        ImageButton imgReceive = convertView.findViewById(R.id.imgReceive);
         ImageView imgMore  = convertView.findViewById(R.id.iconMoreDashboard);
 
 
         final FeedItem item = feedItems.get(position);
         //Image Paging
-        ArrayList<Bitmap> listImage = new ArrayList<Bitmap>();
-        Connection con = database.connectToDatabase();
-        Bitmap imageActor = null;
+//        ArrayList<Bitmap> listImage = new ArrayList<Bitmap>();
+//        Connection con = database.connectToDatabase();
+//        Bitmap imageActor = null;
+//
+//        try{
+//            if(item.actorImageId != 0){
+//                Bitmap img = database.getImageInDatabase(con, item.actorImageId);
+//                this.listImagesInAllItems.add(img);
+//                imageActor = img;
+//            }
+//
+//            if(item.imageId != 0) {
+//                Bitmap img = database.getImageInDatabase(con, item.imageId);
+//                this.listImagesInAllItems.add(img);
+//                listImage.add(img);
+//            }
+//
+//            if(item.image2Id != 0) {
+//                Bitmap img = database.getImageInDatabase(con, item.image2Id);
+//                this.listImagesInAllItems.add(img);
+//                listImage.add(img);
+//            }
+//
+//            if(item.image3Id != 0) {
+//                Bitmap img = database.getImageInDatabase(con, item.image3Id);
+//                this.listImagesInAllItems.add(img);
+//                listImage.add(img);
+//            }
+//            con.close();
+//        }catch (SQLException e) {
+//            e.printStackTrace();
+//        }
 
-        try{
-            if(item.actorImageId != 0){
-                Bitmap img = database.getImageInDatabase(con, item.actorImageId);
-                this.listImagesInAllItems.add(img);
-                imageActor = img;
-            }
 
-            if(item.imageId != 0) {
-                Bitmap img = database.getImageInDatabase(con, item.imageId);
-                this.listImagesInAllItems.add(img);
-                listImage.add(img);
-            }
-
-            if(item.image2Id != 0) {
-                Bitmap img = database.getImageInDatabase(con, item.image2Id);
-                this.listImagesInAllItems.add(img);
-                listImage.add(img);
-            }
-
-            if(item.image3Id != 0) {
-                Bitmap img = database.getImageInDatabase(con, item.image3Id);
-                this.listImagesInAllItems.add(img);
-                listImage.add(img);
-            }
-            con.close();
-        }catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-
-        ImageSlideAdapter imageSlideAdapter = new ImageSlideAdapter(convertView.getContext(),listImage,imageActor);
+        ImageSlideAdapter imageSlideAdapter = new ImageSlideAdapter(convertView.getContext(),imageMap.get(item.postId).imagesPost,imageMap.get(item.postId).imageActor);
         pageImage.setAdapter(imageSlideAdapter);
         indicator.setViewPager(pageImage);
 
-        actorImage.setImageBitmap(imageActor);
+        actorImage.setImageBitmap(imageMap.get(item.postId).imageActor);
         actorName.setText(item.actorName);
         title.setText(item.title);
         content.setText(item.contents);
@@ -178,7 +274,7 @@ public class FeedListAdapter extends BaseAdapter {
                 ImageButton imgLike = (ImageButton) v;
                 if(item.isLiked){
                     imgLike.setImageResource(R.drawable.ic_heart_fill_foreground);
-                    likePost(item.postId);
+                    likePost(item.postId, item.actorId, item.title);
                 }else{
                     imgLike.setImageResource(R.drawable.ic_heart_foreground);
                     unLikePost(item.postId);
@@ -193,7 +289,7 @@ public class FeedListAdapter extends BaseAdapter {
                 ImageButton imgReceive = (ImageButton) v;
                 if(item.isReceiver){
                     imgReceive.setImageResource(R.drawable.ic_hand_fill_foreground);
-                    receivePost(item.postId);
+                    receivePost(item.postId, item.actorId, item.title);
                 }else{
                     imgReceive.setImageResource(R.drawable.ic_hand_foreground);
                     unReceivePost(item.postId);
@@ -210,10 +306,27 @@ public class FeedListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private void likePost(int postId){
+    private void likePost(int postId, int actorId, String postName){
         Connection con = database.connectToDatabase();
+        SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        String create_date = formater.format(date);
         String query = "INSERT INTO [Like](UserId,PostId)VALUES("+currentUser.id+", "+postId+")";
+        String queryNotification = "INSERT INTO [Notification]" +
+                "           (UserId,PostId,Status,CreateDate,Title,Contents,Type)" +
+                "     VALUES" +
+                "           ("+actorId +
+                "           ,"+postId +
+                "           ,1" +
+                "           ," + "CONVERT(datetime,'" +create_date+"',120)"+
+                "           ,N'"+currentUser.name+" Đã thích bài'" +
+                "           ,N'Đã có thêm một người thích bài "+postName+"'" +
+                "           ,1)";
+
         database.excuteCommand(con, query);
+        database.excuteCommand(con, queryNotification);
+
+
         try {
             con.close();
         } catch (SQLException e) {
@@ -232,10 +345,26 @@ public class FeedListAdapter extends BaseAdapter {
         }
     }
 
-    private void receivePost(int postId){
+    private void receivePost(int postId, int actorId, String postName){
         Connection con = database.connectToDatabase();
+        SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        String create_date = formater.format(date);
         String query = "INSERT INTO [Receive](UserId,PostId)VALUES("+currentUser.id+", "+postId+")";
+        String queryNotification = "INSERT INTO [Notification]" +
+                "           (UserId,PostId,Status,CreateDate,Title,Contents,Type)" +
+                "     VALUES" +
+                "           ("+actorId +
+                "           ,"+postId +
+                "           ,1" +
+                "           ," + "CONVERT(datetime,'" +create_date+"',120)"+
+                "           ,N'"+currentUser.name+" Đã đăng ký nhận'" +
+                "           ,N'Đã có thêm một người đăng ký nhận bài "+postName+"'" +
+                "           ,1)";
+
         database.excuteCommand(con, query);
+        database.excuteCommand(con, queryNotification);
+
         try {
             con.close();
         } catch (SQLException e) {
@@ -267,4 +396,19 @@ public class FeedListAdapter extends BaseAdapter {
     }
 
 
+
+
+
+    public class ImageStoreEachPost{
+        public ArrayList<Bitmap> imagesPost;
+        public Bitmap imageActor;
+
+        public ImageStoreEachPost(ArrayList<Bitmap> imagesPost, Bitmap imageActor) {
+            this.imagesPost = imagesPost;
+            this.imageActor = imageActor;
+        }
+    }
+
+
 }
+

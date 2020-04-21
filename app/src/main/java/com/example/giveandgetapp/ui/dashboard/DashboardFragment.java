@@ -109,10 +109,24 @@ public class DashboardFragment extends Fragment {
 
 
                     }else if(_countCurrent != -1){
+                        _countCurrent = -1;
                         _progressBar.setVisibility(View.VISIBLE);
 
-                        _countCurrent = loadMorePost();
-                        _progressBar.setVisibility(View.INVISIBLE);
+                        Runnable runable = new Runnable() {
+                            @Override
+                            public void run() {
+                                _countCurrent = loadMorePost();
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        _progressBar.setVisibility(View.INVISIBLE);
+                                    }
+                                });
+                            }
+                        };
+
+                        Thread thread = new Thread(runable);
+                        thread.start();
 
                     }else {
                         return;
@@ -156,17 +170,28 @@ public class DashboardFragment extends Fragment {
 
         ResultSet result = _database.excuteCommand(con, query);
 
+        ArrayList<FeedItem> listFeedItem=  _dashboardViewModel.getListFeedItem().getValue();
         int countRow = 0;
         try {
             while (result.next()){
                 int postId = result.getInt("Id");
 
                 if(postId > _dashboardViewModel.getMaxPostId().getValue().intValue()){
-                    _dashboardViewModel.getMaxPostId().setValue(postId);
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            _dashboardViewModel.getMaxPostId().setValue(postId);
+                        }
+                    });
                 }
 
                 if(postId < _dashboardViewModel.getMinPostId().getValue().intValue()){
-                    _dashboardViewModel.getMinPostId().setValue(postId);
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            _dashboardViewModel.getMinPostId().setValue(postId);
+                        }
+                    });
                 }
 
                 int actorId = result.getInt("ActorId");
@@ -186,7 +211,7 @@ public class DashboardFragment extends Fragment {
                 }
 
                 FeedItem item = new FeedItem(postId,actorId,actorImage,actorName,title,content,Image,Image2,Image3,isLiked,isReceived,createDate);
-                _dashboardViewModel.getListFeedItem().getValue().add(item);
+                listFeedItem.add(item);
                 countRow++;
 
             }
@@ -194,7 +219,13 @@ public class DashboardFragment extends Fragment {
                 return countRow;
             }
 
-            _adapter.notifyDataSetChanged();
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    _dashboardViewModel.setListFeedItem(listFeedItem);
+                }
+            });
+
 
             con.close();
         } catch (SQLException e) {

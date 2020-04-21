@@ -40,17 +40,25 @@ public class ImageSlideAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-        boolean isShowed = container.isShown();
-
-        if(!isShowed) {
-            if(listImage.get(position) != null){
-                listImage.get(position).recycle();
-            }
-
-            if(actorImage !=null){
-                actorImage.recycle();
-            }
-        }
+//        Runnable runable = new Runnable() {
+//            @Override
+//            public void run() {
+//                boolean isShowed = container.isShown();
+//
+//                if(!isShowed) {
+//                    if(listImage.get(position) != null){
+//                        listImage.get(position).recycle();
+//                    }
+//
+//                    if(actorImage !=null){
+//                        actorImage.recycle();
+//                    }
+//                }
+//            }
+//        };
+//
+//        Thread thread = new Thread(runable);
+//        thread.start();
 
 
         ((ViewPager) container).removeView((View) object);
