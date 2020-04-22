@@ -62,10 +62,12 @@ public class DashboardFragment extends Fragment {
         _progressBar = root.findViewById(R.id.progressBar);
         _sessionManager = new SessionManager(root.getContext());
 
-        if(_dashboardViewModel.getListFeedItem().getValue() == null){
-            initListPost();
-        }
+//        if(_dashboardViewModel.getListFeedItem().getValue() == null){
+//            initListPost();
+//        }
 
+        initListPost();
+        
         _dashboardViewModel.getListFeedItem().observe(this, new Observer<ArrayList<FeedItem>>() {
             @Override
             public void onChanged(ArrayList<FeedItem> feedItems) {
