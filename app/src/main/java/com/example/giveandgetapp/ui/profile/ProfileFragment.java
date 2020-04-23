@@ -217,15 +217,39 @@ public class ProfileFragment extends Fragment {
 
         ArrayList<PostProfile> listProfileReceive= profileViewModel.getListPostProfileReceive().getValue();
         _listImagePostReceive = new ArrayList<Bitmap>();
-
-
-        for (PostProfile item:listProfileReceive) {
-            Bitmap img = _database.getImageInDatabaseInSquire(con, item.imageId);
-            _listImagePostReceive.add(img);
-        }
-
-        _receivePostAdapter = new ReceivePostAdapter(root.getContext(),listProfileReceive,_listImagePostReceive);
+        _receivePostAdapter = new ReceivePostAdapter(root.getContext(),new ArrayList<PostProfile>(),new ArrayList<Bitmap>());
         _gridReceivePost.setAdapter(_receivePostAdapter);
+
+        Runnable runnablePostReceive = new Runnable() {
+            @Override
+            public void run() {
+                Connection connection = _database.connectToDatabase();
+
+                for (PostProfile item:listProfileReceive) {
+                    Bitmap img = _database.getImageInDatabaseInSquire(connection, item.imageId);
+                    _listImagePostReceive.add(img);
+                }
+
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        _receivePostAdapter.setListPostReceive(listProfileReceive, _listImagePostReceive);
+                        _receivePostAdapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        };
+
+        Thread threadPostReceive = new Thread(runnablePostReceive);
+        threadPostReceive.start();
+
+
 
 
 
@@ -248,12 +272,31 @@ public class ProfileFragment extends Fragment {
 
         ArrayList<PostProfile> listProfileActor= profileViewModel.getListPostProfileActor().getValue();
         _listImagePostActor = new ArrayList<Bitmap>();
+        _actorPostAdapter = new ActorPostAdapter(root.getContext(),new ArrayList<PostProfile>(),new ArrayList<Bitmap>());
+        _gridActorPost.setAdapter(_actorPostAdapter);
 
+        Runnable runnablePostActor = new Runnable() {
+            @Override
+            public void run() {
+                Connection connection = _database.connectToDatabase();
 
-        for (PostProfile item:listProfileActor) {
-            Bitmap img = _database.getImageInDatabaseInSquire(con, item.imageId);
-            _listImagePostActor.add(img);
-        }
+                for (PostProfile item:listProfileActor) {
+                    Bitmap img = _database.getImageInDatabaseInSquire(connection, item.imageId);
+                    _listImagePostActor.add(img);
+                }
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        _actorPostAdapter.setListPostActor(listProfileActor,_listImagePostActor);
+                        _actorPostAdapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        };
+
+        Thread threadPostActor = new Thread(runnablePostActor);
+        threadPostActor.start();
 
         try {
             con.close();
@@ -261,8 +304,7 @@ public class ProfileFragment extends Fragment {
             e.printStackTrace();
         }
 
-        _actorPostAdapter = new ActorPostAdapter(root.getContext(),listProfileActor,_listImagePostActor);
-        _gridActorPost.setAdapter(_actorPostAdapter);
+
 
 
         //Set EventClick for grid post actor
