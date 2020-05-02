@@ -16,8 +16,9 @@
                 android:id="@+id/txtnoidungbaocao"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:visibility="gone"
-                android:background="@null"/>
+                android:background="@null"
+                android:hint="nội dung báo cáo"
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/btnBaocao"

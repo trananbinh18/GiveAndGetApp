@@ -226,14 +226,49 @@ public class PostDetailActivity extends AppCompatActivity {
                                 public void onClick(View view) {
                                     try {
                                         Connection con  = _database.connectToDatabase();
-                                        String query = "INSERT INTO [Report]" +
-                                                "   (PostId ,UserId ,Contents)" +
-                                                "    VALUES" +
-                                                "           ("+item.postId +
-                                                "           ,"+currentUser.id+
-                                                "           ,"+_noidungbaocao.getText().toString()+")";
-                                        _database.excuteCommand(con,query);
+                                        String queryCheckExist = "SELECT *" +
+                                                "  FROM [Report]" +
+                                                "  WHERE PostId = " +item.postId +
+                                                "  AND UserId =" + currentUser.id;
+
+                                        ResultSet rs = _database.excuteCommand(con,queryCheckExist);
+
+                                        if(rs.next()){
+                                            String query = "UPDATE [Report]" +
+                                                    "   SET Contents = '" +_noidungbaocao.getText().toString()+"'"+
+                                                    "       WHERE PostId = " +item.postId +
+                                                    "       AND UserId =" + currentUser.id;
+
+                                            _database.excuteCommand(con,query);
+
+
+                                        }else{
+                                            String query = "INSERT INTO [Report]" +
+                                                    "   (PostId ,UserId ,Contents)" +
+                                                    "    VALUES" +
+                                                    "           ("+item.postId +
+                                                    "           ,"+currentUser.id+
+                                                    "           ,'"+_noidungbaocao.getText().toString()+"')";
+
+                                            _database.excuteCommand(con,query);
+
+                                            String queryGetReportCount = "SELECT ReportCount FROM [User] WHERE Id = "+ item.actorId;
+
+                                            ResultSet resultSetReportCount = _database.excuteCommand(con,queryGetReportCount);
+                                            if(resultSetReportCount.next()){
+                                                int reportCount = resultSetReportCount.getInt("ReportCount");
+                                                reportCount++;
+                                                String queryUpdateReportCount = "UPDATE [User] " +
+                                                        "   SET ReportCount = " +reportCount+
+                                                        "       WHERE Id = " + item.actorId;
+
+                                                _database.excuteCommand(con,queryUpdateReportCount);
+                                            }
+                                        }
+
+
                                         con.close();
+                                        dialog.cancel();
                                     } catch (SQLException e) {
                                         e.printStackTrace();
                                     }
