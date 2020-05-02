@@ -40,7 +40,6 @@ import com.example.giveandgetapp.database.ReceivePostAdapter;
 import com.example.giveandgetapp.database.SessionManager;
 import com.example.giveandgetapp.database.User;
 
-import java.security.PublicKey;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -632,7 +631,6 @@ public class ProfileFragment extends Fragment {
 
             _isRedirectToActivity = false;
         }
-
         super.onStop();
     }
 }
