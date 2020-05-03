@@ -34,7 +34,7 @@ public class FeedItem {
         this.isReceiver = isReceiver;
     }
 
-    public FeedItem(int postId, int actorId, int actorImageId, String actorName, String title, String contents, int imageId, int image2Id, int image3Id, boolean isLiked, boolean isReceiver, Date createDate){
+    public FeedItem(int postId, int actorId, int actorImageId, String actorName, String title, String contents, int imageId, int image2Id, int image3Id, boolean isLiked, boolean isReceiver, Date createDate, int likeCount){
         this.postId = postId;
         this.actorId = actorId;
         this.actorImageId = actorImageId;
@@ -47,6 +47,7 @@ public class FeedItem {
         this.isLiked = isLiked;
         this.isReceiver = isReceiver;
         this.createDate = createDate;
+        this.likeCount = likeCount;
     }
 
     public int postId;
@@ -64,6 +65,7 @@ public class FeedItem {
     public Bitmap image3;
     public boolean isLiked;
     public boolean isReceiver;
+    public int likeCount;
     public Date createDate;
 
 }

@@ -12,18 +12,17 @@
         android:title="@string/title_notifications" />
 
     <item
-        android:id="@+id/navigation_add"
-        android:icon="@drawable/ic_add_black_24dp"
-        android:title="@string/title_add"/>
-
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/ic_person_black_24dp"
+        android:title="@string/title_profile" />
     <item
         android:id="@+id/navigation_search"
         android:icon="@drawable/ic_search_black_24dp"
         android:title="@string/title_search" />
 
     <item
-        android:id="@+id/navigation_profile"
-        android:icon="@drawable/ic_person_black_24dp"
-        android:title="@string/title_profile"/>
+        android:id="@+id/navigation_add"
+        android:icon="@drawable/ic_add_black_24dp"
+        android:title="@string/title_add" />
 
 </menu>

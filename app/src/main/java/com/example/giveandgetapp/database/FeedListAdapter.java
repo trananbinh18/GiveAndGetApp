@@ -323,6 +323,7 @@ public class FeedListAdapter extends BaseAdapter {
                 "           ,N'Đã có thêm một người thích bài "+postName+"'" +
                 "           ,1)";
 
+
         database.excuteCommand(con, query);
         database.excuteCommand(con, queryNotification);
 
