@@ -190,7 +190,13 @@ public class MainActivity extends AppCompatActivity {
                         newNotifications.add(item);
                     }
 
-                    txtNumberNotifyCount.setText(countNotRead+"");
+                    if(countNotRead != 0){
+                        txtNumberNotifyCount.setVisibility(View.VISIBLE);
+                        txtNumberNotifyCount.setText(countNotRead+"");
+                    }else{
+                        txtNumberNotifyCount.setVisibility(View.INVISIBLE);
+                    }
+
 
                     _notificationsViewModel.setListNotification(newNotifications);
 
@@ -242,7 +248,12 @@ public class MainActivity extends AppCompatActivity {
                         newNotifications.add(item);
                     }
 
-                    txtNumberNotifyCount.setText(countNotRead+"");
+                    if(countNotRead != 0){
+                        txtNumberNotifyCount.setVisibility(View.VISIBLE);
+                        txtNumberNotifyCount.setText(countNotRead+"");
+                    }else{
+                        txtNumberNotifyCount.setVisibility(View.INVISIBLE);
+                    }
 
                     _notificationsViewModel.setListNotification(newNotifications);
 
@@ -304,7 +315,7 @@ public class MainActivity extends AppCompatActivity {
 
         User currentUser = sessionManager.getUserDetail();
 
-        String query = "SELECT p.LikeCount ,p.Id, a.Id as ActorId, a.Name as ActorName, p.Title, p.Contents, l.UserId as IsLiked, r.UserId as IsReceived, a.Avatar as ActorImage, p.CreateDate, p.Image, p.Image2, p.Image3" +
+        String query = "SELECT p.ReceiverCount ,p.LikeCount ,p.Id, a.Id as ActorId, a.Name as ActorName, p.Title, p.Contents, l.UserId as IsLiked, r.UserId as IsReceived, a.Avatar as ActorImage, p.CreateDate, p.Image, p.Image2, p.Image3" +
                 " FROM [Post] p" +
                 " INNER JOIN [User] a" +
                 " ON p.Actor = a.Id" +
@@ -328,13 +339,14 @@ public class MainActivity extends AppCompatActivity {
                 int Image2 = rs.getInt("Image2");
                 int Image3 = rs.getInt("Image3");
                 int LikeCount = rs.getInt("LikeCount");
+                int ReceiverCount = rs.getInt("ReceiverCount");
                 Timestamp tsCreateDate = rs.getTimestamp("CreateDate");
                 Date createDate = null;
                 if(tsCreateDate != null){
                     createDate = new Date(tsCreateDate.getTime());
                 }
 
-                item = new FeedItem(postId,actorId,actorImage,actorName,title,content,Image,Image2,Image3,isLiked,isReceived,createDate,LikeCount);
+                item = new FeedItem(postId,actorId,actorImage,actorName,title,content,Image,Image2,Image3,isLiked,isReceived,createDate,LikeCount,ReceiverCount);
 
                 con.close();
             }

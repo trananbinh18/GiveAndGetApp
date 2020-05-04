@@ -37,9 +37,8 @@ public class RunableGetNotification implements Runnable{
         this._sessionManager = new SessionManager(context);
         this._context = context;
         this._activity = activity;
-        this._numberOfNotRead = 0;
+        this._numberOfNotRead = Integer.parseInt(txtNumberNotifyCount.getText().toString());
         this._txtNumberNotifyCount = txtNumberNotifyCount;
-
     }
 
     @Override
@@ -48,7 +47,7 @@ public class RunableGetNotification implements Runnable{
         int numberOfNotRead = 0;
 
         Connection con = this._database.connectToDatabase();
-        String query = "SELECT TOP(5) " +
+        String query = "SELECT TOP(10) " +
                 " Id" +
                 ",PostId" +
                 ",Status" +
@@ -58,7 +57,7 @@ public class RunableGetNotification implements Runnable{
                 ",Type" +
                 "  FROM [Notification]" +
                 "  WHERE UserId = " + currentUser.id +
-                "  ORDER BY CreateDate DESC";
+                "  ORDER BY Id DESC";
 
         ResultSet rs = _database.excuteCommand(con, query);
         ArrayList<FeedNotification> result = new ArrayList<FeedNotification>();
@@ -85,13 +84,18 @@ public class RunableGetNotification implements Runnable{
                 result.add(item);
             }
 
+            _numberOfNotRead = Integer.parseInt(_txtNumberNotifyCount.getText().toString());
             if(_numberOfNotRead != numberOfNotRead){
                 final int finalNumberOfNotRead = numberOfNotRead;
                 _activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        _txtNumberNotifyCount.setText(""+finalNumberOfNotRead);
-
+                        if(finalNumberOfNotRead != 0){
+                            _txtNumberNotifyCount.setVisibility(View.VISIBLE);
+                            _txtNumberNotifyCount.setText(finalNumberOfNotRead+"");
+                        }else{
+                            _txtNumberNotifyCount.setVisibility(View.INVISIBLE);
+                        }
                     }
                 });
             }

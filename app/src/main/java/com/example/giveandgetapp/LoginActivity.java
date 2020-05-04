@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -112,7 +113,10 @@ public class LoginActivity extends Activity {
 
     private void moveToMainActivity(){
         Intent goToNextActivity = new Intent(getApplicationContext(), MainActivity.class);
+        goToNextActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(goToNextActivity);
+        ActivityCompat.finishAffinity(this);
+
     }
 
     private boolean createSessionForUser(Connection con, ResultSet resultSet){

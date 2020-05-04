@@ -182,43 +182,10 @@ public class FeedListAdapter extends BaseAdapter {
         ImageButton imgLike = convertView.findViewById(R.id.imgLike);
         ImageButton imgReceive = convertView.findViewById(R.id.imgReceive);
         ImageView imgMore  = convertView.findViewById(R.id.iconMoreDashboard);
+        TextView txtLikeCount = convertView.findViewById(R.id.txtLikeCount);
 
 
         final FeedItem item = feedItems.get(position);
-        //Image Paging
-//        ArrayList<Bitmap> listImage = new ArrayList<Bitmap>();
-//        Connection con = database.connectToDatabase();
-//        Bitmap imageActor = null;
-//
-//        try{
-//            if(item.actorImageId != 0){
-//                Bitmap img = database.getImageInDatabase(con, item.actorImageId);
-//                this.listImagesInAllItems.add(img);
-//                imageActor = img;
-//            }
-//
-//            if(item.imageId != 0) {
-//                Bitmap img = database.getImageInDatabase(con, item.imageId);
-//                this.listImagesInAllItems.add(img);
-//                listImage.add(img);
-//            }
-//
-//            if(item.image2Id != 0) {
-//                Bitmap img = database.getImageInDatabase(con, item.image2Id);
-//                this.listImagesInAllItems.add(img);
-//                listImage.add(img);
-//            }
-//
-//            if(item.image3Id != 0) {
-//                Bitmap img = database.getImageInDatabase(con, item.image3Id);
-//                this.listImagesInAllItems.add(img);
-//                listImage.add(img);
-//            }
-//            con.close();
-//        }catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-
 
         ImageSlideAdapter imageSlideAdapter = new ImageSlideAdapter(convertView.getContext(),imageMap.get(item.postId).imagesPost,imageMap.get(item.postId).imageActor);
         pageImage.setAdapter(imageSlideAdapter);
@@ -228,6 +195,16 @@ public class FeedListAdapter extends BaseAdapter {
         actorName.setText(item.actorName);
         title.setText(item.title);
         content.setText(item.contents);
+
+        //Set text for like and receiver
+        String strLikeCount = (item.likeCount>0)?item.likeCount+" lượt thích":"";
+        String strReceiverCount = (item.receiverCount>0)?item.receiverCount+" lượt đăng ký":"";
+        if(strLikeCount =="" || strReceiverCount ==""){
+            txtLikeCount.setText(strLikeCount+strReceiverCount);
+        }else{
+            txtLikeCount.setText(strLikeCount+" | "+strReceiverCount);
+        }
+
 
         //Set Time post
         String timeStr = "";
@@ -241,7 +218,7 @@ public class FeedListAdapter extends BaseAdapter {
                 calendar1.setTime(new Date());
                 int hourBefore = calendar1.get(Calendar.HOUR_OF_DAY) - calendar.get(Calendar.HOUR_OF_DAY);
                 if(hourBefore != 0){
-                    timeStr = hourBefore+" giờ trước";
+                    timeStr = -hourBefore+" giờ trước";
                 }else{
                     timeStr = "gần đây";
                 }
@@ -274,10 +251,10 @@ public class FeedListAdapter extends BaseAdapter {
                 ImageButton imgLike = (ImageButton) v;
                 if(item.isLiked){
                     imgLike.setImageResource(R.drawable.ic_heart_fill_foreground);
-                    likePost(item.postId, item.actorId, item.title);
+                    likePost(item, txtLikeCount);
                 }else{
                     imgLike.setImageResource(R.drawable.ic_heart_foreground);
-                    unLikePost(item.postId);
+                    unLikePost(item, txtLikeCount);
                 }
             }
         });
@@ -289,10 +266,10 @@ public class FeedListAdapter extends BaseAdapter {
                 ImageButton imgReceive = (ImageButton) v;
                 if(item.isReceiver){
                     imgReceive.setImageResource(R.drawable.ic_hand_fill_foreground);
-                    receivePost(item.postId, item.actorId, item.title);
+                    receivePost(item, txtLikeCount);
                 }else{
                     imgReceive.setImageResource(R.drawable.ic_hand_foreground);
-                    unReceivePost(item.postId);
+                    unReceivePost(item, txtLikeCount);
                 }
             }
         });
@@ -306,82 +283,156 @@ public class FeedListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private void likePost(int postId, int actorId, String postName){
-        Connection con = database.connectToDatabase();
-        SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = new Date();
-        String create_date = formater.format(date);
-        String query = "INSERT INTO [Like](UserId,PostId)VALUES("+currentUser.id+", "+postId+")";
-        String queryNotification = "INSERT INTO [Notification]" +
-                "           (UserId,PostId,Status,CreateDate,Title,Contents,Type)" +
-                "     VALUES" +
-                "           ("+actorId +
-                "           ,"+postId +
-                "           ,1" +
-                "           ," + "CONVERT(datetime,'" +create_date+"',120)"+
-                "           ,N'"+currentUser.name+" Đã thích bài'" +
-                "           ,N'Đã có thêm một người thích bài "+postName+"'" +
-                "           ,1)";
-
-
-        database.excuteCommand(con, query);
-        database.excuteCommand(con, queryNotification);
-
-
-        try {
-            con.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
+    private void likePost(FeedItem item, TextView txtLikeCount){
+        item.likeCount++;
+        String strLikeCount = item.likeCount+" lượt thích";
+        String strReceiverCount = (item.receiverCount >0)?item.receiverCount+" lượt đăng ký":"";
+        if(strReceiverCount != ""){
+            txtLikeCount.setText(strLikeCount + " | "+strReceiverCount);
+        }else{
+            txtLikeCount.setText(strLikeCount);
         }
+
+
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                Connection con = database.connectToDatabase();
+                SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date date = new Date();
+                String create_date = formater.format(date);
+                String query = "INSERT INTO [Like](UserId,PostId)VALUES("+currentUser.id+", "+item.postId+")";
+                String queryNotification = "INSERT INTO [Notification]" +
+                        "           (UserId,PostId,Status,CreateDate,Title,Contents,Type)" +
+                        "     VALUES" +
+                        "           ("+item.actorId +
+                        "           ,"+item.postId +
+                        "           ,1" +
+                        "           ," + "CONVERT(datetime,'" +create_date+"',120)"+
+                        "           ,N'"+currentUser.name+" Đã thích bài'" +
+                        "           ,N'Đã có thêm một người thích bài "+item.title+"'" +
+                        "           ,1)";
+
+
+                database.excuteCommand(con, query);
+                database.excuteCommand(con, queryNotification);
+
+                try {
+                    con.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        Thread thread = new Thread(runnable);
+        thread.start();
+
+
+
+
     }
 
-    private void unLikePost(int postId){
-        Connection con = database.connectToDatabase();
-        String query = "DELETE FROM [Like] WHERE UserId="+currentUser.id+" AND PostId="+postId;
-        database.excuteCommand(con, query);
-        try {
-            con.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
+    private void unLikePost(FeedItem item, TextView txtLikeCount){
+        item.likeCount = (item.likeCount>0)?item.likeCount-1:0;
+        String strLikeCount = (item.likeCount>0)?item.likeCount+" lượt thích":"";
+        String strReceiverCount = (item.receiverCount>0)?item.receiverCount+" lượt đăng ký":"";
+        if(strLikeCount =="" || strReceiverCount ==""){
+            txtLikeCount.setText(strLikeCount+strReceiverCount);
+        }else{
+            txtLikeCount.setText(strLikeCount+" | "+strReceiverCount);
         }
+
+
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                Connection con = database.connectToDatabase();
+                String query = "DELETE FROM [Like] WHERE UserId="+currentUser.id+" AND PostId="+item.postId;
+                database.excuteCommand(con, query);
+                try {
+                    con.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        Thread thread = new Thread(runnable);
+        thread.start();
+
     }
 
-    private void receivePost(int postId, int actorId, String postName){
-        Connection con = database.connectToDatabase();
-        SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = new Date();
-        String create_date = formater.format(date);
-        String query = "INSERT INTO [Receive](UserId,PostId)VALUES("+currentUser.id+", "+postId+")";
-        String queryNotification = "INSERT INTO [Notification]" +
-                "           (UserId,PostId,Status,CreateDate,Title,Contents,Type)" +
-                "     VALUES" +
-                "           ("+actorId +
-                "           ,"+postId +
-                "           ,1" +
-                "           ," + "CONVERT(datetime,'" +create_date+"',120)"+
-                "           ,N'"+currentUser.name+" Đã đăng ký nhận'" +
-                "           ,N'Đã có thêm một người đăng ký nhận bài "+postName+"'" +
-                "           ,1)";
-
-        database.excuteCommand(con, query);
-        database.excuteCommand(con, queryNotification);
-
-        try {
-            con.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
+    private void receivePost(FeedItem item, TextView txtLikeCount){
+        item.receiverCount++;
+        String strReceiverCount = item.receiverCount+" lượt đăng ký";
+        String strLikeCount = (item.likeCount>0)?item.likeCount+" lượt thích":"";
+        if(strLikeCount != ""){
+            txtLikeCount.setText(strLikeCount+" | "+strReceiverCount);
+        }else{
+            txtLikeCount.setText(strReceiverCount);
         }
+
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                Connection con = database.connectToDatabase();
+                SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date date = new Date();
+                String create_date = formater.format(date);
+                String query = "INSERT INTO [Receive](UserId,PostId)VALUES("+currentUser.id+", "+item.postId+")";
+                String queryNotification = "INSERT INTO [Notification]" +
+                        "           (UserId,PostId,Status,CreateDate,Title,Contents,Type)" +
+                        "     VALUES" +
+                        "           ("+item.actorId +
+                        "           ,"+item.postId +
+                        "           ,1" +
+                        "           ," + "CONVERT(datetime,'" +create_date+"',120)"+
+                        "           ,N'"+currentUser.name+" Đã đăng ký nhận'" +
+                        "           ,N'Đã có thêm một người đăng ký nhận bài "+item.title+"'" +
+                        "           ,1)";
+
+                database.excuteCommand(con, query);
+                database.excuteCommand(con, queryNotification);
+
+                try {
+                    con.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        Thread thread = new Thread(runnable);
+        thread.start();
     }
 
-    private void unReceivePost(int postId){
-        Connection con = database.connectToDatabase();
-        String query = "DELETE FROM [Receive] WHERE UserId="+currentUser.id+" AND PostId="+postId;
-        database.excuteCommand(con, query);
-        try {
-            con.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
+    private void unReceivePost(FeedItem item, TextView txtLikeCount){
+        item.receiverCount = (item.receiverCount>0)?item.receiverCount-1:0;
+        String strLikeCount = (item.likeCount>0)?item.likeCount+" lượt thích":"";
+        String strReceiverCount = (item.receiverCount>0)?item.receiverCount+" lượt đăng ký":"";
+        if(strLikeCount =="" || strReceiverCount ==""){
+            txtLikeCount.setText(strLikeCount+strReceiverCount);
+        }else{
+            txtLikeCount.setText(strLikeCount+" | "+strReceiverCount);
         }
+
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                Connection con = database.connectToDatabase();
+                String query = "DELETE FROM [Receive] WHERE UserId="+currentUser.id+" AND PostId="+item.postId;
+                database.excuteCommand(con, query);
+                try {
+                    con.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        Thread thread = new Thread(runnable);
+        thread.start();
     }
 
     private View.OnClickListener getListenerForPostDetailActivity(final int postId){

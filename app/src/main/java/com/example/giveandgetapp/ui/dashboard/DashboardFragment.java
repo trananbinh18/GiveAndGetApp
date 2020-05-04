@@ -153,7 +153,7 @@ public class DashboardFragment extends Fragment {
         Connection con = _database.connectToDatabase();
         User currentUser = _sessionManager.getUserDetail();
 
-        String query = "SELECT p.LikeCount ,p.Id, a.Id as ActorId, a.Name as ActorName, p.Title, p.Contents, l.UserId as IsLiked, r.UserId as IsReceived, a.Avatar as ActorImage, p.Image, p.Image2, p.Image3, p.CreateDate" +
+        String query = "SELECT p.ReceiverCount, p.LikeCount ,p.Id, a.Id as ActorId, a.Name as ActorName, p.Title, p.Contents, l.UserId as IsLiked, r.UserId as IsReceived, a.Avatar as ActorImage, p.Image, p.Image2, p.Image3, p.CreateDate" +
                 " FROM [Post] p" +
                 " INNER JOIN [User] a" +
                 " ON p.Actor = a.Id" +
@@ -207,13 +207,15 @@ public class DashboardFragment extends Fragment {
                 int Image2 = result.getInt("Image2");
                 int Image3 = result.getInt("Image3");
                 int likeCount = result.getInt("LikeCount");
+                int receiverCount = result.getInt("ReceiverCount");
+
                 Timestamp tsCreateDate = result.getTimestamp("CreateDate");
                 Date createDate = null;
                 if(tsCreateDate != null){
                     createDate = new Date(tsCreateDate.getTime());
                 }
 
-                FeedItem item = new FeedItem(postId,actorId,actorImage,actorName,title,content,Image,Image2,Image3,isLiked,isReceived,createDate,likeCount);
+                FeedItem item = new FeedItem(postId,actorId,actorImage,actorName,title,content,Image,Image2,Image3,isLiked,isReceived,createDate,likeCount,receiverCount);
                 listFeedItem.add(item);
                 countRow++;
 
@@ -246,7 +248,7 @@ public class DashboardFragment extends Fragment {
         _database = new Database(getContext());
         Connection con = _database.connectToDatabase();
 
-        String query = "SELECT p.LikeCount ,p.Id, a.Id as ActorId, a.Name as ActorName, p.Title, p.Contents, l.UserId as IsLiked, r.UserId as IsReceived, a.Avatar as ActorImage, p.CreateDate, p.Image, p.Image2, p.Image3" +
+        String query = "SELECT p.ReceiverCount ,p.LikeCount ,p.Id, a.Id as ActorId, a.Name as ActorName, p.Title, p.Contents, l.UserId as IsLiked, r.UserId as IsReceived, a.Avatar as ActorImage, p.CreateDate, p.Image, p.Image2, p.Image3" +
                 " FROM [Post] p" +
                 " INNER JOIN [User] a" +
                 " ON p.Actor = a.Id" +
@@ -293,13 +295,14 @@ public class DashboardFragment extends Fragment {
                 int Image2 = result.getInt("Image2");
                 int Image3 = result.getInt("Image3");
                 int likeCount = result.getInt("LikeCount");
+                int receiverCount = result.getInt("ReceiverCount");
                 Timestamp tsCreateDate = result.getTimestamp("CreateDate");
                 Date createDate = null;
                 if(tsCreateDate != null){
                     createDate = new Date(tsCreateDate.getTime());
                 }
 
-                FeedItem item = new FeedItem(postId,actorId,actorImage,actorName,title,content,Image,Image2,Image3,isLiked,isReceived,createDate,likeCount);
+                FeedItem item = new FeedItem(postId,actorId,actorImage,actorName,title,content,Image,Image2,Image3,isLiked,isReceived,createDate,likeCount,receiverCount);
                 listFeedItem.add(item);
 
             }
