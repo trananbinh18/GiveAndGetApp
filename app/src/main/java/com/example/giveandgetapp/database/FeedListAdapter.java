@@ -313,9 +313,14 @@ public class FeedListAdapter extends BaseAdapter {
                         "           ,N'Đã có thêm một người thích bài "+item.title+"'" +
                         "           ,1)";
 
+                String queryUpdateLikeCount = "UPDATE [Post]" +
+                        "   SET LikeCount = LikeCount+1" +
+                        "   WHERE Id = "+ item.postId;
+
 
                 database.excuteCommand(con, query);
                 database.excuteCommand(con, queryNotification);
+                database.excuteCommand(con,queryUpdateLikeCount);
 
                 try {
                     con.close();
@@ -349,7 +354,12 @@ public class FeedListAdapter extends BaseAdapter {
             public void run() {
                 Connection con = database.connectToDatabase();
                 String query = "DELETE FROM [Like] WHERE UserId="+currentUser.id+" AND PostId="+item.postId;
+                String queryUpdateLikeCount = "UPDATE [Post]" +
+                        "   SET LikeCount = LikeCount-1" +
+                        "   WHERE LikeCount > 0 AND Id = "+item.postId;
                 database.excuteCommand(con, query);
+                database.excuteCommand(con,queryUpdateLikeCount);
+
                 try {
                     con.close();
                 } catch (SQLException e) {
@@ -392,8 +402,13 @@ public class FeedListAdapter extends BaseAdapter {
                         "           ,N'Đã có thêm một người đăng ký nhận bài "+item.title+"'" +
                         "           ,1)";
 
+                String queryUpdateReceiverCount = "UPDATE [Post]" +
+                        "   SET ReceiverCount = ReceiverCount+1" +
+                        "   WHERE Id = "+ item.postId;
+
                 database.excuteCommand(con, query);
                 database.excuteCommand(con, queryNotification);
+                database.excuteCommand(con, queryUpdateReceiverCount);
 
                 try {
                     con.close();
@@ -422,7 +437,11 @@ public class FeedListAdapter extends BaseAdapter {
             public void run() {
                 Connection con = database.connectToDatabase();
                 String query = "DELETE FROM [Receive] WHERE UserId="+currentUser.id+" AND PostId="+item.postId;
+                String queryUpdateReceiverCount = "UPDATE [Post]" +
+                        "   SET ReceiverCount = ReceiverCount-1" +
+                        "   WHERE ReceiverCount > 0 AND Id = "+item.postId;
                 database.excuteCommand(con, query);
+                database.excuteCommand(con,queryUpdateReceiverCount);
                 try {
                     con.close();
                 } catch (SQLException e) {
