@@ -211,26 +211,6 @@ public class MainActivity extends AppCompatActivity {
                 //On rating
                 case RESULT_OK:
                     final int postId = Integer.parseInt(data.getData().toString());
-                    //edit Post in profile view model
-                    _profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
-
-                    if(_profileViewModel.getListPostProfileActor().getValue() == null){
-                        _profileViewModel.setListPostProfileActor(getInitListPostProfileActor(_profileViewModel));
-                    }
-                    ArrayList<PostProfile> currentPostProfiles = _profileViewModel.getListPostProfileReceive().getValue();
-                    ArrayList<PostProfile> newPostProfiles = new ArrayList<PostProfile>();
-
-                    for (PostProfile item: currentPostProfiles) {
-                        if(item.postId == postId){
-                            item.status = 4;
-                        }
-
-
-                        newPostProfiles.add(item);
-                    }
-
-                    _profileViewModel.setListPostProfileReceive(newPostProfiles);
-
 
                     //Set for notification
                     ArrayList<FeedNotification> currentNotifications = _notificationsViewModel.getListNotification().getValue();
@@ -265,7 +245,6 @@ public class MainActivity extends AppCompatActivity {
 
         super.onActivityResult(requestCode, resultCode, data);
     }
-
 
     private ArrayList<PostProfile> getInitListPostProfileActor(ProfileViewModel profileViewModel) {
         ArrayList<PostProfile> listPostProfile = new ArrayList<PostProfile>();
