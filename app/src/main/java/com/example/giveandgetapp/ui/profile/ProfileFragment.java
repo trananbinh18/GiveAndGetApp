@@ -54,6 +54,7 @@ public class ProfileFragment extends Fragment {
     private ImageView _iconBack;
     private ImageView _avatarUser;
     private Button _btnEditProfile;
+    private TextView _lblten;
     private TextView _lbllop;
     private TextView _lblmssv;
     private TextView _lblsdt;
@@ -110,6 +111,7 @@ public class ProfileFragment extends Fragment {
 
         User user = _sessionManager.getUserDetail();
 
+        _lblten = root.findViewById(R.id.lbltenuser);
         _lbllop = root.findViewById(R.id.lbllopuser);
         _lblmssv = root.findViewById(R.id.lblmssvuser);
         _lblsdt = root.findViewById(R.id.lblsdtuser);
@@ -149,6 +151,7 @@ public class ProfileFragment extends Fragment {
         }
 
         //Load thông tin user
+        _lblten.setText("Tên: " + user.name);
         _lbllop.setText("Lớp: " + user.clazz);
         _lblmssv.setText("MSSV: " + user.studentId);
         _lblsdt.setText("SĐT: " + user.phone);

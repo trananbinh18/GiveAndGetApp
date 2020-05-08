@@ -120,6 +120,12 @@
                 android:padding="20dp">
 
                 <TextView
+                    android:id="@+id/lbltenuser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="0dp" />
+                <TextView
                     android:id="@+id/lbllopuser"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
