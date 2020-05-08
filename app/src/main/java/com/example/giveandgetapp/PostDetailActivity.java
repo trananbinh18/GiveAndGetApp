@@ -51,7 +51,6 @@ public class PostDetailActivity extends AppCompatActivity {
     private Database _database;
     private ImageView _imageActor;
     private ImageView _imageMore;
-    private TextView _txtTimePost;
     private TextView _txtActorName;
     private TextView _txtContentPost;
     private TextView _txtTitlePost;
@@ -73,8 +72,7 @@ public class PostDetailActivity extends AppCompatActivity {
 
         _sessionManager = new SessionManager(this);
         final User user = _sessionManager.getUserDetail();
-        _txtTimePost = findViewById(R.id.timelogin);
-        _txtActorName = findViewById(R.id.actornamedetail);
+        _txtActorName = findViewById(R.id.timelogin);
         _txtContentPost = findViewById(R.id.txtcontenpost);
         _txtTitlePost = findViewById(R.id.txttitlepost);
         _imageDetailPost = findViewById(R.id.imagedetailpost);
@@ -85,7 +83,7 @@ public class PostDetailActivity extends AppCompatActivity {
         _imgLike = findViewById(R.id.imageButton2);
         _imgReceive = findViewById(R.id.imageButton3);
         _txtLikeCount = findViewById(R.id.txtLikeCountPostdetail);
-        _txtTimelogin = findViewById(R.id.timelogin);
+        _txtTimelogin = findViewById(R.id.actornamedetail);
 
         _database = new Database(this);
         final User currentUser = _sessionManager.getUserDetail();
