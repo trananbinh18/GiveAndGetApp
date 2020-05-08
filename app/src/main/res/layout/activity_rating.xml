@@ -103,11 +103,27 @@
                     android:text="Xác nhận"/>
 
                 <Button
-                    android:id="@+id/btnDenied"
+                    android:id="@+id/btnConfirmDenied"
                     android:layout_width="130dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center_horizontal"
-                    android:text="Hủy xác nhận"/>
+                    android:text="Hủy Xác nhận" />
+
+                <Button
+                    android:id="@+id/btnBack"
+                    android:layout_width="130dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Quay lại"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/btnDenied"
+                    android:layout_width="130dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Xác nhận từ chối"
+                    android:visibility="gone" />
 
                 <Button
                     android:id="@+id/btnHuyRating"

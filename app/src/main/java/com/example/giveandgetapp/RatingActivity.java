@@ -17,6 +17,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.widget.ScrollView;
+import android.widget.Scroller;
 import android.widget.TextView;
 
 import java.sql.Connection;
@@ -38,6 +40,8 @@ public class RatingActivity extends AppCompatActivity {
     private TextView _txtMain;
     private Button _btnApprove;
     private Button _btnDenied;
+    private Button _btnConfirmDenied;
+    private Button _btnBack;
     private int _postId;
     private User _currentUser;
     private int _actorId;
@@ -48,7 +52,6 @@ public class RatingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rating);
         this._postId = getIntent().getIntExtra("Post_Id",0);
-
         _actorImageRating = findViewById(R.id.avatarActorRating);
         _txtTitlePostRating = findViewById(R.id.titlePostRating);
         _txtContentPostRating = findViewById(R.id.contentPostRating);
@@ -58,6 +61,8 @@ public class RatingActivity extends AppCompatActivity {
         _txtMain = findViewById(R.id.txtMain);
         _btnApprove = findViewById(R.id.btnApprove);
         _btnDenied = findViewById(R.id.btnDenied);
+        _btnBack = findViewById(R.id.btnBack);
+        _btnConfirmDenied = findViewById(R.id.btnConfirmDenied);
         _sessionManager = new SessionManager(this);
         _database = new Database(this);
         _currentUser = _sessionManager.getUserDetail();
@@ -87,6 +92,32 @@ public class RatingActivity extends AppCompatActivity {
                 _btnLuuRating.setVisibility(View.VISIBLE);
                 _btnApprove.setVisibility(View.INVISIBLE);
                 _btnDenied.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        //Button Confirm Deny
+        _btnConfirmDenied.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                _btnDenied.setVisibility(View.VISIBLE);
+                _btnBack.setVisibility(View.VISIBLE);
+                _btnApprove.setVisibility(View.INVISIBLE);
+                _btnConfirmDenied.setVisibility(View.INVISIBLE);
+                _btnLuuRating.setVisibility(View.INVISIBLE);
+                _ratingBar.setVisibility(View.INVISIBLE);
+                _txtMain.setText("Bạn có thật sự không muốn nhận món đồ này ?");
+             }
+        });
+
+        //Button Back
+        _btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                _btnDenied.setVisibility(View.INVISIBLE);
+                _btnBack.setVisibility(View.INVISIBLE);
+                _btnApprove.setVisibility(View.VISIBLE);
+                _btnConfirmDenied.setVisibility(View.VISIBLE);
+                _txtMain.setText("Bạn Đã được cho món đồ này, bạn có xác nhận nhận món đồ này ?");
             }
         });
 

@@ -8,7 +8,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.giveandgetapp.R;
 
@@ -23,13 +25,14 @@ public class UserGivenAdapter extends BaseAdapter {
     private double _pecent;
     private int _giveType;
     public int _idUserChoosed;
+    private ScrollView _parentScrollView;
 
-    public UserGivenAdapter(Context context, ArrayList<UserGiven> listUserGiven, int giveType){
+    public UserGivenAdapter(Context context, ArrayList<UserGiven> listUserGiven, int giveType, ScrollView parentScrollView){
         this._context = context;
         this._listUserGiven = listUserGiven;
         this._giveType = giveType;
         this._pecent = (_listUserGiven.size() != 0)?100/ (_listUserGiven.size()):0;
-
+        this._parentScrollView = parentScrollView;
     }
 
     @Override
@@ -63,6 +66,18 @@ public class UserGivenAdapter extends BaseAdapter {
         //If it is random
         if(this._giveType != 1){
             imageGiven.setVisibility(View.GONE);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(_context,"Chọn vào nút random để chọn người ngẫu nhiên.",Toast.LENGTH_LONG).show();
+                    _parentScrollView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            _parentScrollView.fullScroll(View.FOCUS_DOWN);
+                        }
+                    });
+                }
+            });
         }else{
             txtPercent.setVisibility(View.GONE);
             UserGiven userGiven = _listUserGiven.get(i);
@@ -73,6 +88,8 @@ public class UserGivenAdapter extends BaseAdapter {
         txtUserName.setText(userGiven.userName);
         imgAvatarUser.setImageBitmap(userGiven.userImage);
         txtPercent.setText(String.format("%.2f",_pecent));
+
+
         return view;
     }
 
