@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +44,8 @@ public class GiveActivity extends AppCompatActivity {
     private TextView _postTitleGiveActivity;
     private ImageButton _btnRandom;
     private Button _btnApprove;
+    private ScrollView _scrollView;
+
 
     private FeedListAdapter _adapterGiveActivity;
     private ArrayList<UserGiven> _listFeedItemGiveActivity;
@@ -60,6 +63,7 @@ public class GiveActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_give);
+        _scrollView = findViewById(R.id.scrollView);
         _listviewUserGiveActivity = findViewById(R.id.listviewusergiveactivity);
         _postImageGiveActivity = findViewById(R.id.postImagegiveactivity);
         _postTitleGiveActivity = findViewById(R.id.posttitlegiveactivity);
@@ -105,13 +109,11 @@ public class GiveActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        _adapter = new UserGivenAdapter(this,_listFeedItemGiveActivity, _giveType, _scrollView);
         //Pick
         if(this._giveType == 1){
             _btnRandom.setVisibility(View.GONE);
         }
-
-
-        _adapter = new UserGivenAdapter(this,_listFeedItemGiveActivity, _giveType);
 
         _listviewUserGiveActivity.setAdapter(_adapter);
         _postImageGiveActivity.setImageBitmap(_postImage);
@@ -135,6 +137,8 @@ public class GiveActivity extends AppCompatActivity {
                 ImageButton imgBtn = _listviewUserGiveActivity.getChildAt(randomPosition).findViewById(R.id.iconGiven);
                 imgBtn.setImageResource(R.drawable.ic_hand_fill_foreground);
                 imgBtn.setVisibility(View.VISIBLE);
+
+                _btnRandom.setOnClickListener(null);
 
             }
         });
