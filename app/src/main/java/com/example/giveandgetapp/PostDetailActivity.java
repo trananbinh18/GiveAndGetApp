@@ -1,5 +1,6 @@
 package com.example.giveandgetapp;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -63,11 +64,13 @@ public class PostDetailActivity extends AppCompatActivity {
     private ImageButton _imgLike;
     private TextView _txtLikeCount;
     private TextView _txtTimelogin;
+    private Activity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_detail);
+        this.activity = this;
         this.postId = getIntent().getIntExtra("Post_Id",0);
 
         _sessionManager = new SessionManager(this);
@@ -206,6 +209,7 @@ public class PostDetailActivity extends AppCompatActivity {
                 _dialogPost.setView(abc);
                 final AlertDialog dialog = _dialogPost.create();
 
+                final Button _chodo = abc.findViewById(R.id.btnChoDo);
                 final Button _baocao = (Button) abc.findViewById(R.id.btnBaocao);
 //                  _baocao.setVisibility(View.INVISIBLE);
                 final Button _tuychon = (Button) abc.findViewById(R.id.btntuychon);
@@ -217,9 +221,12 @@ public class PostDetailActivity extends AppCompatActivity {
                 {
                     //User là actor
 
+                    _chodo.setVisibility(View.VISIBLE);
 //                    _baocao.setVisibility(View.GONE);
                     _baocao.setText("Xóa bài viết");
                     _tuychon.setText("Chỉnh sửa bài viết");
+
+                    _chodo.setOnClickListener(getButtonGiveClickListener(item.postId));
 
                     //Button xoa bai viet
                     _baocao.setOnClickListener(new View.OnClickListener() {
@@ -369,5 +376,18 @@ public class PostDetailActivity extends AppCompatActivity {
         }
 
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private View.OnClickListener getButtonGiveClickListener(int postId) {
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(activity, GiveActivity.class);
+                intent.putExtra("Post_Id",postId);
+                activity.startActivityForResult(intent,11);
+            }
+        };
+
+        return listener;
     }
 }
