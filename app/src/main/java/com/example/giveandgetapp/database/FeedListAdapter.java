@@ -332,10 +332,6 @@ public class FeedListAdapter extends BaseAdapter {
 
         Thread thread = new Thread(runnable);
         thread.start();
-
-
-
-
     }
 
     private void unLikePost(FeedItem item, TextView txtLikeCount){

@@ -39,9 +39,11 @@ import android.widget.TextView;
 import com.example.giveandgetapp.R;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class PostDetailActivity extends AppCompatActivity {
 
@@ -60,7 +62,8 @@ public class PostDetailActivity extends AppCompatActivity {
     private int postId;
     private ImageButton _imgReceive;
     private ImageButton _imgLike;
-
+    private TextView _txtLikeCount;
+    private TextView _txtTimelogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,10 +84,13 @@ public class PostDetailActivity extends AppCompatActivity {
         _dialogLayout = findViewById(R.id.dialog);
         _imgLike = findViewById(R.id.imageButton2);
         _imgReceive = findViewById(R.id.imageButton3);
+        _txtLikeCount = findViewById(R.id.txtLikeCountPostdetail);
+        _txtTimelogin = findViewById(R.id.timelogin);
+
         _database = new Database(this);
         final User currentUser = _sessionManager.getUserDetail();
         Connection con = _database.connectToDatabase();
-        String query = "SELECT p.Id, a.Id as ActorId, a.Name as ActorName, p.Title, p.Contents, l.UserId as IsLiked, r.UserId as IsReceived, a.Avatar as ActorImage, p.Image, p.Image2, p.Image3" +
+        String query = "SELECT p.CreateDate, p.Id, a.Id as ActorId, a.Name as ActorName, p.Title, p.Contents, l.UserId as IsLiked, r.UserId as IsReceived, a.Avatar as ActorImage, p.Image, p.Image2, p.Image3,p.ReceiverCount ,p.LikeCount" +
                 " FROM [Post] p" +
                 " INNER JOIN [User] a" +
                 " ON p.Actor = a.Id" +
@@ -110,7 +116,12 @@ public class PostDetailActivity extends AppCompatActivity {
                 Bitmap Image = _database.getImageInDatabase(con,result.getInt("Image"));
                 Bitmap Image2 = _database.getImageInDatabase(con,result.getInt("Image2"));
                 Bitmap Image3 = _database.getImageInDatabase(con,result.getInt("Image3"));
+                int likeCount = result.getInt("LikeCount");
+                int receiverCount = result.getInt("ReceiverCount");
+                Date createDate = result.getDate("CreateDate");
+
                 item = new FeedItem(postId,actorId,actorImage,actorName,title,contents,Image,Image2,Image3,isLiked,isReceived);
+//                item1 = new FeedItem(postId, actorId, actorImageId, actorName, title, contents, imageId, image2Id, image3Id, isLiked, isReceived, createDate, likeCount, receiverCount);
 
                 ArrayList<Bitmap> listImage = new ArrayList<Bitmap>();
                 if(item.image != null) {
@@ -125,6 +136,8 @@ public class PostDetailActivity extends AppCompatActivity {
                     listImage.add(item.image3);
                 }
 
+
+
                 ImageSlideAdapter imageSlideAdapter = new ImageSlideAdapter(this,listImage,null);
                 _imageDetailPost.setAdapter(imageSlideAdapter);
                 _indicatorDetail.setViewPager(_imageDetailPost);
@@ -132,6 +145,40 @@ public class PostDetailActivity extends AppCompatActivity {
                 _imageActor.setImageBitmap(item.actorImage);
                 _txtTitlePost.setText(item.title);
                 _txtContentPost.setText(item.contents);
+
+                //Set Time post
+                String timeStr = "";
+                if(createDate != null){
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(createDate);
+                    long DAY_IN_MS = 1000 * 60 * 60 * 24;
+                    java.util.Date currentDate = new java.util.Date(System.currentTimeMillis() - (1 * DAY_IN_MS));
+                    if(currentDate.before(createDate)){
+                        Calendar calendar1 = Calendar.getInstance();
+                        calendar1.setTime(new java.util.Date());
+                        int hourBefore = calendar1.get(Calendar.HOUR_OF_DAY) - calendar.get(Calendar.HOUR_OF_DAY);
+                        if(hourBefore != 0){
+                            timeStr = hourBefore+" giờ trước";
+                        }else{
+                            timeStr = "gần đây";
+                        }
+
+                    }else{
+                        int month = calendar.get(Calendar.MONTH)+1;
+                        timeStr = "Ngày "+ calendar.get(Calendar.DAY_OF_MONTH)+" Tháng "+ month;
+                    }
+                }
+
+                _txtTimelogin.setText(timeStr);
+
+                //Set text for like and receiver
+                String strLikeCount = (likeCount>0)?likeCount+" lượt thích":"";
+                String strReceiverCount = (receiverCount>0)?receiverCount+" lượt đăng ký":"";
+                if(strLikeCount =="" || strReceiverCount ==""){
+                    _txtLikeCount.setText(strLikeCount+strReceiverCount);
+                }else{
+                    _txtLikeCount.setText(strLikeCount+" | "+strReceiverCount);
+                }
 
                 if(item.isLiked){
                     _imgLike.setImageResource(R.drawable.ic_heart_fill_foreground);
