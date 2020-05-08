@@ -346,10 +346,12 @@ public class ProfileFragment extends Fragment {
                     btnReviewActor.setVisibility(View.VISIBLE);
                     btnDeleteActor.setVisibility(View.VISIBLE);
                     btnEditActor.setVisibility(View.VISIBLE);
+                    btnGiveActor.setVisibility(View.VISIBLE);
 
                     //Add action listener
                     btnReviewActor.setOnClickListener(getButtonReviewClickListener(item.postId));
                     btnDeleteActor.setOnClickListener(getButtonDeleteClickListener(item.postId, position));
+                    btnGiveActor.setOnClickListener(getButtonGiveClickListener(item.postId));
                 }
                 //Are Post is expire
                 else if(item.status == 2){

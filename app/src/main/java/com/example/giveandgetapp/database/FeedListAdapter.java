@@ -218,7 +218,7 @@ public class FeedListAdapter extends BaseAdapter {
                 calendar1.setTime(new Date());
                 int hourBefore = calendar1.get(Calendar.HOUR_OF_DAY) - calendar.get(Calendar.HOUR_OF_DAY);
                 if(hourBefore != 0){
-                    timeStr = -hourBefore+" giờ trước";
+                    timeStr = hourBefore+" giờ trước";
                 }else{
                     timeStr = "gần đây";
                 }
@@ -274,7 +274,7 @@ public class FeedListAdapter extends BaseAdapter {
             }
         });
 
-        pageImage.setOnClickListener(getListenerForPostDetailActivity(item.postId));
+        actorImage.setOnClickListener(getListenerForPostDetailActivity(item.postId));
         title.setOnClickListener(getListenerForPostDetailActivity(item.postId));
         content.setOnClickListener(getListenerForPostDetailActivity(item.postId));
         imgMore.setOnClickListener(getListenerForPostDetailActivity(item.postId));

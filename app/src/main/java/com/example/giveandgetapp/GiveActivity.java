@@ -45,6 +45,7 @@ public class GiveActivity extends AppCompatActivity {
     private ImageButton _btnRandom;
     private Button _btnApprove;
     private ScrollView _scrollView;
+    private TextView _txtMain;
 
 
     private FeedListAdapter _adapterGiveActivity;
@@ -69,6 +70,7 @@ public class GiveActivity extends AppCompatActivity {
         _postTitleGiveActivity = findViewById(R.id.posttitlegiveactivity);
         _btnRandom = findViewById(R.id.btnRandom);
         _btnApprove = findViewById(R.id.btnApprove);
+        _txtMain = findViewById(R.id.txtMain);
 
         _sessionManager = new SessionManager(this);
         _currentUser = _sessionManager.getUserDetail();
@@ -113,6 +115,12 @@ public class GiveActivity extends AppCompatActivity {
         //Pick
         if(this._giveType == 1){
             _btnRandom.setVisibility(View.GONE);
+        }
+
+        //check is any user exist
+        if(_listFeedItemGiveActivity.isEmpty()){
+            _txtMain.setText("Không có người nào đăng ký nhận bài viết này");
+            _btnApprove.setVisibility(View.INVISIBLE);
         }
 
         _listviewUserGiveActivity.setAdapter(_adapter);
