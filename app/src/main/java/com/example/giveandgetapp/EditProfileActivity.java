@@ -30,6 +30,8 @@ import android.widget.Toast;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class EditProfileActivity extends AppCompatActivity {
 
@@ -46,6 +48,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private Button _btnLuu;
     private Button _btnHuy;
     private User _user;
+    private TextView _txtMessageError;
 
     public final int REQUEST_CODE_IMG_AVATAR = 1;
     private boolean isChangeAvatar = false;
@@ -65,6 +68,7 @@ public class EditProfileActivity extends AppCompatActivity {
         _txtLop = findViewById(R.id.txtlopedit);
         _txtMssv = findViewById(R.id.txtmssvedit);
         _txtSdt = findViewById(R.id.txtsdtedit);
+        _txtMessageError = findViewById(R.id.messageerror);
 
         _txtEmail = findViewById(R.id.txtemailedit);
         _txtEmail.setFocusable(true);
@@ -89,6 +93,22 @@ public class EditProfileActivity extends AppCompatActivity {
         _txtMssv.setText(_user.studentId);
         _txtSdt.setText(_user.phone);
         _txtEmail.setText(_user.email);
+
+        //Check điều kiện input
+        String congchuoi = _txtName.getText().toString() + _txtGioitinh.getText().toString() + _txtSdt.getText().toString()
+                + _txtMssv.getText().toString() + _txtLop.getText().toString();
+        Pattern p = Pattern.compile("[^a-z0-9 ]", Pattern.CASE_INSENSITIVE);
+        Matcher m = p.matcher(congchuoi);
+        boolean checkspecialchar = m.find();
+
+        if(_txtName.getText()== null || _txtGioitinh.getText()== null || _txtSdt.getText() == null
+        || _txtMssv.getText() == null || _txtLop.getText() == null){
+            _txtMessageError.setText("Vui lòng nhập những trường bắt buộc");
+        }
+        if(checkspecialchar){
+            _txtMessageError.setText("Vui lòng không nhập kí tự đặc biệt");
+        }
+
 
         //Lưu
         _btnLuu.setOnClickListener(new View.OnClickListener() {
@@ -190,10 +210,8 @@ public class EditProfileActivity extends AppCompatActivity {
                         isChangeAvatar = true;
                     }
                 }
-
                 break;
         }
-
         super.onActivityResult(requestCode,resultCode,data);
     }
 }
