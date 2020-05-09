@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
     private void getNotificationsInterval(NotificationsViewModel modelNotification, TextView txtNumberNotifyCount){
         ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
         executorService.scheduleAtFixedRate(new RunableGetNotification(modelNotification ,txtNumberNotifyCount ,getApplicationContext(),this),
-                0, 5, TimeUnit.SECONDS);
+                0, 10, TimeUnit.SECONDS);
     }
 
     @Override

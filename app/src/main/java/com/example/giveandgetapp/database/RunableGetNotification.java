@@ -48,14 +48,15 @@ public class RunableGetNotification implements Runnable{
 
         Connection con = this._database.connectToDatabase();
         String query = "SELECT TOP(10) " +
-                " Id" +
-                ",PostId" +
-                ",Status" +
-                ",CreateDate" +
-                ",Title" +
-                ",Contents" +
-                ",Type" +
-                "  FROM [Notification]" +
+                " n.Id" +
+                ",n.PostId" +
+                ",n.Status" +
+                ",n.CreateDate" +
+                ",n.Title" +
+                ",n.Contents" +
+                ",n.Type" +
+                ",p.Image" +
+                "  FROM [Notification] n LEFT JOIN [Post] p ON n.PostId = p.Id " +
                 "  WHERE UserId = " + currentUser.id +
                 "  ORDER BY Id DESC";
 
@@ -67,6 +68,7 @@ public class RunableGetNotification implements Runnable{
                 int id = rs.getInt("Id");
                 int postId = rs.getInt("PostId");
                 int status = rs.getInt("Status");
+                int idImage = rs.getInt("Image");
                 if(status == 1){
                     numberOfNotRead++;
                 }
@@ -80,7 +82,7 @@ public class RunableGetNotification implements Runnable{
                 String content = rs.getString("Contents");
                 int type = rs.getInt("Type");
 
-                FeedNotification item = new FeedNotification(id,postId,status,createDate,title,content,type);
+                FeedNotification item = new FeedNotification(id,postId,status,createDate,title,content,type,idImage);
                 result.add(item);
             }
 

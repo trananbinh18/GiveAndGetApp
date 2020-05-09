@@ -12,8 +12,9 @@ public class FeedNotification {
     public String title;
     public String contents;
     public int type;
+    public int idImagePost;
 
-    public FeedNotification(int id,int postId, int status, Date creaDateTime, String title, String contents, int type){
+    public FeedNotification(int id,int postId, int status, Date creaDateTime, String title, String contents, int type, int idImagePost){
         this.id = id;
         this.postId = postId;
         this.status = status;
@@ -21,6 +22,7 @@ public class FeedNotification {
         this.title = title;
         this.contents = contents;
         this.type = type;
+        this.idImagePost = idImagePost;
     }
 
 }

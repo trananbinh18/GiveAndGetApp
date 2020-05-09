@@ -3,10 +3,12 @@ package com.example.giveandgetapp.database;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -60,10 +62,26 @@ public class ReceivePostAdapter extends BaseAdapter {
 
         LinearLayout layoutItem = convertView.findViewById(R.id.layoutItem);
         TextView txtStatus = convertView.findViewById(R.id.txtStatus);
+        ImageView imgStatus = convertView.findViewById(R.id.imgStatus);
         TextView txtTitle = convertView.findViewById(R.id.txtTitle);
 
-        String statusStr = (item.status == 1)?"Chưa hết hạn":(item.status == 2)?"Đã hết hạn":(item.status == 3)?"Đang chờ Xác nhận":"Đóng";
-        txtStatus.setText(statusStr);
+//        String statusStr = (item.status == 1)?"Chưa hết hạn":(item.status == 2)?"Đã hết hạn":(item.status == 3)?"Đang chờ Xác nhận":"Đóng";
+//        txtStatus.setText(statusStr);
+        switch (item.status){
+            case 1:
+                imgStatus.setImageDrawable(_context.getResources().getDrawable(R.drawable.ic_fiber_manual_record_green_24dp));
+                break;
+            case 2:
+                imgStatus.setImageDrawable(_context.getResources().getDrawable(R.drawable.ic_fiber_manual_record_red_24dp));
+                break;
+            case 3:
+                imgStatus.setImageDrawable(_context.getResources().getDrawable(R.drawable.ic_fiber_manual_record_yellow_24dp));
+                break;
+            default:
+                imgStatus.setImageDrawable(_context.getResources().getDrawable(R.drawable.ic_fiber_manual_record_gray_24dp));
+                break;
+        }
+
 //        txtTitle.setText(item.title);
         layoutItem.setBackground(new BitmapDrawable(_context.getResources(), _listImage.get(position)));
 

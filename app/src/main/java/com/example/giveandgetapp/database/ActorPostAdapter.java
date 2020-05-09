@@ -10,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -65,11 +66,27 @@ public class ActorPostAdapter extends BaseAdapter {
 
         LinearLayout layoutItem = convertView.findViewById(R.id.layoutItem);
         TextView txtStatus = convertView.findViewById(R.id.txtStatus);
+        ImageView imgStatus = convertView.findViewById(R.id.imgStatus);
         TextView txtTitle = convertView.findViewById(R.id.txtTitle);
 
-        String statusStr = (item.status == 1)?"Chưa hết hạn":(item.status == 2)?"Đã hết hạn":(item.status == 3)?"Đang chờ xác nhận":"Đóng";
-        txtStatus.setText(statusStr);
+//        String statusStr = (item.status == 1)?"Chưa hết hạn":(item.status == 2)?"Đã hết hạn":(item.status == 3)?"Đang chờ xác nhận":"Đóng";
+//        txtStatus.setText(statusStr);
 //        txtTitle.setText(item.title);
+
+        switch (item.status){
+            case 1:
+                imgStatus.setImageDrawable(_context.getResources().getDrawable(R.drawable.ic_fiber_manual_record_green_24dp));
+                break;
+            case 2:
+                imgStatus.setImageDrawable(_context.getResources().getDrawable(R.drawable.ic_fiber_manual_record_red_24dp));
+                break;
+            case 3:
+                imgStatus.setImageDrawable(_context.getResources().getDrawable(R.drawable.ic_fiber_manual_record_yellow_24dp));
+                break;
+            default:
+                imgStatus.setImageDrawable(_context.getResources().getDrawable(R.drawable.ic_fiber_manual_record_gray_24dp));
+                break;
+        }
         layoutItem.setBackground(new BitmapDrawable(_context.getResources(), _listImage.get(position)));
 
 

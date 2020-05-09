@@ -118,8 +118,8 @@ public class GiveActivity extends AppCompatActivity {
         }
 
         //check is any user exist
-        if(_listFeedItemGiveActivity.isEmpty()){
-            _txtMain.setText("Không có người nào đăng ký nhận bài viết này");
+        if(_listFeedItemGiveActivity.size() < 2){
+            _txtMain.setText("Không thể cho đồ, phải có ít nhất 2 người đăng ký bài viết này");
             _btnApprove.setVisibility(View.INVISIBLE);
         }
 

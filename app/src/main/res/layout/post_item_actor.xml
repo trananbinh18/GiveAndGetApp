@@ -9,6 +9,14 @@
     android:padding="5dp">
 
 
+    <ImageView
+        android:id="@+id/imgStatus"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:foregroundGravity="left"
+        app:srcCompat="@drawable/ic_fiber_manual_record_green_24dp" />
+
     <TextView
         android:id="@+id/txtStatus"
         android:layout_width="match_parent"

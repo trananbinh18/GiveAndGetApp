@@ -79,17 +79,18 @@ public class NotificationsFragment extends Fragment {
         ArrayList<FeedNotification> result = new ArrayList<FeedNotification>();
         Connection con = _database.connectToDatabase();
         User currentUser = _sessionManager.getUserDetail();
-        String query = "SELECT TOP(5) " +
-                " Id" +
-                ",PostId" +
-                ",Status" +
-                ",CreateDate" +
-                ",Title" +
-                ",Contents" +
-                ",Type" +
-                "  FROM [Notification]" +
+        String query = "SELECT TOP(10) " +
+                " n.Id" +
+                ",n.PostId" +
+                ",n.Status" +
+                ",n.CreateDate" +
+                ",n.Title" +
+                ",n.Contents" +
+                ",n.Type" +
+                ",p.Image" +
+                "  FROM [Notification] n LEFT JOIN [Post] p ON n.PostId = p.Id " +
                 "  WHERE UserId = " + currentUser.id +
-                "  ORDER BY CreateDate DESC";
+                "  ORDER BY Id DESC";
 
         ResultSet rs = _database.excuteCommand(con, query);
 
@@ -107,8 +108,9 @@ public class NotificationsFragment extends Fragment {
                 String title = rs.getString("Title");
                 String content = rs.getString("Contents");
                 int type = rs.getInt("Type");
+                int idImage = rs.getInt("Image");
 
-                FeedNotification item = new FeedNotification(id,postId,status,createDate,title,content,type);
+                FeedNotification item = new FeedNotification(id,postId,status,createDate,title,content,type,idImage);
                 result.add(item);
             }
 
