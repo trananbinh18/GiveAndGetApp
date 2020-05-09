@@ -43,6 +43,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -234,6 +235,29 @@ public class PostDetailActivity extends AppCompatActivity {
                         public void onClick(View v) {
                             try {
                                 Connection con  = _database.connectToDatabase();
+                                String queryGetAllReciever = "SELECT UserId" +
+                                        "  FROM [Receive] " +
+                                        "  WHERE PostId = " + item.postId;
+                                ResultSet resultSet = _database.excuteCommand(con, queryGetAllReciever);
+
+                                while (resultSet.next()){
+                                    SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                    java.util.Date date = new java.util.Date();
+                                    String create_date = formater.format(date);
+
+                                    String queryAddNotification = "INSERT INTO [Notification]" +
+                                            "           (UserId,Status,CreateDate,Title,Contents,Type)" +
+                                            "     VALUES" +
+                                            "           ("+resultSet.getInt("UserId") +
+                                            "           ,1" +
+                                            "           ," + "CONVERT(datetime,'" +create_date+"',120)"+
+                                            "           ,N'Bài viết của "+item.actorName+" đã xóa'" +
+                                            "           ,N'Bài viết "+item.title+" đã bị xóa'" +
+                                            "           ,0)";
+
+                                    _database.excuteCommand(con,queryAddNotification);
+                                }
+
                                 String query = "DELETE FROM [Post] " +
                                         "      WHERE Id ="+item.postId;
                                 _database.excuteCommand(con,query);

@@ -230,6 +230,27 @@ public class EditPostActivity extends AppCompatActivity {
                         String given_type = (_rdoGroupPickType.getCheckedRadioButtonId() == R.id.rdoPickeditpost)?"1":"2";
                         String expireType = amountDay+"";
 
+                        String queryGetAllReciever = "SELECT UserId" +
+                                "  FROM [Receive] " +
+                                "  WHERE PostId = " + _postId;
+                        ResultSet resultSet = _database.excuteCommand(con, queryGetAllReciever);
+
+                        while (resultSet.next()){
+                            String create_date = formater.format(date);
+
+                            String queryAddNotification = "INSERT INTO [Notification]" +
+                                    "           (PostId,UserId,Status,CreateDate,Title,Contents,Type)" +
+                                    "     VALUES" +
+                                    "           ("+_postId+","+resultSet.getInt("UserId") +
+                                    "           ,1" +
+                                    "           ," + "CONVERT(datetime,'" +create_date+"',120)"+
+                                    "           ,N'Bài viết của "+user.name+" đã được chỉnh sửa'" +
+                                    "           ,N'Bài viết "+user.name+" đã được chỉnh sửa'" +
+                                    "           ,1)";
+
+                            _database.excuteCommand(con,queryAddNotification);
+                        }
+
                         String query = "UPDATE [Post]" +
                                 "   SET CatalogId = "+catalogId +
                                 "      ,Image = " + image+
