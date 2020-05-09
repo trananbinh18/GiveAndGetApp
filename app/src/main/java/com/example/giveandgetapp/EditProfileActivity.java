@@ -94,28 +94,28 @@ public class EditProfileActivity extends AppCompatActivity {
         _txtSdt.setText(_user.phone);
         _txtEmail.setText(_user.email);
 
-        //Check điều kiện input
-        String congchuoi = _txtName.getText().toString() + _txtGioitinh.getText().toString() + _txtSdt.getText().toString()
-                + _txtMssv.getText().toString() + _txtLop.getText().toString();
-        Pattern p = Pattern.compile("[^a-z0-9 ]", Pattern.CASE_INSENSITIVE);
-        Matcher m = p.matcher(congchuoi);
-        boolean checkspecialchar = m.find();
 
-        if(_txtName.getText()== null || _txtGioitinh.getText()== null || _txtSdt.getText() == null
-        || _txtMssv.getText() == null || _txtLop.getText() == null){
-            _txtMessageError.setText("Vui lòng nhập những trường bắt buộc");
-        }
-        if(checkspecialchar){
-            _txtMessageError.setText("Vui lòng không nhập kí tự đặc biệt");
-        }
 
 
         //Lưu
         _btnLuu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Connection con = _database.connectToDatabase();
+                //Check điều kiện input
+                String congchuoi = _txtName.getText().toString() + _txtGioitinh.getText().toString() + _txtSdt.getText().toString()
+                        + _txtMssv.getText().toString() + _txtLop.getText().toString();
+                Pattern p = Pattern.compile("[^a-z0-9 ]", Pattern.CASE_INSENSITIVE);
+                Matcher m = p.matcher(congchuoi);
+                boolean checkspecialchar = m.find();
 
+                if(_txtName.getText()== null || _txtGioitinh.getText()== null || _txtSdt.getText() == null
+                        || _txtMssv.getText() == null || _txtLop.getText() == null){
+                    _txtMessageError.setText("Vui lòng nhập những trường bắt buộc");
+                }
+                if(checkspecialchar){
+                    _txtMessageError.setText("Vui lòng không nhập kí tự đặc biệt");
+                }
+                Connection con = _database.connectToDatabase();
                 String strQueryAvatar = "";
                 if(isChangeAvatar){
                     Bitmap bitmap = ((BitmapDrawable)_imageUser.getDrawable()).getBitmap();
