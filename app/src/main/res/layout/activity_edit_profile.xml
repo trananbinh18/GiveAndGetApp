@@ -98,7 +98,8 @@
                         android:layout_height="30dp"
                         android:layout_marginLeft="150dp"
                         android:layout_marginTop="-238dp"
-                        android:background="@null" />
+                        android:background="@null"
+                        android:hint="Bắt buộc nhập"/>
 
                     <EditText
                         android:id="@+id/txtgioitinhedit"
@@ -106,7 +107,8 @@
                         android:layout_height="30dp"
                         android:layout_marginLeft="150dp"
                         android:layout_marginTop="10dp"
-                        android:background="@null" />
+                        android:background="@null"
+                        android:hint="Bắt buộc nhập"/>
 
                     <EditText
                         android:id="@+id/txtlopedit"
@@ -114,7 +116,8 @@
                         android:layout_height="30dp"
                         android:layout_marginLeft="150dp"
                         android:layout_marginTop="10dp"
-                        android:background="@null" />
+                        android:background="@null"
+                        android:hint="Bắt buộc nhập"/>
 
                     <EditText
                         android:id="@+id/txtmssvedit"
@@ -122,7 +125,8 @@
                         android:layout_height="30dp"
                         android:layout_marginLeft="150dp"
                         android:layout_marginTop="10dp"
-                        android:background="@null" />
+                        android:background="@null"
+                        android:hint="Bắt buộc nhập"/>
 
                     <EditText
                         android:id="@+id/txtsdtedit"
@@ -130,7 +134,9 @@
                         android:layout_height="30dp"
                         android:layout_marginLeft="150dp"
                         android:layout_marginTop="10dp"
-                        android:background="@null" />
+                        android:background="@null"
+                        android:maxLength="10"
+                        android:hint="Bắt buộc nhập"/>
 
                     <EditText
                         android:id="@+id/txtemailedit"
@@ -139,6 +145,14 @@
                         android:layout_marginLeft="150dp"
                         android:layout_marginTop="10dp"
                         android:background="@null" />
+
+                    <TextView
+                        android:id="@+id/messageerror"
+                        android:layout_width="wrap_content"
+                        android:layout_height="25dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="10dp"
+                        android:textColor="#FF0000"/>
                 </LinearLayout>
 
                 <LinearLayout
