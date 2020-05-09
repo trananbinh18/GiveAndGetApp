@@ -104,7 +104,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 //Check điều kiện input
                 String congchuoi = _txtName.getText().toString() + _txtGioitinh.getText().toString() + _txtSdt.getText().toString()
                         + _txtMssv.getText().toString() + _txtLop.getText().toString();
-                Pattern p = Pattern.compile("[^a-z0-9 ]", Pattern.CASE_INSENSITIVE);
+                Pattern p = Pattern.compile("[^A-Za-z0-9]", Pattern.CASE_INSENSITIVE);
                 Matcher m = p.matcher(congchuoi);
                 boolean checkspecialchar = m.find();
 
