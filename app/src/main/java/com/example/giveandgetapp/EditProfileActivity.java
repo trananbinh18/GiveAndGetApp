@@ -108,12 +108,14 @@ public class EditProfileActivity extends AppCompatActivity {
                 Matcher m = p.matcher(congchuoi);
                 boolean checkspecialchar = m.find();
 
-                if(_txtName.getText()== null || _txtGioitinh.getText()== null || _txtSdt.getText() == null
-                        || _txtMssv.getText() == null || _txtLop.getText() == null){
+                if(_txtName.getText().toString().isEmpty() || _txtGioitinh.getText().toString().isEmpty() || _txtSdt.getText().toString().isEmpty()
+                        || _txtMssv.getText().toString().isEmpty() || _txtLop.getText().toString().isEmpty()){
                     _txtMessageError.setText("Vui lòng nhập những trường bắt buộc");
+                    return;
                 }
                 if(checkspecialchar){
                     _txtMessageError.setText("Vui lòng không nhập kí tự đặc biệt");
+                    return;
                 }
                 Connection con = _database.connectToDatabase();
                 String strQueryAvatar = "";
