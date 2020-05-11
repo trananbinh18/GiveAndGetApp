@@ -244,8 +244,8 @@ public class EditPostActivity extends AppCompatActivity {
                                     "           ("+_postId+","+resultSet.getInt("UserId") +
                                     "           ,1" +
                                     "           ," + "CONVERT(datetime,'" +create_date+"',120)"+
-                                    "           ,N'Bài viết của "+user.name+" đã được chỉnh sửa'" +
-                                    "           ,N'Bài viết "+user.name+" đã được chỉnh sửa'" +
+                                    "           ,N'Bài viết của "+user.name+" đã được chỉnh sửa nội dung'" +
+                                    "           ,N'Bài viết "+user.name+" đã được chỉnh sửa nội dung'" +
                                     "           ,1)";
 
                             _database.excuteCommand(con,queryAddNotification);
