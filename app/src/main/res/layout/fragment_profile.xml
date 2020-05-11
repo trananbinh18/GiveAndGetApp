@@ -227,6 +227,28 @@
                                     android:verticalSpacing="10dp" />
 
                             </LinearLayout>
+
+                            //tab3
+
+                            <LinearLayout
+                                android:id="@+id/tab3"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="#dadada"
+                                android:orientation="vertical">
+
+                                <GridView
+                                    android:id="@+id/gridActorPostGived"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:columnWidth="100dp"
+                                    android:gravity="center"
+                                    android:horizontalSpacing="10dp"
+                                    android:numColumns="auto_fit"
+                                    android:stretchMode="columnWidth"
+                                    android:verticalSpacing="10dp" />
+
+                            </LinearLayout>
                         </FrameLayout>
                     </LinearLayout>
                 </TabHost>

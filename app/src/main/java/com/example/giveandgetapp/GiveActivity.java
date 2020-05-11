@@ -121,6 +121,8 @@ public class GiveActivity extends AppCompatActivity {
         if(_listFeedItemGiveActivity.size() < 2){
             _txtMain.setText("Không thể cho đồ, phải có ít nhất 2 người đăng ký bài viết này");
             _btnApprove.setVisibility(View.INVISIBLE);
+            _listviewUserGiveActivity.setVisibility(View.INVISIBLE);
+            _btnRandom.setVisibility(View.INVISIBLE);
         }
 
         _listviewUserGiveActivity.setAdapter(_adapter);
@@ -146,7 +148,12 @@ public class GiveActivity extends AppCompatActivity {
                 imgBtn.setImageResource(R.drawable.ic_hand_fill_foreground);
                 imgBtn.setVisibility(View.VISIBLE);
 
-                _btnRandom.setOnClickListener(null);
+                _btnRandom.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(getApplicationContext(),"Bạn chỉ được chọn ngẫu nhiên một lần",Toast.LENGTH_LONG).show();
+                    }
+                });
 
             }
         });

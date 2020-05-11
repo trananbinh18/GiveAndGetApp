@@ -67,12 +67,16 @@ public class ProfileFragment extends Fragment {
     private ProfileViewModel profileViewModel;
     private GridView _gridActorPost;
     private GridView _gridReceivePost;
+    private GridView _gridActorPostGived;
     private ArrayList<Bitmap> _listImagePostActor;
     private ArrayList<Bitmap> _listImagePostReceive;
+    private ArrayList<Bitmap> _listImagePostActorGive;
     private Boolean _isRedirectToActivity  = false;
     private int _maxIdPostProfileActor = 0;
     private ActorPostAdapter _actorPostAdapter;
     private ReceivePostAdapter _receivePostAdapter;
+    private ActorPostAdapter _actorPostGivedAdapter;
+
 
     public final int REQUEST_CODE_EDIT_PROFILE = 100;
 
@@ -122,6 +126,7 @@ public class ProfileFragment extends Fragment {
         _btnLogout = root.findViewById(R.id.btnlogout);
         _gridActorPost = root.findViewById(R.id.gridActorPost);
         _gridReceivePost = root.findViewById(R.id.gridReceivePost);
+        _gridActorPostGived = root.findViewById(R.id.gridActorPostGived);
 
 
 
@@ -189,6 +194,12 @@ public class ProfileFragment extends Fragment {
         spec.setIndicator("Những bài viết đã nhận");
         _tabHost.addTab(spec);
 
+        //tab3
+        spec = _tabHost.newTabSpec("Tab ba");
+        spec.setContent(R.id.tab3);
+        spec.setIndicator("Những bài viết đã cho");
+        _tabHost.addTab(spec);
+
         TabWidget tw = (TabWidget)_tabHost.findViewById(android.R.id.tabs);
         View tabView = tw.getChildTabViewAt(0);
         TextView tv = (TextView)tabView.findViewById(android.R.id.title);
@@ -198,6 +209,10 @@ public class ProfileFragment extends Fragment {
         View tabView1 = tw.getChildTabViewAt(1);
         TextView tv1 = (TextView)tabView1.findViewById(android.R.id.title);
         tv1.setTextSize(10);
+
+        View tabView2 = tw.getChildTabViewAt(2);
+        TextView tv2 = (TextView)tabView2.findViewById(android.R.id.title);
+        tv2.setTextSize(10);
 
         //Set Adapter for Gridview receive
         profileViewModel.getListPostProfileReceive().observe(this, new Observer<ArrayList<PostProfile>>() {
@@ -262,20 +277,38 @@ public class ProfileFragment extends Fragment {
                 Connection connection = _database.connectToDatabase();
                 _listImagePostActor = new ArrayList<Bitmap>();
 
+                _listImagePostActorGive = new ArrayList<Bitmap>();
+                ArrayList<PostProfile> postProfileGived = new ArrayList<PostProfile>();
+
                 for (PostProfile item:postProfiles) {
                     Bitmap img = _database.getImageInDatabaseInSquire(connection, item.imageId);
                     _listImagePostActor.add(img);
+                    if(item.status > 2){
+                        postProfileGived.add(item);
+                        _listImagePostActorGive.add(img);
+                    }
                 }
+
+                _actorPostGivedAdapter.setListPostActor(postProfileGived,_listImagePostActorGive);
+                _actorPostGivedAdapter.notifyDataSetChanged();
 
                 _actorPostAdapter.setListPostActor(postProfiles,_listImagePostActor);
                 _actorPostAdapter.notifyDataSetChanged();
             }
         });
 
+        //Post Actor adp
         ArrayList<PostProfile> listProfileActor= profileViewModel.getListPostProfileActor().getValue();
         _listImagePostActor = new ArrayList<Bitmap>();
         _actorPostAdapter = new ActorPostAdapter(root.getContext(),new ArrayList<PostProfile>(),new ArrayList<Bitmap>());
         _gridActorPost.setAdapter(_actorPostAdapter);
+
+        //Post Actor Gived adp
+        ArrayList<PostProfile> listProfileActorGive = new ArrayList<PostProfile>();
+        _listImagePostActorGive = new ArrayList<Bitmap>();
+        _actorPostGivedAdapter = new ActorPostAdapter(root.getContext(),new ArrayList<PostProfile>(),new ArrayList<Bitmap>());
+        _gridActorPostGived.setAdapter(_actorPostGivedAdapter);
+
 
         Runnable runnablePostActor = new Runnable() {
             @Override
@@ -285,6 +318,10 @@ public class ProfileFragment extends Fragment {
                 for (PostProfile item:listProfileActor) {
                     Bitmap img = _database.getImageInDatabaseInSquire(connection, item.imageId);
                     _listImagePostActor.add(img);
+                    if(item.status > 2){
+                        listProfileActorGive.add(item);
+                        _listImagePostActorGive.add(img);
+                    }
                 }
 
                 getActivity().runOnUiThread(new Runnable() {
@@ -292,6 +329,9 @@ public class ProfileFragment extends Fragment {
                     public void run() {
                         _actorPostAdapter.setListPostActor(listProfileActor,_listImagePostActor);
                         _actorPostAdapter.notifyDataSetChanged();
+
+                        _actorPostGivedAdapter.setListPostActor(listProfileActorGive, _listImagePostActorGive);
+                        _actorPostGivedAdapter.notifyDataSetChanged();
                     }
                 });
             }
@@ -358,10 +398,53 @@ public class ProfileFragment extends Fragment {
                 }
                 //Are Post is expire
                 else if(item.status == 2){
+                    btnReviewActor.setVisibility(View.VISIBLE);
+                    btnReviewActor.setOnClickListener(getButtonReviewClickListener(item.postId));
+
                     btnGiveActor.setVisibility(View.VISIBLE);
 
                     //Add action listener
                     btnGiveActor.setOnClickListener(getButtonGiveClickListener(item.postId));
+                } else {
+                    btnReviewActor.setVisibility(View.VISIBLE);
+                    btnReviewActor.setOnClickListener(getButtonReviewClickListener(item.postId));
+                }
+
+                dlogPostActor.show();
+
+            }
+        });
+
+        //Actor post gived dialog
+        _gridActorPostGived.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                PostProfile item = listProfileActorGive.get(position);
+
+                //Are Post is not expire time
+                if(item.status == 1){
+                    btnReviewActor.setVisibility(View.VISIBLE);
+                    btnDeleteActor.setVisibility(View.VISIBLE);
+                    btnEditActor.setVisibility(View.VISIBLE);
+                    btnGiveActor.setVisibility(View.VISIBLE);
+
+                    //Add action listener
+                    btnReviewActor.setOnClickListener(getButtonReviewClickListener(item.postId));
+                    btnDeleteActor.setOnClickListener(getButtonDeleteClickListener(item.postId, position));
+                    btnGiveActor.setOnClickListener(getButtonGiveClickListener(item.postId));
+                }
+                //Are Post is expire
+                else if(item.status == 2){
+                    btnReviewActor.setVisibility(View.VISIBLE);
+                    btnReviewActor.setOnClickListener(getButtonReviewClickListener(item.postId));
+
+                    btnGiveActor.setVisibility(View.VISIBLE);
+
+                    //Add action listener
+                    btnGiveActor.setOnClickListener(getButtonGiveClickListener(item.postId));
+                } else {
+                    btnReviewActor.setVisibility(View.VISIBLE);
+                    btnReviewActor.setOnClickListener(getButtonReviewClickListener(item.postId));
                 }
 
                 dlogPostActor.show();
@@ -412,9 +495,20 @@ public class ProfileFragment extends Fragment {
                 //Are Post is expire
                 else if(item.status == 3 && _sessionManager.getUserDetail().id == item.receiveId){
                     btnRatingReceive.setVisibility(View.VISIBLE);
+
                     
                     //Add action listener
                     btnRatingReceive.setOnClickListener(getButtonRatingClickListener(item.postId));
+
+                    btnReviewReceive.setVisibility(View.VISIBLE);
+
+                    //Add action listener
+                    btnReviewReceive.setOnClickListener(getButtonReviewClickListener(item.postId));
+                }else {
+                    btnReviewReceive.setVisibility(View.VISIBLE);
+
+                    //Add action listener
+                    btnReviewReceive.setOnClickListener(getButtonReviewClickListener(item.postId));
                 }
 
                 dlogPostReceive.show();
@@ -542,7 +636,7 @@ public class ProfileFragment extends Fragment {
 
             String query = "SELECT p.Id, p.Image, p.Title, p.Status, p.Receiver" +
                     " FROM [Post] p " +
-                    " INNER JOIN Receive r ON r.PostId = p.Id AND r.UserId = "+currentUser.id;
+                    " WHERE p.Receiver = "+currentUser.id;
             ResultSet result = _database.excuteCommand(con, query);
 
             while(result.next()){

@@ -66,6 +66,7 @@ public class PostDetailActivity extends AppCompatActivity {
     private TextView _txtLikeCount;
     private TextView _txtTimelogin;
     private Activity activity;
+    private int postStatus = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +93,7 @@ public class PostDetailActivity extends AppCompatActivity {
         _database = new Database(this);
         final User currentUser = _sessionManager.getUserDetail();
         Connection con = _database.connectToDatabase();
-        String query = "SELECT p.CreateDate, p.Id, a.Id as ActorId, a.Name as ActorName, p.Title, p.Contents, l.UserId as IsLiked, r.UserId as IsReceived, a.Avatar as ActorImage, p.Image, p.Image2, p.Image3,p.ReceiverCount ,p.LikeCount" +
+        String query = "SELECT p.Status ,p.CreateDate, p.Id, a.Id as ActorId, a.Name as ActorName, p.Title, p.Contents, l.UserId as IsLiked, r.UserId as IsReceived, a.Avatar as ActorImage, p.Image, p.Image2, p.Image3,p.ReceiverCount ,p.LikeCount" +
                 " FROM [Post] p" +
                 " INNER JOIN [User] a" +
                 " ON p.Actor = a.Id" +
@@ -120,6 +121,7 @@ public class PostDetailActivity extends AppCompatActivity {
                 Bitmap Image3 = _database.getImageInDatabase(con,result.getInt("Image3"));
                 int likeCount = result.getInt("LikeCount");
                 int receiverCount = result.getInt("ReceiverCount");
+                postStatus = result.getInt("Status");
                 Date createDate = result.getDate("CreateDate");
 
                 item = new FeedItem(postId,actorId,actorImage,actorName,title,contents,Image,Image2,Image3,isLiked,isReceived);
@@ -222,12 +224,15 @@ public class PostDetailActivity extends AppCompatActivity {
                 {
                     //User là actor
 
-                    _chodo.setVisibility(View.VISIBLE);
+
 //                    _baocao.setVisibility(View.GONE);
                     _baocao.setText("Xóa bài viết");
                     _tuychon.setText("Chỉnh sửa bài viết");
 
-                    _chodo.setOnClickListener(getButtonGiveClickListener(item.postId));
+                    if(postStatus < 3){
+                        _chodo.setVisibility(View.VISIBLE);
+                        _chodo.setOnClickListener(getButtonGiveClickListener(item.postId));
+                    }
 
                     //Button xoa bai viet
                     _baocao.setOnClickListener(new View.OnClickListener() {
