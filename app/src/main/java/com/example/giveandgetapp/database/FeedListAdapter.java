@@ -244,6 +244,10 @@ public class FeedListAdapter extends BaseAdapter {
             imgReceive.setImageResource(R.drawable.ic_hand_foreground);
         }
 
+        if(currentUser.id == item.actorId){
+            imgReceive.setVisibility(View.INVISIBLE);
+        }
+
         imgLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
