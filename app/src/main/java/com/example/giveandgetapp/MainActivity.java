@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
             switch (resultCode){
                 //On rating
                 case RESULT_OK:
-                    final int postId = Integer.parseInt(data.getData().toString());
+                    final int postId = Integer.parseInt(data.getData().toString().split(",")[0]);
 
                     //Set for notification
                     ArrayList<FeedNotification> currentNotifications = _notificationsViewModel.getListNotification().getValue();
@@ -236,6 +236,13 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     _notificationsViewModel.setListNotification(newNotifications);
+
+                    int actorId = Integer.parseInt(data.getData().toString().split(",")[1]);
+
+                    //Go to activity actor info
+                    Intent intent = new Intent(this.getApplicationContext(), ActorInforActivity.class);
+                    intent.putExtra("Actor_Id",actorId);
+                    this.startActivity(intent);
 
 
                     break;

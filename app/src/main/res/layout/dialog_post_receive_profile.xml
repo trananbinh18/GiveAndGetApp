@@ -34,6 +34,15 @@
             android:visibility="gone" />
 
         <Button
+            android:id="@+id/btnActorProfile"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="5dp"
+            android:background="#D3D3D3"
+            android:text="Thông tin tác giả"
+            android:textColor="#000000" />
+
+        <Button
             android:id="@+id/btnCancel"
             android:text="Hủy"
             android:textColor="#ff0000"

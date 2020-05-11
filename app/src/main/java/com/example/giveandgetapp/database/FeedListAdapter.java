@@ -17,6 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.giveandgetapp.ActorInforActivity;
 import com.example.giveandgetapp.PostDetailActivity;
 import com.example.giveandgetapp.R;
 
@@ -278,7 +279,7 @@ public class FeedListAdapter extends BaseAdapter {
             }
         });
 
-        actorImage.setOnClickListener(getListenerForPostDetailActivity(item.postId));
+        actorImage.setOnClickListener(getListenerForActorInfoActivity(item.actorId));
         title.setOnClickListener(getListenerForPostDetailActivity(item.postId));
         content.setOnClickListener(getListenerForPostDetailActivity(item.postId));
         imgMore.setOnClickListener(getListenerForPostDetailActivity(item.postId));
@@ -461,6 +462,18 @@ public class FeedListAdapter extends BaseAdapter {
                 Intent intent = new Intent(activity.getApplicationContext(), PostDetailActivity.class);
                 intent.putExtra("Post_Id",postId);
                 activity.startActivityForResult(intent,10);
+            }
+        };
+        return listener;
+    }
+
+    private View.OnClickListener getListenerForActorInfoActivity(final int actorId){
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(activity.getApplicationContext(), ActorInforActivity.class);
+                intent.putExtra("Actor_Id",actorId);
+                activity.startActivity(intent);
             }
         };
         return listener;

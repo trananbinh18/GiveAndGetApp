@@ -224,7 +224,8 @@ public class RatingActivity extends AppCompatActivity {
                 }
 
                 Intent data = new Intent();
-                data.setData(Uri.parse(_postId+""));
+                data.setData(Uri.parse(_postId+","+_actorId));
+
                 setResult(RESULT_OK, data);
 
                 finish();

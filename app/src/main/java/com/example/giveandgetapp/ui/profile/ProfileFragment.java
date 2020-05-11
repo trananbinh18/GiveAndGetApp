@@ -26,6 +26,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.giveandgetapp.ActorInforActivity;
 import com.example.giveandgetapp.EditProfileActivity;
 import com.example.giveandgetapp.GiveActivity;
 import com.example.giveandgetapp.LoginActivity;
@@ -215,22 +216,7 @@ public class ProfileFragment extends Fragment {
         tv2.setTextSize(10);
 
         //Set Adapter for Gridview receive
-        profileViewModel.getListPostProfileReceive().observe(this, new Observer<ArrayList<PostProfile>>() {
-            @Override
-            public void onChanged(ArrayList<PostProfile> postProfiles) {
-                Connection connection = _database.connectToDatabase();
-                _listImagePostReceive = new ArrayList<Bitmap>();
 
-                for (PostProfile item:postProfiles) {
-                    Bitmap img = _database.getImageInDatabaseInSquire(connection, item.imageId);
-                    _listImagePostReceive.add(img);
-                }
-
-                _receivePostAdapter.setListPostReceive(postProfiles, _listImagePostReceive);
-                _receivePostAdapter.notifyDataSetChanged();
-
-            }
-        });
 
         ArrayList<PostProfile> listProfileReceive= profileViewModel.getListPostProfileReceive().getValue();
         _listImagePostReceive = new ArrayList<Bitmap>();
@@ -460,6 +446,7 @@ public class ProfileFragment extends Fragment {
         Button btnReviewReceive = viewPostReceive.findViewById(R.id.btnReview);
         Button btnRatingReceive = viewPostReceive.findViewById(R.id.btnRating);
         Button btnCancelReceive = viewPostReceive.findViewById(R.id.btnCancel);
+        Button btnActorProfileReceive = viewPostReceive.findViewById(R.id.btnActorProfile);
 
         dialogPostReceive.setView(viewPostReceive);
         Dialog dlogPostReceive = dialogPostReceive.create();
@@ -483,6 +470,8 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 PostProfile item = listProfileReceive.get(position);
+
+                btnActorProfileReceive.setOnClickListener(getButtonActorInfoClickListener(item.actorId));
 
                 //Are Post is not expire time
                 if(item.status == 1){
@@ -535,6 +524,20 @@ public class ProfileFragment extends Fragment {
         };
 
         return listener;
+    }
+
+    private View.OnClickListener getButtonActorInfoClickListener(int actorId){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Go to activity actor info
+                Intent intent = new Intent(getActivity(), ActorInforActivity.class);
+                intent.putExtra("Actor_Id",actorId);
+                getActivity().startActivityForResult(intent,20);
+
+                _isRedirectToActivity = true;
+            }
+        };
     }
 
     private View.OnClickListener getButtonGiveClickListener(int postId) {
@@ -634,7 +637,7 @@ public class ProfileFragment extends Fragment {
             Connection con = _database.connectToDatabase();
             User currentUser = _sessionManager.getUserDetail();
 
-            String query = "SELECT p.Id, p.Image, p.Title, p.Status, p.Receiver" +
+            String query = "SELECT p.Actor ,p.Id, p.Image, p.Title, p.Status, p.Receiver" +
                     " FROM [Post] p " +
                     " WHERE p.Receiver = "+currentUser.id;
             ResultSet result = _database.excuteCommand(con, query);
@@ -645,8 +648,10 @@ public class ProfileFragment extends Fragment {
                 int status = result.getInt("Status");
                 int imageId = result.getInt("Image");
                 int receiverId = result.getInt("Receiver");
+                int actorId = result.getInt("Actor");
 
                 PostProfile postProfile = new PostProfile(postId, currentUser.id, title, status, imageId,receiverId);
+                postProfile.actorId = actorId;
                 listPostProfile.add(postProfile);
             }
 
