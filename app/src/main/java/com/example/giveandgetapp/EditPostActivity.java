@@ -266,7 +266,7 @@ public class EditPostActivity extends AppCompatActivity {
 
                         _database.excuteCommand(con, query);
                         con.close();
-                        Toast.makeText(getApplicationContext(), "Bài đăng đã hoàn tất" , Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Chỉnh sửa bài viết hoàn tất" , Toast.LENGTH_LONG).show();
 
 
 

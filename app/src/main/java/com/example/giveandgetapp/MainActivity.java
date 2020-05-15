@@ -248,6 +248,24 @@ public class MainActivity extends AppCompatActivity {
                     break;
 
             }
+        }else if(requestCode == 14){
+            //On Editing
+            final int postId1 = Integer.parseInt(data.getData().toString());
+
+            //Delete Post in dashboard view model
+            _dashboardViewModel = ViewModelProviders.of(this).get(DashboardViewModel.class);
+            ArrayList<FeedItem> currentFeedItems1 = _dashboardViewModel.getListFeedItem().getValue();
+            ArrayList<FeedItem> newFeedItems1 = new ArrayList<FeedItem>();
+
+            for (FeedItem item:currentFeedItems1) {
+                if(item.postId == postId1){
+                    newFeedItems1.add(getFeedItemById(postId1));
+                }else{
+                    newFeedItems1.add(item);
+                }
+            }
+            _dashboardViewModel.setListFeedItem(newFeedItems1);
+
         }
 
         super.onActivityResult(requestCode, resultCode, data);

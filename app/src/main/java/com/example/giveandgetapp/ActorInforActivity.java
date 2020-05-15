@@ -27,6 +27,19 @@ public class ActorInforActivity extends AppCompatActivity {
 
     private Database _database;
 
+    //Round rating count
+    public static double roundHalf(double number) {
+        double diff = number - (int)number;
+        if (diff < 0.25) {
+            return (int)number;
+        }
+        else if (diff < 0.75) {
+            return (int)number + 0.5;
+        } else {
+            return (int)number + 1;
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +79,11 @@ public class ActorInforActivity extends AppCompatActivity {
             if(resultSet.next()){
                 avataruser.setImageBitmap(_database.getImageInDatabaseInSquire(con, resultSet.getInt("Avatar")));
                 sobaidang.setText(resultSet.getInt("NumberPostHadRated")+"");
-                sodanhgia.setText(resultSet.getFloat("RatingCount")+"");
+                int rpc = resultSet.getInt("ReportCount");
+                float rtc = resultSet.getFloat("RatingCount");
+                double parsertcToDouble = rtc;
+                double rating = roundHalf(parsertcToDouble);
+                sodanhgia.setText(rating+"");
                 sobaocao.setText(resultSet.getInt("ReportCount")+"");
 
                 lbltenuser.setText("Tên: "+resultSet.getString("Name"));

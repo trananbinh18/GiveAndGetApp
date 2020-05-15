@@ -8,6 +8,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -27,6 +29,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.giveandgetapp.ActorInforActivity;
+import com.example.giveandgetapp.EditPostActivity;
 import com.example.giveandgetapp.EditProfileActivity;
 import com.example.giveandgetapp.GiveActivity;
 import com.example.giveandgetapp.LoginActivity;
@@ -92,6 +95,7 @@ public class ProfileFragment extends Fragment {
             return (int)number + 1;
         }
     }
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -380,6 +384,7 @@ public class ProfileFragment extends Fragment {
                     //Add action listener
                     btnReviewActor.setOnClickListener(getButtonReviewClickListener(item.postId));
                     btnDeleteActor.setOnClickListener(getButtonDeleteClickListener(item.postId, position));
+                    btnEditActor.setOnClickListener(getButtonEditClickListener(item.postId));
                     btnGiveActor.setOnClickListener(getButtonGiveClickListener(item.postId));
                 }
                 //Are Post is expire
@@ -504,10 +509,6 @@ public class ProfileFragment extends Fragment {
 
             }
         });
-
-
-
-
         return root;
     }
 
@@ -518,6 +519,21 @@ public class ProfileFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), RatingActivity.class);
                 intent.putExtra("Post_Id",postId);
                 getActivity().startActivityForResult(intent,12);
+
+                _isRedirectToActivity = true;
+            }
+        };
+
+        return listener;
+    }
+
+    private View.OnClickListener getButtonEditClickListener(int postId) {
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), EditPostActivity.class);
+                intent.putExtra("Post_Id",postId);
+                getActivity().startActivityForResult(intent,14);
 
                 _isRedirectToActivity = true;
             }
@@ -737,4 +753,6 @@ public class ProfileFragment extends Fragment {
         }
         super.onStop();
     }
+
+
 }
