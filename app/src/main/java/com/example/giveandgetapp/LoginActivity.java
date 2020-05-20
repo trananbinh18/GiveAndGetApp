@@ -35,6 +35,7 @@ import java.sql.Statement;
 public class LoginActivity extends Activity {
     private Database _database;
     private Button _btnLogin;
+    private Button _btnRegister;
     private Button _btnCancel;
     private EditText _txtEmail;
     private EditText _txtPassword;
@@ -62,6 +63,7 @@ public class LoginActivity extends Activity {
 
         //View element
         _btnLogin = findViewById(R.id.btn_login);
+        _btnRegister = findViewById(R.id.btn_register);
         _btnCancel = findViewById(R.id.btn_cancel);
         _txtEmail = findViewById(R.id.txt_email);
         _txtPassword = findViewById(R.id.txt_password);
@@ -109,6 +111,15 @@ public class LoginActivity extends Activity {
                 _progressBar.setVisibility(View.INVISIBLE);
             }
         });
+
+        //Action button Register
+        _btnRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void moveToMainActivity(){
@@ -146,8 +157,8 @@ public class LoginActivity extends Activity {
            e.printStackTrace();
        }
         return false;
-
     }
+
 
 
 
