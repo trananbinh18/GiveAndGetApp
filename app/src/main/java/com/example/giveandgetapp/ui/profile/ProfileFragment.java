@@ -183,13 +183,13 @@ public class ProfileFragment extends Fragment {
         });
 
         //Button logout
-        _btnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view)
-            {
-                _sessionManager.logout();
-            }
-        });
+//        _btnLogout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view)
+//            {
+//                _sessionManager.logout();
+//            }
+//        });
 
         _tabHost.setup();
 
