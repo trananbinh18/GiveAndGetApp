@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -96,9 +97,12 @@ public class ProfileFragment extends Fragment {
         }
     }
 
-
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+
         profileViewModel =
                 ViewModelProviders.of(this.getActivity()).get(ProfileViewModel.class);
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
@@ -255,8 +259,6 @@ public class ProfileFragment extends Fragment {
 
         Thread threadPostReceive = new Thread(runnablePostReceive);
         threadPostReceive.start();
-
-
 
 
 
@@ -512,6 +514,23 @@ public class ProfileFragment extends Fragment {
         return root;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.bottom_nav_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.navigation_logout){
+            //What you want(Code Here)
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    //Button rating action
     private View.OnClickListener getButtonRatingClickListener(int postId) {
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
@@ -527,6 +546,7 @@ public class ProfileFragment extends Fragment {
         return listener;
     }
 
+    //Button edit action
     private View.OnClickListener getButtonEditClickListener(int postId) {
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
@@ -542,6 +562,7 @@ public class ProfileFragment extends Fragment {
         return listener;
     }
 
+    //Button actor info action
     private View.OnClickListener getButtonActorInfoClickListener(int actorId){
         return new View.OnClickListener() {
             @Override
@@ -556,6 +577,7 @@ public class ProfileFragment extends Fragment {
         };
     }
 
+    //Button give action
     private View.OnClickListener getButtonGiveClickListener(int postId) {
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
@@ -571,7 +593,7 @@ public class ProfileFragment extends Fragment {
         return listener;
     }
 
-
+    //Button review action
     private View.OnClickListener getButtonReviewClickListener(int postId) {
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
@@ -587,6 +609,7 @@ public class ProfileFragment extends Fragment {
         return listener;
     }
 
+    //Button delete action
     private View.OnClickListener getButtonDeleteClickListener(int postId, int position) {
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
@@ -676,9 +699,7 @@ public class ProfileFragment extends Fragment {
             e.printStackTrace();
         }
 
-
         return listPostProfile;
-
     }
 
     @Override
@@ -729,8 +750,6 @@ public class ProfileFragment extends Fragment {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-
         return listPostProfile;
     }
 
@@ -753,6 +772,4 @@ public class ProfileFragment extends Fragment {
         }
         super.onStop();
     }
-
-
 }
