@@ -87,7 +87,7 @@ public class LoginActivity extends Activity {
 
 
                 Connection con = _database.connectToDatabase();
-                String query = "SELECT * FROM [User] WHERE Email = '"+email+"' AND Password = '"+password+"'";
+                String query = "SELECT * FROM [User] WHERE Email = '"+email+"' AND Password = '"+password+"' AND IsVerify=1";
                 ResultSet resultSet = _database.excuteCommand(con, query);
                 try {
                     if(resultSet.next()){
