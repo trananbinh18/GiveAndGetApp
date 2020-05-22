@@ -25,4 +25,10 @@
         android:icon="@drawable/ic_add_black_24dp"
         android:title="@string/title_add" />
 
+    <item
+        android:id="@+id/navigation_logout"
+        android:icon="@drawable/icon_search"
+        android:title="Logout"
+        app:showAsAction="ifRoom"/>
+
 </menu>
