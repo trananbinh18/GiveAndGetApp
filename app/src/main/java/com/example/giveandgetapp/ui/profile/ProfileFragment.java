@@ -100,9 +100,6 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-
         profileViewModel =
                 ViewModelProviders.of(this.getActivity()).get(ProfileViewModel.class);
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
@@ -514,21 +511,6 @@ public class ProfileFragment extends Fragment {
         return root;
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.bottom_nav_menu, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if(id == R.id.navigation_logout){
-            //What you want(Code Here)
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     //Button rating action
     private View.OnClickListener getButtonRatingClickListener(int postId) {
@@ -767,7 +749,6 @@ public class ProfileFragment extends Fragment {
                     img.recycle();
                 }
             }
-
             _isRedirectToActivity = false;
         }
         super.onStop();
