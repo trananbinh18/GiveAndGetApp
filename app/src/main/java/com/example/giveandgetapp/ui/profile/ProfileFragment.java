@@ -132,7 +132,7 @@ public class ProfileFragment extends Fragment {
         _sobaidang = root.findViewById(R.id.sobaidang);
         _sodanhgia = root.findViewById(R.id.sodanhgia);
         _sobaocao = root.findViewById(R.id.sobaocao);
-        _btnLogout = root.findViewById(R.id.btnlogout);
+//        _btnLogout = root.findViewById(R.id.btnlogout);
         _gridActorPost = root.findViewById(R.id.gridActorPost);
         _gridReceivePost = root.findViewById(R.id.gridReceivePost);
         _gridActorPostGived = root.findViewById(R.id.gridActorPostGived);
