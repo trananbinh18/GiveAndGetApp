@@ -304,35 +304,35 @@ public class ProfileFragment extends Fragment {
         _gridActorPostGived.setAdapter(_actorPostGivedAdapter);
 
 
-        Runnable runnablePostActor = new Runnable() {
-            @Override
-            public void run() {
-                Connection connection = _database.connectToDatabase();
-
-                for (PostProfile item:listProfileActor) {
-                    Bitmap img = _database.getImageInDatabaseInSquire(connection, item.imageId);
-                    _listImagePostActor.add(img);
-                    if(item.status > 2){
-                        listProfileActorGive.add(item);
-                        _listImagePostActorGive.add(img);
-                    }
-                }
-
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        _actorPostAdapter.setListPostActor(listProfileActor,_listImagePostActor);
-                        _actorPostAdapter.notifyDataSetChanged();
-
-                        _actorPostGivedAdapter.setListPostActor(listProfileActorGive, _listImagePostActorGive);
-                        _actorPostGivedAdapter.notifyDataSetChanged();
-                    }
-                });
-            }
-        };
-
-        Thread threadPostActor = new Thread(runnablePostActor);
-        threadPostActor.start();
+//        Runnable runnablePostActor = new Runnable() {
+//            @Override
+//            public void run() {
+//                Connection connection = _database.connectToDatabase();
+//
+//                for (PostProfile item:listProfileActor) {
+//                    Bitmap img = _database.getImageInDatabaseInSquire(connection, item.imageId);
+//                    _listImagePostActor.add(img);
+//                    if(item.status > 2){
+//                        listProfileActorGive.add(item);
+//                        _listImagePostActorGive.add(img);
+//                    }
+//                }
+//
+//                getActivity().runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        _actorPostAdapter.setListPostActor(listProfileActor,_listImagePostActor);
+//                        _actorPostAdapter.notifyDataSetChanged();
+//
+//                        _actorPostGivedAdapter.setListPostActor(listProfileActorGive, _listImagePostActorGive);
+//                        _actorPostGivedAdapter.notifyDataSetChanged();
+//                    }
+//                });
+//            }
+//        };
+//
+//        Thread threadPostActor = new Thread(runnablePostActor);
+//        threadPostActor.start();
 
         try {
             con.close();

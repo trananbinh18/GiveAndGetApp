@@ -97,7 +97,7 @@ public class RegisterActivity extends AppCompatActivity {
                     _txtMessageErrorRegister.setText("Vui lòng nhập những trường bắt buộc");
                     return;
                 }
-                if(!arrEmail[1].equals(new String("vanlanguni.vn"))){
+                if(!(arrEmail[1].equals(new String("vanlanguni.vn")) || arrEmail[1].equals(new String("vanlanguni.edu.vn")))){
                     _txtMessageErrorRegister.setText("Vui lòng sử dụng Email của trường.");
                     return;
                 }

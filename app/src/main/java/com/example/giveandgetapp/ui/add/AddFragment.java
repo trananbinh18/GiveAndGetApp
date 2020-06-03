@@ -28,6 +28,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
 
 import com.example.giveandgetapp.LoginActivity;
 import com.example.giveandgetapp.R;
@@ -187,6 +188,8 @@ public class AddFragment extends Fragment {
                        _database.excuteCommand(con, query);
                        con.close();
                        Toast.makeText( root.getContext(), "Bài đăng đã hoàn tất" , Toast.LENGTH_LONG).show();
+
+                       Navigation.findNavController(getActivity(),R.id.nav_host_fragment).navigate(R.id.navigation_dashboard);
 
                        resetFlagment();
                    } catch (SQLException e) {

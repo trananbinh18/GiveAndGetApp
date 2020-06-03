@@ -74,6 +74,8 @@ public class EditProfileActivity extends AppCompatActivity {
         _txtEmail.setFocusable(true);
         _txtEmail.setFocusableInTouchMode(true);
         _txtEmail.setInputType(InputType.TYPE_NULL);
+        _txtGioitinh.setFocusableInTouchMode(true);
+        _txtGioitinh.setInputType(InputType.TYPE_NULL);
 
         _btnLuu = findViewById(R.id.btnluuedit);
         _btnHuy = findViewById(R.id.btnhuyedit);
@@ -102,8 +104,9 @@ public class EditProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //Check điều kiện input
-                String congchuoi = _txtName.getText().toString() + _txtGioitinh.getText().toString() + _txtSdt.getText().toString()
+                String congchuoi = _txtName.getText().toString() + _txtSdt.getText().toString()
                         + _txtMssv.getText().toString() + _txtLop.getText().toString();
+//                String abc = congchuoi.replaceAll(" ","");
                 Pattern p = Pattern.compile("[^A-Za-z0-9 ]", Pattern.CASE_INSENSITIVE);
                 Matcher m = p.matcher(congchuoi);
                 boolean checkspecialchar = m.find();

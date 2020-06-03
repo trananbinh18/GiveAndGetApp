@@ -51,6 +51,13 @@
                     android:layout_height="30dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="10dp"
+                    android:text="Giới tính: " />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
                     android:text="Số điện thoại: " />
 
                 <TextView
@@ -79,7 +86,7 @@
                     android:layout_width="250dp"
                     android:layout_height="30dp"
                     android:layout_marginLeft="150dp"
-                    android:layout_marginTop="-238dp"
+                    android:layout_marginTop="-268dp"
                     android:background="@null"
                     android:hint="Bắt buộc nhập"/>
 
@@ -90,13 +97,37 @@
                     android:layout_marginLeft="150dp"
                     android:layout_marginTop="10dp"
                     android:background="@null" />
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:orientation="horizontal">
+                    <RadioButton
+                        android:id="@+id/rbtnMale"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="150dp"
+                        android:layout_marginTop="0dp"
+                        android:background="@null"
+                        android:text="Nam"
+                        android:checked="true"/>
+
+                    <RadioButton
+                        android:id="@+id/rbtnFemale"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="50dp"
+                        android:layout_marginTop="0dp"
+                        android:background="@null"
+                        android:text="Nữ"/>
+                </RadioGroup>
+
 
                 <EditText
                     android:id="@+id/txtSDTRegister"
                     android:layout_width="250dp"
                     android:layout_height="30dp"
                     android:layout_marginLeft="150dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="18dp"
                     android:background="@null"
                     android:hint="Bắt buộc nhập"/>
 
@@ -139,19 +170,21 @@
                     android:layout_marginTop="10dp"
                     android:visibility="gone" />
 
-                <TextView
-                    android:id="@+id/messageErrorRegister"
-                    android:layout_width="wrap_content"
-                    android:layout_height="60dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="10dp"
-                    android:textColor="#FF0000" />
+
             </LinearLayout>
+            <TextView
+                android:id="@+id/messageErrorRegister"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:textColor="#FF0000" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
 
                 <Button
                     android:id="@+id/btnSaveRegister"
