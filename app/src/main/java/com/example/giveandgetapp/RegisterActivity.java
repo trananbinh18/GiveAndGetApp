@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -33,6 +34,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText _txtEmailRegister;
     private EditText _txtPasswordRegister;
     private EditText _txtVerifyPasswordRegister;
+    private RadioGroup _rdrGender;
     private Button _btnSaveRegister;
     private Button _btnCancelRegister;
     private TextView _txtMessageErrorRegister;
@@ -52,6 +54,7 @@ public class RegisterActivity extends AppCompatActivity {
         _progressBar = findViewById(R.id.progressBar);
         _txtVerifyPasswordRegister = findViewById(R.id.txtVerifyPasswordRegister);
         _txtMessageErrorRegister = findViewById(R.id.messageErrorRegister);
+        _rdrGender = findViewById(R.id.rdrGender);
 
         _btnSaveRegister = findViewById(R.id.btnSaveRegister);
         _btnCancelRegister = findViewById(R.id.btnCancelRegister);
@@ -112,6 +115,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void register(){
+        _btnSaveRegister.setClickable(false);
         _progressBar.setVisibility(View.VISIBLE);
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -123,6 +127,7 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         try {
+                            _btnSaveRegister.setClickable(true);
                             JSONObject jsonObject = new JSONObject(response);
                             String errorString = jsonObject.get("Data").toString();
                             if(errorString.length() != 0){
@@ -151,6 +156,7 @@ public class RegisterActivity extends AppCompatActivity {
                 params.put("email",_txtEmailRegister.getText().toString());
                 params.put("password",_txtPasswordRegister.getText().toString());
                 params.put("name",_txtNameRegister.getText().toString());
+                params.put("gender",(_rdrGender.getCheckedRadioButtonId() == R.id.rbtnMale)?"1":"0");
 
                 return params;
 

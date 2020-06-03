@@ -144,6 +144,30 @@ public class Database {
         }
     }
 
+    public Bitmap getImageInDatabaseInRec(Connection con, int idImage) {
+        try {
+            String query = "SELECT Image FROM [Image] WHERE Id = "+idImage;
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            if(!rs.next()){
+                return null;
+            }
+
+            Blob blob = rs.getBlob("Image");
+            byte[] immAsBytes = blob.getBytes(1, (int)blob.length());
+            Bitmap img = BitmapFactory.decodeByteArray(immAsBytes, 0 ,immAsBytes.length);
+            Bitmap resizeImg = Bitmap.createScaledBitmap(img, 320, 750, false);
+            img.recycle();
+
+            return resizeImg;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
     public byte[] convertBitmapToBytes(Bitmap bitmap){
         ByteArrayOutputStream stream = new ByteArrayOutputStream();

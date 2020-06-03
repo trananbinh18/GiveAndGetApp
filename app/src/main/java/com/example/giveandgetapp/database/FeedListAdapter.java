@@ -65,25 +65,25 @@ public class FeedListAdapter extends BaseAdapter {
             Bitmap imageActor = null;
 
             if(item.actorImageId != 0){
-                Bitmap img = database.getImageInDatabase(con, item.actorImageId);
+                Bitmap img = database.getImageInDatabaseInSquire(con, item.actorImageId);
                 this.listImagesInAllItems.add(img);
                 imageActor  = img;
             }
 
             if(item.imageId != 0) {
-                Bitmap img = database.getImageInDatabase(con, item.imageId);
+                Bitmap img = database.getImageInDatabaseInRec(con, item.imageId);
                 this.listImagesInAllItems.add(img);
                 imagesPost.add(img);
             }
 
             if(item.image2Id != 0) {
-                Bitmap img = database.getImageInDatabase(con, item.image2Id);
+                Bitmap img = database.getImageInDatabaseInRec(con, item.image2Id);
                 this.listImagesInAllItems.add(img);
                 imagesPost.add(img);
             }
 
             if(item.image3Id != 0) {
-                Bitmap img = database.getImageInDatabase(con, item.image3Id);
+                Bitmap img = database.getImageInDatabaseInRec(con, item.image3Id);
                 this.listImagesInAllItems.add(img);
                 imagesPost.add(img);
             }
@@ -113,25 +113,25 @@ public class FeedListAdapter extends BaseAdapter {
                 Bitmap imageActor = null;
 
                 if(item.actorImageId != 0){
-                    Bitmap img = database.getImageInDatabase(con, item.actorImageId);
+                    Bitmap img = database.getImageInDatabaseInSquire(con, item.actorImageId);
                     this.listImagesInAllItems.add(img);
                     imageActor  = img;
                 }
 
                 if(item.imageId != 0) {
-                    Bitmap img = database.getImageInDatabase(con, item.imageId);
+                    Bitmap img = database.getImageInDatabaseInRec(con, item.imageId);
                     this.listImagesInAllItems.add(img);
                     imagesPost.add(img);
                 }
 
                 if(item.image2Id != 0) {
-                    Bitmap img = database.getImageInDatabase(con, item.image2Id);
+                    Bitmap img = database.getImageInDatabaseInRec(con, item.image2Id);
                     this.listImagesInAllItems.add(img);
                     imagesPost.add(img);
                 }
 
                 if(item.image3Id != 0) {
-                    Bitmap img = database.getImageInDatabase(con, item.image3Id);
+                    Bitmap img = database.getImageInDatabaseInRec(con, item.image3Id);
                     this.listImagesInAllItems.add(img);
                     imagesPost.add(img);
                 }
@@ -184,6 +184,7 @@ public class FeedListAdapter extends BaseAdapter {
         ImageButton imgReceive = convertView.findViewById(R.id.imgReceive);
         ImageView imgMore  = convertView.findViewById(R.id.iconMoreDashboard);
         TextView txtLikeCount = convertView.findViewById(R.id.txtLikeCount);
+        imgReceive.setVisibility(View.VISIBLE);
 
 
         final FeedItem item = feedItems.get(position);
