@@ -166,8 +166,22 @@ public class ProfileFragment extends Fragment {
 
         //Load thông tin user
         _lblten.setText("Tên: " + user.name);
-        _lbllop.setText("Lớp: " + user.clazz);
-        _lblmssv.setText("MSSV: " + user.studentId);
+        if(user.clazz == null || user.clazz.length() == 0)
+        {
+            _lbllop.setText("Lớp:");
+        }else
+        {
+            _lbllop.setText("Lớp: " + user.clazz);
+        }
+
+        if(user.studentId == null || user.studentId.length() == 0)
+        {
+            _lblmssv.setText("MSSV:");
+        }else
+        {
+            _lblmssv.setText("MSSV: " + user.studentId);
+        }
+
         _lblsdt.setText("SĐT: " + user.phone);
         _avatarUser.setImageBitmap(BitmapFactory.decodeFile(user.avatar));
 

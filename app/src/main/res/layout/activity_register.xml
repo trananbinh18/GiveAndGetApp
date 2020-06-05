@@ -86,7 +86,7 @@
                     android:layout_width="250dp"
                     android:layout_height="30dp"
                     android:layout_marginLeft="150dp"
-                    android:layout_marginTop="-268dp"
+                    android:layout_marginTop="-278dp"
                     android:background="@null"
                     android:hint="Bắt buộc nhập"/>
 
@@ -111,7 +111,7 @@
                         android:layout_marginLeft="150dp"
                         android:layout_marginTop="0dp"
                         android:background="@null"
-                        android:checked="false"
+                        android:checked="true"
                         android:text="Nam" />
 
                     <RadioButton
@@ -121,7 +121,7 @@
                         android:layout_marginLeft="50dp"
                         android:layout_marginTop="0dp"
                         android:background="@null"
-                        android:checked="true"
+                        android:checked="false"
                         android:text="Nữ" />
                 </RadioGroup>
 
@@ -131,7 +131,7 @@
                     android:layout_width="250dp"
                     android:layout_height="30dp"
                     android:layout_marginLeft="150dp"
-                    android:layout_marginTop="18dp"
+                    android:layout_marginTop="23dp"
                     android:background="@null"
                     android:hint="Bắt buộc nhập"/>
 

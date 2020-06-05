@@ -65,7 +65,7 @@ public class FeedListAdapter extends BaseAdapter {
             Bitmap imageActor = null;
 
             if(item.actorImageId != 0){
-                Bitmap img = database.getImageInDatabaseInSquire(con, item.actorImageId);
+                Bitmap img = database.getImageInDatabase(con, item.actorImageId);
                 this.listImagesInAllItems.add(img);
                 imageActor  = img;
             }
@@ -113,7 +113,7 @@ public class FeedListAdapter extends BaseAdapter {
                 Bitmap imageActor = null;
 
                 if(item.actorImageId != 0){
-                    Bitmap img = database.getImageInDatabaseInSquire(con, item.actorImageId);
+                    Bitmap img = database.getImageInDatabase(con, item.actorImageId);
                     this.listImagesInAllItems.add(img);
                     imageActor  = img;
                 }

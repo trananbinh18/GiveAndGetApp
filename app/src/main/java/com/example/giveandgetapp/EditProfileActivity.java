@@ -104,13 +104,21 @@ public class EditProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //Check điều kiện input
-                String congchuoi = _txtName.getText().toString() + _txtSdt.getText().toString()
+                String congchuoi = _txtSdt.getText().toString()
                         + _txtMssv.getText().toString() + _txtLop.getText().toString();
 //                String abc = congchuoi.replaceAll(" ","");
+                String getName = _txtName.getText().toString();
                 Pattern p = Pattern.compile("[^A-Za-z0-9 ]", Pattern.CASE_INSENSITIVE);
                 Matcher m = p.matcher(congchuoi);
                 boolean checkspecialchar = m.find();
 
+                Pattern pname = Pattern.compile("[^A-Za-z0-9 àáãạảăắằẳẵặâấầẩẫậèéẹẻẽêềếểễệđìíĩỉịòóõọỏôốồổỗộơớờởỡợùúũụủưứừửữựỳỵỷỹýÀÁÃẠẢĂẮẰẲẴẶÂẤẦẨẪẬÈÉẸẺẼÊỀẾỂỄỆĐÌÍĨỈỊÒÓÕỌỎÔỐỒỔỖỘƠỚỜỞỠỢÙÚŨỤỦƯỨỪỬỮỰỲỴỶỸÝ]", Pattern.CASE_INSENSITIVE);
+                Matcher mname = pname.matcher(getName);
+                boolean checkName = mname.find();
+                if(checkName == true){
+                    _txtMessageError.setText("Vui lòng không nhập kí tự đặc biệt");
+                    return;
+                }
                 if(_txtName.getText().toString().isEmpty() || _txtGioitinh.getText().toString().isEmpty() || _txtSdt.getText().toString().isEmpty()
                         || _txtMssv.getText().toString().isEmpty() || _txtLop.getText().toString().isEmpty()){
                     _txtMessageError.setText("Vui lòng nhập những trường bắt buộc");
