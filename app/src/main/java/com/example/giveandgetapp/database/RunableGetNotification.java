@@ -2,13 +2,23 @@ package com.example.giveandgetapp.database;
 
 import android.app.Activity;
 import android.app.Application;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.service.notification.StatusBarNotification;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.app.NotificationCompat;
+
+import com.example.giveandgetapp.GiveActivity;
+import com.example.giveandgetapp.PostDetailActivity;
 import com.example.giveandgetapp.R;
+import com.example.giveandgetapp.RatingActivity;
 import com.example.giveandgetapp.ui.notifications.NotificationsViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 
@@ -69,9 +79,6 @@ public class RunableGetNotification implements Runnable{
                 int postId = rs.getInt("PostId");
                 int status = rs.getInt("Status");
                 int idImage = rs.getInt("Image");
-                if(status == 1){
-                    numberOfNotRead++;
-                }
                 Timestamp tsCreateDate = rs.getTimestamp("CreateDate");
                 Date createDate = null;
                 if(tsCreateDate != null){
@@ -82,8 +89,14 @@ public class RunableGetNotification implements Runnable{
                 String content = rs.getString("Contents");
                 int type = rs.getInt("Type");
 
+
                 FeedNotification item = new FeedNotification(id,postId,status,createDate,title,content,type,idImage);
                 result.add(item);
+
+                if(status == 1){
+                    numberOfNotRead++;
+                    addNotification(_context, item);
+                }
             }
 
             _numberOfNotRead = Integer.parseInt(_txtNumberNotifyCount.getText().toString());
@@ -108,6 +121,47 @@ public class RunableGetNotification implements Runnable{
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+    }
+
+
+    public static void addNotification( Context context, FeedNotification feedNotification){
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+                .setSmallIcon(R.drawable.ic_notifications_black_24dp)
+                .setContentTitle(feedNotification.title)
+                .setContentText(feedNotification.contents)
+                .setAutoCancel(true);
+
+
+        NotificationManager manager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+        Intent intent;
+        intent = new Intent(context, PostDetailActivity.class);
+        intent.putExtra("Post_Id", feedNotification.postId);
+        intent.putExtra("Is_From_Notification",true);
+        intent.putExtra("Notification_Id",feedNotification.id);
+
+        switch (feedNotification.type) {
+            case 2:
+                if (feedNotification.status == 1) {
+                    intent = new Intent(context, GiveActivity.class);
+                    intent.putExtra("Post_Id", feedNotification.postId);
+                }
+                break;
+            case 3:
+                if (feedNotification.status == 1) {
+                    intent = new Intent(context, RatingActivity.class);
+                    intent.putExtra("Post_Id", feedNotification.postId);
+                }
+                break;
+
+        }
+
+        Intent[] intents = {intent};
+        PendingIntent pendingIntent = PendingIntent.getActivities(context, 0, intents, PendingIntent.FLAG_ONE_SHOT);
+
+        builder.setContentIntent(pendingIntent);
+
+        manager.notify(feedNotification.id, builder.build());
 
     }
 }

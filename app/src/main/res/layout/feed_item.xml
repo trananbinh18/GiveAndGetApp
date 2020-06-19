@@ -44,7 +44,7 @@
                     android:layout_width="150dp"
                     android:layout_height="30dp"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -54,12 +54,20 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="0dp"/>
 
+                <TextView
+                    android:id="@+id/ratingcount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="10dp"
+                    android:drawableRight="@drawable/ic_star_black_24dp"
+                    android:paddingBottom="10dp"/>
+
                 <ImageView
                     android:id="@+id/iconMoreDashboard"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginLeft="230dp"
-                    android:layout_marginTop="-60dp"
+                    android:layout_marginTop="-85dp"
                     android:clickable="true"
                     android:src="@drawable/ic_more_horiz_black_24dp" />
 

@@ -428,7 +428,7 @@ public class ProfileFragment extends Fragment {
         _gridActorPostGived.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                PostProfile item = listProfileActorGive.get(position);
+                PostProfile item = _actorPostGivedAdapter._listPostActor.get(position);
 
                 //Are Post is not expire time
                 if(item.status == 1){
@@ -492,7 +492,7 @@ public class ProfileFragment extends Fragment {
         _gridReceivePost.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                PostProfile item = listProfileReceive.get(position);
+                PostProfile item = _actorPostAdapter._listPostActor.get(position);
 
                 btnActorProfileReceive.setOnClickListener(getButtonActorInfoClickListener(item.actorId));
 

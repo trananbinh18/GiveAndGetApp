@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
     private void getNotificationsInterval(NotificationsViewModel modelNotification, TextView txtNumberNotifyCount){
         ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
         executorService.scheduleAtFixedRate(new RunableGetNotification(modelNotification ,txtNumberNotifyCount ,getApplicationContext(),this),
-                0, 10, TimeUnit.SECONDS);
+                0, 15, TimeUnit.SECONDS);
     }
 
     @Override
@@ -319,7 +319,7 @@ public class MainActivity extends AppCompatActivity {
 
         User currentUser = sessionManager.getUserDetail();
 
-        String query = "SELECT p.ReceiverCount ,p.LikeCount ,p.Id, a.Id as ActorId, a.Name as ActorName, p.Title, p.Contents, l.UserId as IsLiked, r.UserId as IsReceived, a.Avatar as ActorImage, p.CreateDate, p.Image, p.Image2, p.Image3" +
+        String query = "SELECT p.ReceiverCount ,p.LikeCount ,p.Id, a.Id as ActorId, a.Name as ActorName, p.Title, p.Contents, l.UserId as IsLiked, r.UserId as IsReceived, a.Avatar as ActorImage, p.CreateDate, p.Image, p.Image2, p.Image3, a.RatingCount" +
                 " FROM [Post] p" +
                 " INNER JOIN [User] a" +
                 " ON p.Actor = a.Id" +
@@ -344,13 +344,14 @@ public class MainActivity extends AppCompatActivity {
                 int Image3 = rs.getInt("Image3");
                 int LikeCount = rs.getInt("LikeCount");
                 int ReceiverCount = rs.getInt("ReceiverCount");
+                float RatingCount = rs.getFloat("RatingCount");
                 Timestamp tsCreateDate = rs.getTimestamp("CreateDate");
                 Date createDate = null;
                 if(tsCreateDate != null){
                     createDate = new Date(tsCreateDate.getTime());
                 }
 
-                item = new FeedItem(postId,actorId,actorImage,actorName,title,content,Image,Image2,Image3,isLiked,isReceived,createDate,LikeCount,ReceiverCount);
+                item = new FeedItem(postId,actorId,actorImage,actorName,title,content,Image,Image2,Image3,isLiked,isReceived,createDate,LikeCount,ReceiverCount,RatingCount);
 
                 con.close();
             }

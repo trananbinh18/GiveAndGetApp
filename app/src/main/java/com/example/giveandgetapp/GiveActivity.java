@@ -189,7 +189,29 @@ public class GiveActivity extends AppCompatActivity {
                     try {
                     _database.excuteCommand(con,query);
                     _database.excuteCommand(con,queryAddNotification);
-                    String queryEditNotification = "UPDATE [Notification]" +
+                    String queryAddNotifications ="INSERT INTO [Notification]" +
+                            "           (UserId,PostId,Status,CreateDate,Title,Contents,Type)" +
+                            "     VALUES ";
+
+                    for(UserGiven userGiven : _listFeedItemGiveActivity){
+                        if(userGiven.userId != idUserChoosed){
+
+                            queryAddNotifications += " ("+userGiven.userId+
+                                    "           ,"+_postId +
+                                    "           ,1" +
+                                    "           ," + "CONVERT(datetime,'" +create_date+"',120)"+
+                                    "           ,N'Bài viết bạn đăng ký nhận đã được cho đồ'" +
+                                    "           ,N'Bài viết "+_postTitle+" mà bạn đăng ký đã được cho.'" +
+                                    "           ,0),";
+
+                        }
+                    }
+
+
+                    _database.excuteCommand(con,queryAddNotifications.substring(0, queryAddNotifications.length() - 1));
+
+
+                        String queryEditNotification = "UPDATE [Notification]" +
                                 "   SET Status = 2"+
                                 "   WHERE UserId="+_currentUser.id+
                                 "       AND PostId="+_postId+

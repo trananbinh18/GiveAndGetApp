@@ -20,6 +20,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.example.giveandgetapp.ActorInforActivity;
 import com.example.giveandgetapp.PostDetailActivity;
 import com.example.giveandgetapp.R;
+import com.example.giveandgetapp.ui.profile.ProfileFragment;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -184,6 +185,7 @@ public class FeedListAdapter extends BaseAdapter {
         ImageButton imgReceive = convertView.findViewById(R.id.imgReceive);
         ImageView imgMore  = convertView.findViewById(R.id.iconMoreDashboard);
         TextView txtLikeCount = convertView.findViewById(R.id.txtLikeCount);
+        TextView ratingCount = convertView.findViewById(R.id.ratingcount);
         imgReceive.setVisibility(View.VISIBLE);
 
 
@@ -197,6 +199,7 @@ public class FeedListAdapter extends BaseAdapter {
         actorName.setText(item.actorName);
         title.setText(item.title);
         content.setText(item.contents);
+        ratingCount.setText("Đã được đánh giá: "+ ProfileFragment.roundHalf(item.ratingCount));
 
         //Set text for like and receiver
         String strLikeCount = (item.likeCount>0)?item.likeCount+" lượt thích":"";
@@ -325,7 +328,9 @@ public class FeedListAdapter extends BaseAdapter {
 
 
                 database.excuteCommand(con, query);
-                database.excuteCommand(con, queryNotification);
+                if(currentUser.id != item.actorId){
+                    database.excuteCommand(con, queryNotification);
+                }
                 database.excuteCommand(con,queryUpdateLikeCount);
 
                 try {
