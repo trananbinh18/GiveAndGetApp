@@ -446,16 +446,13 @@ public class ProfileFragment extends Fragment {
                 else if(item.status == 2){
                     btnReviewActor.setVisibility(View.VISIBLE);
                     btnReviewActor.setOnClickListener(getButtonReviewClickListener(item.postId));
-
                     btnGiveActor.setVisibility(View.VISIBLE);
-
                     //Add action listener
                     btnGiveActor.setOnClickListener(getButtonGiveClickListener(item.postId));
                 } else {
                     btnReviewActor.setVisibility(View.VISIBLE);
                     btnReviewActor.setOnClickListener(getButtonReviewClickListener(item.postId));
                 }
-
                 dlogPostActor.show();
 
             }

@@ -1,8 +1,13 @@
 package com.example.giveandgetapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,6 +29,7 @@ public class ActorInforActivity extends AppCompatActivity {
     private TextView lbllopuser;
     private TextView lblmssvuser;
     private TextView lblsdtuser;
+    private Button _btnKetthucActorInfor;
 
     private Database _database;
 
@@ -45,13 +51,13 @@ public class ActorInforActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_actor_infor);
-
         this.actorId = getIntent().getIntExtra("Actor_Id",0);
 
         this.avataruser = findViewById(R.id.avataruser);
         this.sobaidang = findViewById(R.id.sobaidang);
         this.sodanhgia = findViewById(R.id.sodanhgia);
         this.sobaocao = findViewById(R.id.sobaocao);
+        this._btnKetthucActorInfor = findViewById(R.id.btnKethucActorInfor);
 
         this.lbltenuser = findViewById(R.id.lbltenuser);
         this.lbllopuser = findViewById(R.id.lbllopuser);
@@ -98,7 +104,12 @@ public class ActorInforActivity extends AppCompatActivity {
 
         }
 
-
-
+        _btnKetthucActorInfor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                finish();
+            }
+        });
     }
 }

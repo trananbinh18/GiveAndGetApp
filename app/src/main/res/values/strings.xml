@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GiveAndGetApp</string>
+    <string name="app_name">GiveAndGet</string>
     <string name="title_add">Tạo bài viết mới</string>
     <string name="title_dashboard">Các viết bài mới</string>
     <string name="title_notifications">Thông báo</string>

@@ -67,17 +67,17 @@ public class RatingActivity extends AppCompatActivity {
         _database = new Database(this);
         _currentUser = _sessionManager.getUserDetail();
         Connection con = _database.connectToDatabase();
-        String queryPost = "SELECT * FROM Post WHERE Id = "+_postId;
+        String queryPost = "SELECT *, Avatar FROM [Post] INNER JOIN [User] u ON Post.Actor = u.Id WHERE Post.Id = "+_postId;
         ResultSet rs = _database.excuteCommand(con,queryPost);
 
         try {
             if(rs.next()){
                 _txtTitlePostRating.setText(rs.getString("Title"));
                 _txtContentPostRating.setText(rs.getString("Contents"));
+                _actorImageRating.setImageBitmap(_database.getImageInDatabase(con,rs.getInt("Avatar")));
                 _actorId = rs.getInt("Actor");
                 _postTitle = rs.getString("Title");
             }
-
             con.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -117,7 +117,7 @@ public class RatingActivity extends AppCompatActivity {
                 _btnBack.setVisibility(View.INVISIBLE);
                 _btnApprove.setVisibility(View.VISIBLE);
                 _btnConfirmDenied.setVisibility(View.VISIBLE);
-                _txtMain.setText("Bạn Đã được cho món đồ này, bạn có xác nhận nhận món đồ này ?");
+                _txtMain.setText("Bạn đã được cho món đồ này bạn có muốn xác nhận đã nhận món đồ này?");
             }
         });
 
@@ -157,7 +157,6 @@ public class RatingActivity extends AppCompatActivity {
                         "           ,2)";
 
                 _database.excuteCommand(con,queryNotification);
-
 
                 finish();
             }
@@ -225,9 +224,7 @@ public class RatingActivity extends AppCompatActivity {
 
                 Intent data = new Intent();
                 data.setData(Uri.parse(_postId+","+_actorId));
-
                 setResult(RESULT_OK, data);
-
                 finish();
 
             }
@@ -241,8 +238,5 @@ public class RatingActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-        //Ratingbar
-
     }
 }

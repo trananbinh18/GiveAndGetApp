@@ -52,10 +52,20 @@ public class ResultSearchAdapter extends BaseAdapter {
             view = inflater.inflate(R.layout.listviewresult_searchfragment, null);
         ImageView imagePost = view.findViewById(R.id.imagePostSearch);
         TextView txtTitlePostSearch = view.findViewById(R.id.posttitleresultsearch);
+        TextView txtStatusPostSearch = view.findViewById(R.id.poststatusresultsearch);
         LinearLayout layout1searchfragment = view.findViewById(R.id.layout1searchfragment);
 
         ResultSearch resultSearch = _listResultSearch.get(i);
         txtTitlePostSearch.setText(resultSearch.postTitle);
+        if(resultSearch.postStatus == 1){
+            txtStatusPostSearch.setText("Trạng thái bài viết: Còn hạn");
+        }else if (resultSearch.postStatus == 2){
+            txtStatusPostSearch.setText("Trạng thái bài viết: Hết hạn");
+        }else if (resultSearch.postStatus == 3){
+            txtStatusPostSearch.setText("Trạng thái bài viết: Chờ đánh giá");
+        }else {
+            txtStatusPostSearch.setText("Trạng thái bài viết: Đã đóng");
+        }
         imagePost.setImageBitmap(resultSearch.postImage);
 
         layout1searchfragment.setOnClickListener(new View.OnClickListener() {

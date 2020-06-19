@@ -87,15 +87,33 @@ public class SearchFragment extends Fragment {
                String editText = _txtTypeTitleSearch.getText().toString();
 
                _listResultSearchFragment.clear();
-               if(_spinnerSelectCatalogi.getSelectedItem().toString().contains("Tất cả")){
-                   String queryAllPost = "SELECT * FROM [Post] WHERE [Post].Title LIKE '%"+editText+"%'";
-                   ResultSet rsAllPost = _database.excuteCommand(con, queryAllPost);
+               if(_spinnerSelectCatalogi.getSelectedItem().toString().contains("Tất cả") && editText.isEmpty()){
+                   String queryAll = "SELECT TOP 30 * FROM [Post]";
+                   ResultSet rsAllPost = _database.excuteCommand(con, queryAll);
                    try{
-                       while (rsAllPost.next()){
+                       while (rsAllPost != null && rsAllPost.next()){
                            int _postid = rsAllPost.getInt("Id");
                            String _posttitle = rsAllPost.getString("Title");
                            Bitmap _postimage = _database.getImageInDatabase(con,rsAllPost.getInt("Image"));
-                           ResultSearch item = new ResultSearch(_postid,_posttitle,_postimage);
+                           int _poststatus = rsAllPost.getInt("Status");
+                           ResultSearch item = new ResultSearch(_postid,_posttitle,_postimage, _poststatus);
+                           _listResultSearchFragment.add(item);
+                       }
+
+                   }catch (SQLException e){
+                       e.printStackTrace();
+                   }
+               }
+               if(_spinnerSelectCatalogi.getSelectedItem().toString().contains("Tất cả")){
+                   String queryAllPost = "SELECT * FROM [Post] WHERE [Post].Title LIKE N'%"+editText+"%'";
+                   ResultSet rsAllPost = _database.excuteCommand(con, queryAllPost);
+                   try{
+                       while (rsAllPost != null && rsAllPost.next()){
+                           int _postid = rsAllPost.getInt("Id");
+                           String _posttitle = rsAllPost.getString("Title");
+                           Bitmap _postimage = _database.getImageInDatabase(con,rsAllPost.getInt("Image"));
+                           int _poststatus = rsAllPost.getInt("Status");
+                           ResultSearch item = new ResultSearch(_postid,_posttitle,_postimage, _poststatus);
                            _listResultSearchFragment.add(item);
                        }
 
@@ -106,7 +124,7 @@ public class SearchFragment extends Fragment {
 
                else {
                    String catalogId = ((Catalog)_spinnerSelectCatalogi.getSelectedItem()).id+"";
-                   String querySearch = "SELECT * FROM [Post] WHERE CatalogId = "+catalogId+" and Title LIKE '%"+editText+"%' ";
+                   String querySearch = "SELECT * FROM [Post] WHERE CatalogId = "+catalogId+" and Title LIKE N'%"+editText+"%' ";
                    ResultSet rsSearch = _database.excuteCommand(con, querySearch);
                    //Get Post
                    try{
@@ -115,7 +133,8 @@ public class SearchFragment extends Fragment {
                                int _postid = rsSearch.getInt("Id");
                                String _posttitle = rsSearch.getString("Title");
                                Bitmap _postimage = _database.getImageInDatabase(con,rsSearch.getInt("Image"));
-                               ResultSearch item = new ResultSearch(_postid,_posttitle,_postimage);
+                               int _poststatus = rsSearch.getInt("Status");
+                               ResultSearch item = new ResultSearch(_postid,_posttitle,_postimage,_poststatus);
                                _listResultSearchFragment.add(item);
                            }
                        }

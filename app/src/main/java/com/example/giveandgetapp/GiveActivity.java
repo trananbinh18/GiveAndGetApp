@@ -154,7 +154,6 @@ public class GiveActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(),"Bạn chỉ được chọn ngẫu nhiên một lần",Toast.LENGTH_LONG).show();
                     }
                 });
-
             }
         });
 
@@ -180,7 +179,7 @@ public class GiveActivity extends AppCompatActivity {
                             "           ,"+_postId +
                             "           ,1" +
                             "           ," + "CONVERT(datetime,'" +create_date+"',120)"+
-                            "           ,N'Xác bạn đã nhận được món đồ'" +
+                            "           ,N'Xác nhận bạn đã nhận được món đồ'" +
                             "           ,N'Bạn nhận được một món đồ của từ bài post "+_postTitle+"'" +
                             "           ,3)";
 
@@ -236,9 +235,6 @@ public class GiveActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-
     }
 
     @Override
