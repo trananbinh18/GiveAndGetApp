@@ -57,7 +57,7 @@
                 <ListView
                     android:id="@+id/listviewResultSearch"
                     android:layout_width="match_parent"
-                    android:layout_height="500dp">
+                    android:layout_height="1000dp">
                 </ListView>
             </LinearLayout>
         </LinearLayout>

@@ -61,7 +61,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:layout_marginLeft="10dp"
-                    android:text="Bạn Đã được cho món đồ này bạn có xác nhận nhận món đồ này"
+                    android:text="Bạn đã được cho món đồ này bạn có muốn xác nhận đã nhận món đồ này?"
                     android:textSize="23dp" />
 
             </LinearLayout>
@@ -99,6 +99,7 @@
                     android:id="@+id/btnApprove"
                     android:layout_width="130dp"
                     android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
                     android:layout_gravity="center_horizontal"
                     android:text="Xác nhận"/>
 
@@ -106,6 +107,7 @@
                     android:id="@+id/btnConfirmDenied"
                     android:layout_width="130dp"
                     android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
                     android:layout_gravity="center_horizontal"
                     android:text="Hủy Xác nhận" />
 
