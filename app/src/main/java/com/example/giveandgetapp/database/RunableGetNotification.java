@@ -126,42 +126,54 @@ public class RunableGetNotification implements Runnable{
 
 
     public static void addNotification( Context context, FeedNotification feedNotification){
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-                .setSmallIcon(R.drawable.ic_notifications_black_24dp)
-                .setContentTitle(feedNotification.title)
-                .setContentText(feedNotification.contents)
-                .setAutoCancel(true);
-
-
         NotificationManager manager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
-        Intent intent;
-        intent = new Intent(context, PostDetailActivity.class);
-        intent.putExtra("Post_Id", feedNotification.postId);
-        intent.putExtra("Is_From_Notification",true);
-        intent.putExtra("Notification_Id",feedNotification.id);
-
-        switch (feedNotification.type) {
-            case 2:
-                if (feedNotification.status == 1) {
-                    intent = new Intent(context, GiveActivity.class);
-                    intent.putExtra("Post_Id", feedNotification.postId);
-                }
+        StatusBarNotification[] activeNotifications = manager.getActiveNotifications();
+        boolean isHadNotify = false;
+        for (StatusBarNotification notify: activeNotifications) {
+            if(notify.getId() == feedNotification.id){
+                isHadNotify= true;
                 break;
-            case 3:
-                if (feedNotification.status == 1) {
-                    intent = new Intent(context, RatingActivity.class);
-                    intent.putExtra("Post_Id", feedNotification.postId);
-                }
-                break;
-
+            }
         }
 
-        Intent[] intents = {intent};
-        PendingIntent pendingIntent = PendingIntent.getActivities(context, 0, intents, PendingIntent.FLAG_ONE_SHOT);
+        if(!isHadNotify){
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+                    .setSmallIcon(R.drawable.ic_notifications_black_24dp)
+                    .setContentTitle(feedNotification.title)
+                    .setContentText(feedNotification.contents)
+                    .setAutoCancel(true)
+                    .setChannelId("giveandget");
 
-        builder.setContentIntent(pendingIntent);
 
-        manager.notify(feedNotification.id, builder.build());
+            Intent intent;
+            intent = new Intent(context, PostDetailActivity.class);
+            intent.putExtra("Post_Id", feedNotification.postId);
+            intent.putExtra("Is_From_Notification",true);
+            intent.putExtra("Notification_Id",feedNotification.id);
+
+            switch (feedNotification.type) {
+                case 2:
+                    if (feedNotification.status == 1) {
+                        intent = new Intent(context, GiveActivity.class);
+                        intent.putExtra("Post_Id", feedNotification.postId);
+                    }
+                    break;
+                case 3:
+                    if (feedNotification.status == 1) {
+                        intent = new Intent(context, RatingActivity.class);
+                        intent.putExtra("Post_Id", feedNotification.postId);
+                    }
+                    break;
+
+            }
+
+            Intent[] intents = {intent};
+            PendingIntent pendingIntent = PendingIntent.getActivities(context, 0, intents, PendingIntent.FLAG_ONE_SHOT);
+
+            builder.setContentIntent(pendingIntent);
+
+            manager.notify(feedNotification.id, builder.build());
+        }
 
     }
 }

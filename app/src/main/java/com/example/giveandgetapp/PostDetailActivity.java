@@ -144,7 +144,7 @@ public class PostDetailActivity extends AppCompatActivity {
                     createDate = new Date(tsCreateDate.getTime());
                 }
 
-                item = new FeedItem(postId,actorId,actorImage,actorName,title,contents,Image,Image2,Image3,isLiked,isReceived);
+                item = new FeedItem(postId,actorId,actorImage,actorName,title,contents,Image,Image2,Image3,isLiked,isReceived,likeCount, receiverCount);
 //                item1 = new FeedItem(postId, actorId, actorImageId, actorName, title, contents, imageId, image2Id, image3Id, isLiked, isReceived, createDate, likeCount, receiverCount);
 
                 ArrayList<Bitmap> listImage = new ArrayList<Bitmap>();
