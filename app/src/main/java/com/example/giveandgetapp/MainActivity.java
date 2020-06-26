@@ -234,6 +234,7 @@ public class MainActivity extends AppCompatActivity {
                     //Go to activity actor info
                     Intent intent = new Intent(this.getApplicationContext(), ActorInforActivity.class);
                     intent.putExtra("Actor_Id",actorId);
+                    intent.putExtra("IsFromRating", true);
                     this.startActivity(intent);
 
 

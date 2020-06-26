@@ -20,6 +20,7 @@ import java.sql.ResultSet;
 public class ActorInforActivity extends AppCompatActivity {
 
     private int actorId;
+    private boolean _isFromRating;
 
     private ImageView avataruser;
     private TextView sobaidang;
@@ -29,8 +30,9 @@ public class ActorInforActivity extends AppCompatActivity {
     private TextView lbllopuser;
     private TextView lblmssvuser;
     private TextView lblsdtuser;
-    public static Button _btnKetthucActorInfor;
-    public static TextView _labelInfo;
+    public Button _btnKetthucActorInfor;
+    public TextView _labelInfo;
+
 
     private Database _database;
 
@@ -53,6 +55,8 @@ public class ActorInforActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_actor_infor);
         this.actorId = getIntent().getIntExtra("Actor_Id",0);
+        this._isFromRating = getIntent().getBooleanExtra("IsFromRating", false);
+
 
         this.avataruser = findViewById(R.id.avataruser);
         this.sobaidang = findViewById(R.id.sobaidang);
@@ -60,6 +64,11 @@ public class ActorInforActivity extends AppCompatActivity {
         this.sobaocao = findViewById(R.id.sobaocao);
         _btnKetthucActorInfor = findViewById(R.id.btnKethucActorInfor);
         _labelInfo = findViewById(R.id.thongtinActorInfoActivity);
+        if(_isFromRating)
+        {
+            _btnKetthucActorInfor.setVisibility(View.VISIBLE);
+            _labelInfo.setVisibility(View.VISIBLE);
+        }
 
         this.lbltenuser = findViewById(R.id.lbltenuser);
         this.lbllopuser = findViewById(R.id.lbllopuser);

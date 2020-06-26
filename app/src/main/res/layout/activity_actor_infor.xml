@@ -162,7 +162,7 @@
                     android:layout_marginTop="5dp"
                     android:gravity="center_horizontal"
                     android:text="Bạn hãy lưu lại thông tin liên lạc của người chủ bài viết để nhận đồ!"
-                    android:visibility="visible">
+                    android:visibility="invisible">
                 </TextView>
 
                 <Button
@@ -173,7 +173,7 @@
                     android:layout_gravity="center_horizontal"
                     android:text="Kết thúc"
                     android:textColor="#FF0000"
-                    android:visibility="visible">
+                    android:visibility="invisible">
                 </Button>
             </LinearLayout>
         </LinearLayout>
