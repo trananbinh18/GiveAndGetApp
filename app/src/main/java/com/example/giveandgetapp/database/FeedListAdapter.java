@@ -485,10 +485,6 @@ public class FeedListAdapter extends BaseAdapter {
         return listener;
     }
 
-
-
-
-
     public class ImageStoreEachPost{
         public ArrayList<Bitmap> imagesPost;
         public Bitmap imageActor;

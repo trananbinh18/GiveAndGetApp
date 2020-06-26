@@ -29,7 +29,8 @@ public class ActorInforActivity extends AppCompatActivity {
     private TextView lbllopuser;
     private TextView lblmssvuser;
     private TextView lblsdtuser;
-    private Button _btnKetthucActorInfor;
+    public static Button _btnKetthucActorInfor;
+    public static TextView _labelInfo;
 
     private Database _database;
 
@@ -57,7 +58,8 @@ public class ActorInforActivity extends AppCompatActivity {
         this.sobaidang = findViewById(R.id.sobaidang);
         this.sodanhgia = findViewById(R.id.sodanhgia);
         this.sobaocao = findViewById(R.id.sobaocao);
-        this._btnKetthucActorInfor = findViewById(R.id.btnKethucActorInfor);
+        _btnKetthucActorInfor = findViewById(R.id.btnKethucActorInfor);
+        _labelInfo = findViewById(R.id.thongtinActorInfoActivity);
 
         this.lbltenuser = findViewById(R.id.lbltenuser);
         this.lbllopuser = findViewById(R.id.lbllopuser);
@@ -108,6 +110,7 @@ public class ActorInforActivity extends AppCompatActivity {
             @Override
             public void onClick(View view)
             {
+
                 finish();
             }
         });

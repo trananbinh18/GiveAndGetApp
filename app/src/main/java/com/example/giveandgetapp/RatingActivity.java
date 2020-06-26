@@ -215,7 +215,6 @@ public class RatingActivity extends AppCompatActivity {
                                 "       AND Type = 3";
 
                         _database.excuteCommand(con,queryEditNotification);
-
                         con.close();
                     }
                 } catch (SQLException e) {
@@ -226,7 +225,6 @@ public class RatingActivity extends AppCompatActivity {
                 data.setData(Uri.parse(_postId+","+_actorId));
                 setResult(RESULT_OK, data);
                 finish();
-
             }
         });
 

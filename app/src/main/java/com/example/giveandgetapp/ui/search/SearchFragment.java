@@ -88,7 +88,7 @@ public class SearchFragment extends Fragment {
 
                _listResultSearchFragment.clear();
                if(_spinnerSelectCatalogi.getSelectedItem().toString().contains("Tất cả") && editText.isEmpty()){
-                   String queryAll = "SELECT TOP 30 * FROM [Post]";
+                   String queryAll = "SELECT TOP 10 * FROM [Post]";
                    ResultSet rsAllPost = _database.excuteCommand(con, queryAll);
                    try{
                        while (rsAllPost != null && rsAllPost.next()){

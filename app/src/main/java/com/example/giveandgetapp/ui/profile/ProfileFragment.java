@@ -505,7 +505,6 @@ public class ProfileFragment extends Fragment {
                 else if(item.status == 3 && _sessionManager.getUserDetail().id == item.receiveId){
                     btnRatingReceive.setVisibility(View.VISIBLE);
 
-                    
                     //Add action listener
                     btnRatingReceive.setOnClickListener(getButtonRatingClickListener(item.postId));
 

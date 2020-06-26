@@ -144,10 +144,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     _dashboardViewModel.setListFeedItem(newFeedItems1);
 
-
                     break;
-
-
             }
 
         }else if (requestCode == 11){
@@ -197,13 +194,8 @@ public class MainActivity extends AppCompatActivity {
                         txtNumberNotifyCount.setVisibility(View.INVISIBLE);
                     }
 
-
                     _notificationsViewModel.setListNotification(newNotifications);
-
-
-
                     break;
-
             }
         }else if (requestCode == 12){
             //On rating
@@ -305,8 +297,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-
         return listPostProfile;
     }
 
@@ -358,11 +348,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return item;
-
-
     }
-
 }
 
