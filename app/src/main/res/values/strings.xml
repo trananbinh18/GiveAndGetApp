@@ -11,4 +11,5 @@
     <string name="title_activity_edit_post">EditPostActivity</string>
     <string name="title_activity_rating">RatingActivity</string>
     <string name="title_activity_register">RegisterActivity</string>
+    <string name="title_activity_approve">ApproveActivity</string>
 </resources>

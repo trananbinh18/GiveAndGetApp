@@ -61,24 +61,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:layout_marginLeft="10dp"
-                    android:text="Đánh giá cho bài viết này."
+                    android:text="Bạn đã được cho món đồ này bạn có muốn xác nhận đã nhận món đồ này?"
                     android:textSize="23dp" />
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="vertical">
-
-                <RatingBar
-                    android:id="@+id/ratingBar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:progressTint="#ffff00"
-                    android:visibility="visible" />
             </LinearLayout>
 
             <LinearLayout
@@ -88,12 +73,36 @@
                 android:orientation="vertical" >
 
                 <Button
-                    android:id="@+id/btnLuuRating"
+                    android:id="@+id/btnApprove"
+                    android:layout_width="130dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Xác nhận"/>
+
+                <Button
+                    android:id="@+id/btnConfirmDenied"
+                    android:layout_width="130dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Hủy Xác nhận" />
+
+                <Button
+                    android:id="@+id/btnBack"
                     android:layout_width="130dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center_horizontal"
-                    android:text="Lưu"
-                    android:visibility="visible" />
+                    android:text="Quay lại"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/btnDenied"
+                    android:layout_width="130dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Xác nhận từ chối"
+                    android:visibility="gone" />
 
                 <Button
                     android:id="@+id/btnHuyRating"

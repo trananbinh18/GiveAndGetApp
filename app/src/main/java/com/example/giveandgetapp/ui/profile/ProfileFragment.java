@@ -30,6 +30,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.giveandgetapp.ActorInforActivity;
+import com.example.giveandgetapp.ApproveActivity;
 import com.example.giveandgetapp.EditPostActivity;
 import com.example.giveandgetapp.EditProfileActivity;
 import com.example.giveandgetapp.GiveActivity;
@@ -318,36 +319,6 @@ public class ProfileFragment extends Fragment {
         _gridActorPostGived.setAdapter(_actorPostGivedAdapter);
 
 
-//        Runnable runnablePostActor = new Runnable() {
-//            @Override
-//            public void run() {
-//                Connection connection = _database.connectToDatabase();
-//
-//                for (PostProfile item:listProfileActor) {
-//                    Bitmap img = _database.getImageInDatabaseInSquire(connection, item.imageId);
-//                    _listImagePostActor.add(img);
-//                    if(item.status > 2){
-//                        listProfileActorGive.add(item);
-//                        _listImagePostActorGive.add(img);
-//                    }
-//                }
-//
-//                getActivity().runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        _actorPostAdapter.setListPostActor(listProfileActor,_listImagePostActor);
-//                        _actorPostAdapter.notifyDataSetChanged();
-//
-//                        _actorPostGivedAdapter.setListPostActor(listProfileActorGive, _listImagePostActorGive);
-//                        _actorPostGivedAdapter.notifyDataSetChanged();
-//                    }
-//                });
-//            }
-//        };
-//
-//        Thread threadPostActor = new Thread(runnablePostActor);
-//        threadPostActor.start();
-
         try {
             con.close();
         } catch (SQLException e) {
@@ -489,7 +460,7 @@ public class ProfileFragment extends Fragment {
         _gridReceivePost.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                PostProfile item = _actorPostAdapter._listPostActor.get(position);
+                PostProfile item = _receivePostAdapter._listPostReceive.get(position);
 
                 btnActorProfileReceive.setOnClickListener(getButtonActorInfoClickListener(item.actorId));
 
@@ -502,7 +473,9 @@ public class ProfileFragment extends Fragment {
                 }
 
                 //Are Post is expire
-                else if(item.status == 3 && _sessionManager.getUserDetail().id == item.receiveId){
+                else if(item.status == 4 && _sessionManager.getUserDetail().id == item.receiveId){
+                    btnRatingReceive.setText("Đánh giá");
+
                     btnRatingReceive.setVisibility(View.VISIBLE);
 
                     //Add action listener
@@ -512,7 +485,19 @@ public class ProfileFragment extends Fragment {
 
                     //Add action listener
                     btnReviewReceive.setOnClickListener(getButtonReviewClickListener(item.postId));
-                }else {
+                }else if(item.status == 3){
+                    btnRatingReceive.setVisibility(View.VISIBLE);
+
+                    //Add action listener
+                    btnRatingReceive.setText("Xác nhận nhận đồ");
+                    btnRatingReceive.setOnClickListener(getButtonApproveClickListener(item.postId));
+
+                    btnReviewReceive.setVisibility(View.VISIBLE);
+
+                    //Add action listener
+                    btnReviewReceive.setOnClickListener(getButtonReviewClickListener(item.postId));
+                }
+                else {
                     btnReviewReceive.setVisibility(View.VISIBLE);
 
                     //Add action listener
@@ -525,6 +510,8 @@ public class ProfileFragment extends Fragment {
         });
         return root;
     }
+
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -540,6 +527,22 @@ public class ProfileFragment extends Fragment {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    //Button Approve
+    private View.OnClickListener getButtonApproveClickListener(int postId) {
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ApproveActivity.class);
+                intent.putExtra("Post_Id", postId);
+                getActivity().startActivityForResult(intent,120);
+
+                _isRedirectToActivity = true;
+            }
+        };
+
+        return listener;
     }
 
     //Button rating action

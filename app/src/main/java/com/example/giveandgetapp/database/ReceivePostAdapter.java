@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 public class ReceivePostAdapter extends BaseAdapter {
     private Context _context;
-    private ArrayList<PostProfile> _listPostReceive;
+    public ArrayList<PostProfile> _listPostReceive;
     private LayoutInflater inflater;
     private ArrayList<Bitmap> _listImage;
 
@@ -75,6 +75,9 @@ public class ReceivePostAdapter extends BaseAdapter {
                 imgStatus.setImageDrawable(_context.getResources().getDrawable(R.drawable.ic_fiber_manual_record_red_24dp));
                 break;
             case 3:
+                imgStatus.setImageDrawable(_context.getResources().getDrawable(R.drawable.ic_fiber_manual_record_pink_24dp));
+                break;
+            case 4:
                 imgStatus.setImageDrawable(_context.getResources().getDrawable(R.drawable.ic_fiber_manual_record_yellow_24dp));
                 break;
             default:

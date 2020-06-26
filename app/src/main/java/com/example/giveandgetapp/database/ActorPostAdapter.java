@@ -81,6 +81,9 @@ public class ActorPostAdapter extends BaseAdapter {
                 imgStatus.setImageDrawable(_context.getResources().getDrawable(R.drawable.ic_fiber_manual_record_red_24dp));
                 break;
             case 3:
+                imgStatus.setImageDrawable(_context.getResources().getDrawable(R.drawable.ic_fiber_manual_record_pink_24dp));
+                break;
+            case 4:
                 imgStatus.setImageDrawable(_context.getResources().getDrawable(R.drawable.ic_fiber_manual_record_yellow_24dp));
                 break;
             default:
