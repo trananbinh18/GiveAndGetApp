@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.giveandgetapp.ApproveActivity;
 import com.example.giveandgetapp.GiveActivity;
 import com.example.giveandgetapp.PostDetailActivity;
 import com.example.giveandgetapp.R;
@@ -154,6 +155,13 @@ public class NotificationAdapter extends BaseAdapter {
                             Intent intent2 = new Intent(activity.getApplicationContext(), RatingActivity.class);
                             intent2.putExtra("Post_Id",item.postId);
                             activity.startActivityForResult(intent2,12);
+                        }
+                        break;
+                    case 4:
+                        if(item.status == 1){
+                            Intent intent3 = new Intent(activity.getApplicationContext(), ApproveActivity.class);
+                            intent3.putExtra("Post_Id",item.postId);
+                            activity.startActivityForResult(intent3,120);
                         }
                         break;
 

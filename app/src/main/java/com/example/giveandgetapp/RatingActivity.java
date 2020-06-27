@@ -38,10 +38,6 @@ public class RatingActivity extends AppCompatActivity {
     private Button _btnLuuRating;
     private Button _btnHuyRating;
     private TextView _txtMain;
-    private Button _btnApprove;
-    private Button _btnDenied;
-    private Button _btnConfirmDenied;
-    private Button _btnBack;
     private int _postId;
     private User _currentUser;
     private int _actorId;
@@ -59,10 +55,6 @@ public class RatingActivity extends AppCompatActivity {
         _btnLuuRating = findViewById(R.id.btnLuuRating);
         _btnHuyRating = findViewById(R.id.btnHuyRating);
         _txtMain = findViewById(R.id.txtMain);
-        _btnApprove = findViewById(R.id.btnApprove);
-        _btnDenied = findViewById(R.id.btnDenied);
-        _btnBack = findViewById(R.id.btnBack);
-        _btnConfirmDenied = findViewById(R.id.btnConfirmDenied);
         _sessionManager = new SessionManager(this);
         _database = new Database(this);
         _currentUser = _sessionManager.getUserDetail();
@@ -82,85 +74,6 @@ public class RatingActivity extends AppCompatActivity {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        //Button Approve
-        _btnApprove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                _txtMain.setText("Đánh giá bài viết này");
-                _ratingBar.setVisibility(View.VISIBLE);
-                _btnLuuRating.setVisibility(View.VISIBLE);
-                _btnApprove.setVisibility(View.INVISIBLE);
-                _btnDenied.setVisibility(View.INVISIBLE);
-            }
-        });
-
-        //Button Confirm Deny
-        _btnConfirmDenied.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                _btnDenied.setVisibility(View.VISIBLE);
-                _btnBack.setVisibility(View.VISIBLE);
-                _btnApprove.setVisibility(View.INVISIBLE);
-                _btnConfirmDenied.setVisibility(View.INVISIBLE);
-                _btnLuuRating.setVisibility(View.INVISIBLE);
-                _ratingBar.setVisibility(View.INVISIBLE);
-                _txtMain.setText("Bạn có thật sự không muốn nhận món đồ này ?");
-             }
-        });
-
-        //Button Back
-        _btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                _btnDenied.setVisibility(View.INVISIBLE);
-                _btnBack.setVisibility(View.INVISIBLE);
-                _btnApprove.setVisibility(View.VISIBLE);
-                _btnConfirmDenied.setVisibility(View.VISIBLE);
-                _txtMain.setText("Bạn đã được cho món đồ này bạn có muốn xác nhận đã nhận món đồ này?");
-            }
-        });
-
-        //Button Denied
-        _btnDenied.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Connection con = _database.connectToDatabase();
-
-                String queryEditNotification = "UPDATE [Notification]" +
-                        "   SET Status = 2"+
-                        "   WHERE UserId="+_currentUser.id+
-                        "       AND PostId="+_postId+
-                        "       AND Type = 3";
-
-                _database.excuteCommand(con,queryEditNotification);
-
-                String queryEditPost = "UPDATE [Post]" +
-                        "   SET Status = 2" +
-                        "   WHERE Id = " + _postId;
-
-                _database.excuteCommand(con,queryEditPost);
-
-                SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                Date date = new Date();
-                String create_date = formater.format(date);
-                String queryNotification = "INSERT INTO [Notification]" +
-                        "           (UserId,PostId,Status,CreateDate,Title,Contents,Type)" +
-                        "     VALUES" +
-                        "           ("+_actorId +
-                        "           ,"+_postId +
-                        "           ,1" +
-                        "           ," + "CONVERT(datetime,'" +create_date+"',120)"+
-                        "           ,N'"+_currentUser.name+" đã từ chối xác nhận món đồ này'" +
-                        "           ,N'Hãy chọn lại người nhận'" +
-                        "           ,2)";
-
-                _database.excuteCommand(con,queryNotification);
-
-                finish();
-            }
-        });
 
 
         //Button Luu
@@ -187,7 +100,7 @@ public class RatingActivity extends AppCompatActivity {
                         _database.excuteCommand(con,queryEdit);
 
                         String queryEditPost = "UPDATE [Post]" +
-                                "   SET Status = 4" +
+                                "   SET Status = 5" +
                                 "   WHERE Id = " + _postId;
 
                         _database.excuteCommand(con,queryEditPost);

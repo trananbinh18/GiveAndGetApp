@@ -181,7 +181,7 @@ public class GiveActivity extends AppCompatActivity {
                             "           ," + "CONVERT(datetime,'" +create_date+"',120)"+
                             "           ,N'Xác nhận bạn đã nhận được món đồ'" +
                             "           ,N'Bạn nhận được một món đồ của từ bài post "+_postTitle+"'" +
-                            "           ,3)";
+                            "           ,4)";
 
                     Connection con = _database.connectToDatabase();
 
