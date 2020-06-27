@@ -81,8 +81,6 @@ public class PostDetailActivity extends AppCompatActivity {
         this.postId = getIntent().getIntExtra("Post_Id",0);
         this.isFromNotification = getIntent().getBooleanExtra("Is_From_Notification",false);
 
-
-
         _sessionManager = new SessionManager(this);
         user = _sessionManager.getUserDetail();
         _txtActorName = findViewById(R.id.timelogin);
@@ -280,8 +278,6 @@ public class PostDetailActivity extends AppCompatActivity {
                 if(item.actorId == user.id)
                 {
                     //User là actor
-
-
 //                    _baocao.setVisibility(View.GONE);
                     _baocao.setText("Xóa bài viết");
                     _tuychon.setText("Chỉnh sửa bài viết");
@@ -425,7 +421,7 @@ public class PostDetailActivity extends AppCompatActivity {
                         }
                     });
 
-                    dialog.show();
+                dialog.show();
             }
         });
     }

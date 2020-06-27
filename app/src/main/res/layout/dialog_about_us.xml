@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dialogaboutus"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/logovlu"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/applogo"/>
+        <TextView
+            android:id="@+id/contentAboutUs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:justificationMode="inter_word"
+            android:text="Đây là một dự án thiết thực được sử dụng rộng rãi cho toàn trường Đại học Văn Lang với mục đích chính là sinh viên hoặc giảng viên trong trường có thể tặng những món đồ họ không còn sử dụng và muốn cho người khác, những người muốn nhận được những món đồ đó."/>
+
+        <Button
+            android:id="@+id/btnCancelAboutUs"
+            android:text="Đóng"
+            android:layout_gravity="center_horizontal"
+            android:textColor="#ff0000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_transparent"
+            android:layout_marginTop="15dp"/>
+    </LinearLayout>
+</LinearLayout>

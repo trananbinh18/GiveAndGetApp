@@ -62,6 +62,8 @@ public class ResultSearchAdapter extends BaseAdapter {
         }else if (resultSearch.postStatus == 2){
             txtStatusPostSearch.setText("Trạng thái bài viết: Hết hạn");
         }else if (resultSearch.postStatus == 3){
+            txtStatusPostSearch.setText("Trạng thái bài viết: Chờ xác nhận");
+        }else if (resultSearch.postStatus == 4){
             txtStatusPostSearch.setText("Trạng thái bài viết: Chờ đánh giá");
         }else {
             txtStatusPostSearch.setText("Trạng thái bài viết: Đã đóng");

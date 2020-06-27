@@ -21,8 +21,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-
-
                 <TextView
                     android:id="@+id/searchtypetitle"
                     android:layout_width="match_parent"
@@ -43,7 +41,7 @@
                 <ListView
                     android:id="@+id/listUser"
                     android:layout_width="match_parent"
-                    android:layout_height="1000dp">
+                    android:layout_height="500dp">
                 </ListView>
             </LinearLayout>
         </LinearLayout>

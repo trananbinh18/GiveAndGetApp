@@ -18,13 +18,17 @@ import androidx.annotation.Nullable;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.giveandgetapp.ActorInforActivity;
+import com.example.giveandgetapp.ListUserActivity;
 import com.example.giveandgetapp.PostDetailActivity;
 import com.example.giveandgetapp.R;
 import com.example.giveandgetapp.ui.profile.ProfileFragment;
 
+import net.sourceforge.jtds.jdbc.DateTime;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -256,6 +260,8 @@ public class FeedListAdapter extends BaseAdapter {
         imgLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 item.isLiked = !item.isLiked;
                 ImageButton imgLike = (ImageButton) v;
                 if(item.isLiked){
@@ -287,6 +293,7 @@ public class FeedListAdapter extends BaseAdapter {
         title.setOnClickListener(getListenerForPostDetailActivity(item.postId));
         content.setOnClickListener(getListenerForPostDetailActivity(item.postId));
         imgMore.setOnClickListener(getListenerForPostDetailActivity(item.postId));
+        txtLikeCount.setOnClickListener(getListenerListUserLikedRegistered(item.postId));
 
 
         return convertView;
@@ -310,7 +317,7 @@ public class FeedListAdapter extends BaseAdapter {
                 SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date date = new Date();
                 String create_date = formater.format(date);
-                String query = "INSERT INTO [Like](UserId,PostId)VALUES("+currentUser.id+", "+item.postId+")";
+                String query = "INSERT INTO [Like](UserId,PostId,DateTimeLiked)VALUES("+currentUser.id+", "+item.postId+", "+"CONVERT(datetime,'" +create_date+"',120)"+" )";
                 String queryNotification = "INSERT INTO [Notification]" +
                         "           (UserId,PostId,Status,CreateDate,Title,Contents,Type)" +
                         "     VALUES" +
@@ -397,7 +404,7 @@ public class FeedListAdapter extends BaseAdapter {
                 SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date date = new Date();
                 String create_date = formater.format(date);
-                String query = "INSERT INTO [Receive](UserId,PostId)VALUES("+currentUser.id+", "+item.postId+")";
+                String query = "INSERT INTO [Receive](UserId,PostId,DateTimeRegistered)VALUES("+currentUser.id+", "+item.postId+", "+"CONVERT(datetime,'" +create_date+"',120)"+" )";;
                 String queryNotification = "INSERT INTO [Notification]" +
                         "           (UserId,PostId,Status,CreateDate,Title,Contents,Type)" +
                         "     VALUES" +
@@ -466,6 +473,19 @@ public class FeedListAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(activity.getApplicationContext(), PostDetailActivity.class);
+                intent.putExtra("Post_Id",postId);
+                activity.startActivityForResult(intent,10);
+            }
+        };
+        return listener;
+    }
+
+    //LikeCount Click
+    private  View.OnClickListener getListenerListUserLikedRegistered (final int postId){
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(activity.getApplicationContext(), ListUserActivity.class);
                 intent.putExtra("Post_Id",postId);
                 activity.startActivityForResult(intent,10);
             }
