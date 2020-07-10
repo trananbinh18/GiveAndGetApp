@@ -106,7 +106,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
         android:gravity="center_horizontal"
         android:layout_alignParentBottom="true">
 
@@ -114,6 +113,7 @@
             android:id="@+id/btnAboutUs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="-20dp"
             android:gravity="center_horizontal"
             android:background="@drawable/ic_transparent"
             android:text="About Us"
