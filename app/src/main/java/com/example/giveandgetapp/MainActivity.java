@@ -143,6 +143,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                     _dashboardViewModel.setListFeedItem(newFeedItems1);
+                    Navigation.findNavController(this,R.id.nav_host_fragment).navigate(R.id.navigation_dashboard);
+
 
                     break;
             }
@@ -197,7 +199,52 @@ public class MainActivity extends AppCompatActivity {
                     _notificationsViewModel.setListNotification(newNotifications);
                     break;
             }
-        }else if (requestCode == 12){
+        }else if(requestCode == 120){
+            //On Approve
+            switch (resultCode){
+                //On Approve
+                case RESULT_OK:
+                    final int postId = Integer.parseInt(data.getData().toString().split(",")[0]);
+
+                    //Set for notification
+                    ArrayList<FeedNotification> currentNotifications = _notificationsViewModel.getListNotification().getValue();
+                    ArrayList<FeedNotification> newNotifications = new ArrayList<FeedNotification>();
+
+                    int countNotRead = 0;
+                    for (FeedNotification item: currentNotifications) {
+                        if(item.postId == postId && item.type ==3){
+                            item.status = 2;
+                        }
+                        if(item.status == 1){
+                            countNotRead++;
+                        }
+
+                        newNotifications.add(item);
+                    }
+
+                    if(countNotRead != 0){
+                        txtNumberNotifyCount.setVisibility(View.VISIBLE);
+                        txtNumberNotifyCount.setText(countNotRead+"");
+                    }else{
+                        txtNumberNotifyCount.setVisibility(View.INVISIBLE);
+                    }
+
+                    _notificationsViewModel.setListNotification(newNotifications);
+
+                    int actorId = Integer.parseInt(data.getData().toString().split(",")[1]);
+
+                    //Go to activity actor info
+                    Intent intent = new Intent(this.getApplicationContext(), ActorInforActivity.class);
+                    intent.putExtra("Actor_Id",actorId);
+                    intent.putExtra("IsFromRating", true);
+                    this.startActivity(intent);
+
+
+                    break;
+
+            }
+
+        } else if (requestCode == 12){
             //On rating
             switch (resultCode){
                 //On rating

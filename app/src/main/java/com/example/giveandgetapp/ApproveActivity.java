@@ -112,6 +112,9 @@ public class ApproveActivity extends AppCompatActivity {
                 _database.excuteCommand(con,queryEditNotification);
                 _database.excuteCommand(con, queryEditPost);
 
+                Intent data = new Intent();
+                data.setData(Uri.parse(_postId+","+_actorId));
+                setResult(RESULT_OK, data);
                 finish();
 
 

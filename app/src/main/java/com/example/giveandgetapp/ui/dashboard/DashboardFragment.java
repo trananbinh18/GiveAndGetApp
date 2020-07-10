@@ -52,6 +52,7 @@ public class DashboardFragment extends Fragment {
     private FeedListAdapter _adapter;
     private final int _numberPostLoad = 5;
     private ProgressBar _progressBar;
+    private ListView listViewMain;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -72,8 +73,9 @@ public class DashboardFragment extends Fragment {
             @Override
             public void onChanged(ArrayList<FeedItem> feedItems) {
                 try{
-                    _adapter.setFeedItems(feedItems);
-                    _adapter.notifyDataSetChanged();
+                    _adapter = new FeedListAdapter(getActivity(),feedItems);
+                    listViewMain.setAdapter(_adapter);
+
                 }catch (Exception e){
                     e.printStackTrace();
                 }
@@ -82,7 +84,7 @@ public class DashboardFragment extends Fragment {
 
 
 
-        ListView listViewMain = root.findViewById(R.id.listViewMain);
+        listViewMain = root.findViewById(R.id.listViewMain);
         _adapter = new FeedListAdapter(this.getActivity(), _dashboardViewModel.getListFeedItem().getValue());
         listViewMain.setAdapter(_adapter);
 

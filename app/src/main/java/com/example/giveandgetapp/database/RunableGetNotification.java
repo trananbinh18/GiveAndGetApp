@@ -3,10 +3,12 @@ package com.example.giveandgetapp.database;
 import android.app.Activity;
 import android.app.Application;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.service.notification.StatusBarNotification;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +16,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.example.giveandgetapp.GiveActivity;
+import com.example.giveandgetapp.MainActivity;
 import com.example.giveandgetapp.PostDetailActivity;
 import com.example.giveandgetapp.R;
 import com.example.giveandgetapp.RatingActivity;
@@ -32,6 +36,9 @@ import java.util.ArrayList;
 import javax.xml.datatype.Duration;
 
 public class RunableGetNotification implements Runnable{
+    public static final String APPLICATION_NAME = "GIVE_AND_GET";
+    public static final String PREF_LAST_ID_NOTIFICATION = "PREF_LAST_ID_NOTIFICATION";
+
     NotificationsViewModel _modelNotification;
     Database _database;
     SessionManager _sessionManager;
@@ -40,6 +47,7 @@ public class RunableGetNotification implements Runnable{
     Activity _activity;
     TextView _txtNumberNotifyCount;
     int _numberOfNotRead;
+    int lastIdNotification;
 
     public RunableGetNotification(NotificationsViewModel modelNotification, TextView txtNumberNotifyCount , Context context, Activity activity){
         this._modelNotification = modelNotification;
@@ -53,6 +61,8 @@ public class RunableGetNotification implements Runnable{
 
     @Override
     public void run() {
+        lastIdNotification = getLastIdNotification(_context);
+
         User currentUser = _sessionManager.getUserDetail();
         int numberOfNotRead = 0;
 
@@ -95,7 +105,11 @@ public class RunableGetNotification implements Runnable{
 
                 if(status == 1){
                     numberOfNotRead++;
-                    addNotification(_context, item);
+                    addNotification(_context, item, lastIdNotification);
+                    //First notification
+                    if(numberOfNotRead == 1){
+                        setLastIdNotification(_context, item.id);
+                    }
                 }
             }
 
@@ -125,7 +139,7 @@ public class RunableGetNotification implements Runnable{
     }
 
 
-    public static void addNotification( Context context, FeedNotification feedNotification){
+    public static void addNotification( Context context, FeedNotification feedNotification, int lastIdNotification){
         NotificationManager manager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
         StatusBarNotification[] activeNotifications = manager.getActiveNotifications();
         boolean isHadNotify = false;
@@ -136,13 +150,14 @@ public class RunableGetNotification implements Runnable{
             }
         }
 
-        if(!isHadNotify){
+        if(!isHadNotify && feedNotification.id > lastIdNotification){
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                     .setSmallIcon(R.drawable.ic_notifications_black_24dp)
                     .setContentTitle(feedNotification.title)
                     .setContentText(feedNotification.contents)
                     .setAutoCancel(true)
                     .setChannelId("giveandget");
+
 
 
             Intent intent;
@@ -175,5 +190,17 @@ public class RunableGetNotification implements Runnable{
             manager.notify(feedNotification.id, builder.build());
         }
 
+    }
+
+    public static int getLastIdNotification(Context context){
+        SharedPreferences sharedPref = context.getSharedPreferences(APPLICATION_NAME,0);
+        int lastId = sharedPref.getInt(PREF_LAST_ID_NOTIFICATION,0);
+        return lastId;
+    }
+
+    public static void setLastIdNotification(Context context, int lastId){
+        SharedPreferences.Editor sharedEditor = context.getSharedPreferences(APPLICATION_NAME, 0).edit();
+        sharedEditor.putInt(PREF_LAST_ID_NOTIFICATION, lastId);
+        sharedEditor.commit();
     }
 }

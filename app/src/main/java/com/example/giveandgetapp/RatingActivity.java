@@ -115,7 +115,7 @@ public class RatingActivity extends AppCompatActivity {
                                 "           ,"+_postId +
                                 "           ,1" +
                                 "           ," + "CONVERT(datetime,'" +create_date+"',120)"+
-                                "           ,N'Bạn đã được đánh giá'" +
+                                "           ,N'Bạn đã được đánh giá bởi "+ _currentUser.name+"'" +
                                 "           ,N'Bạn đã được đánh giá "+star+" sao bài: "+_postTitle+"'" +
                                 "           ,0)";
 

@@ -157,7 +157,7 @@
             <LinearLayout
                 android:id="@+id/linearLayout3"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginTop="0dp"
                 android:orientation="horizontal"
                 android:padding="20dp">
@@ -165,11 +165,11 @@
                 <TabHost
                     android:id="@+id/tabhost"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:orientation="vertical">
 
                         <TabWidget
@@ -189,7 +189,7 @@
                             <LinearLayout
                                 android:id="@+id/tab1"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="330dp"
                                 android:background="#dadada"
                                 android:orientation="vertical">
 
@@ -211,7 +211,7 @@
                             <LinearLayout
                                 android:id="@+id/tab2"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="330dp"
                                 android:background="#dadada"
                                 android:orientation="vertical">
 
@@ -233,7 +233,7 @@
                             <LinearLayout
                                 android:id="@+id/tab3"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="330dp"
                                 android:background="#dadada"
                                 android:orientation="vertical">
 
