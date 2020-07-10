@@ -96,9 +96,6 @@ public class EditProfileActivity extends AppCompatActivity {
         _txtSdt.setText(_user.phone);
         _txtEmail.setText(_user.email);
 
-
-
-
         //Lưu
         _btnLuu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,7 +140,7 @@ public class EditProfileActivity extends AppCompatActivity {
                         "UPDATE [User] " +
                         "   SET" + strQueryAvatar +
                         "      StudentId = '" + _txtMssv.getText().toString() + "'"+
-                        "      ,Name = '" + _txtName.getText().toString()+ "'"+
+                        "      ,Name = N'" + _txtName.getText().toString()+ "'"+
                         "      ,Class = '" + _txtLop.getText().toString()+ "'"+
                         "      ,Phone = '" + _txtSdt.getText().toString()+ "'" +
                         " WHERE  Id = "+ _user.id;

@@ -503,15 +503,11 @@ public class ProfileFragment extends Fragment {
                     //Add action listener
                     btnReviewReceive.setOnClickListener(getButtonReviewClickListener(item.postId));
                 }
-
                 dlogPostReceive.show();
-
             }
         });
         return root;
     }
-
-
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
