@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TabWidget;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -49,7 +50,9 @@ import com.example.giveandgetapp.database.User;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ProfileFragment extends Fragment {
 
@@ -335,6 +338,7 @@ public class ProfileFragment extends Fragment {
         Button btnReviewActor = viewPostActor.findViewById(R.id.btnReview);
         Button btnEditActor = viewPostActor.findViewById(R.id.btnEdit);
         Button btnGiveActor = viewPostActor.findViewById(R.id.btnGive);
+        Button btnNotify = viewPostActor.findViewById(R.id.btnNotify);
         Button btnDeleteActor = viewPostActor.findViewById(R.id.btnDelete);
         Button btnCancelActor = viewPostActor.findViewById(R.id.btnCancel);
 
@@ -348,6 +352,7 @@ public class ProfileFragment extends Fragment {
                 btnEditActor.setVisibility(View.GONE);
                 btnGiveActor.setVisibility(View.GONE);
                 btnDeleteActor.setVisibility(View.GONE);
+                btnNotify.setVisibility(View.GONE);
             }
         });
 
@@ -420,6 +425,12 @@ public class ProfileFragment extends Fragment {
                     btnGiveActor.setVisibility(View.VISIBLE);
                     //Add action listener
                     btnGiveActor.setOnClickListener(getButtonGiveClickListener(item.postId));
+                } else if(item.status == 4){
+                    btnReviewActor.setVisibility(View.VISIBLE);
+                    btnNotify.setVisibility(View.VISIBLE);
+                    btnReviewActor.setOnClickListener(getButtonReviewClickListener(item.postId));
+                    btnNotify.setOnClickListener(getButtonNotifyClickListener(item.postId, dlogPostActor));
+
                 } else {
                     btnReviewActor.setVisibility(View.VISIBLE);
                     btnReviewActor.setOnClickListener(getButtonReviewClickListener(item.postId));
@@ -509,6 +520,8 @@ public class ProfileFragment extends Fragment {
         return root;
     }
 
+
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.fragment_menu, menu);
@@ -523,6 +536,53 @@ public class ProfileFragment extends Fragment {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    //Button Notify
+    private View.OnClickListener getButtonNotifyClickListener(int postId, Dialog dlogPostActor) {
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Connection con = _database.connectToDatabase();
+                String queryPost = "SELECT Receiver FROM [Post] WHERE Post.Id = "+postId;
+                ResultSet rs = _database.excuteCommand(con,queryPost);
+                User user = _sessionManager.getUserDetail();
+
+                try {
+                    if(rs.next()){
+                        int receiverId = rs.getInt("Receiver");
+
+                        SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        Date date = new Date();
+                        String create_date = formater.format(date);
+                        String queryNotification = "INSERT INTO [Notification]" +
+                                "           (UserId,PostId,Status,CreateDate,Title,Contents,Type)" +
+                                "     VALUES" +
+                                "           ("+receiverId +
+                                "           ,"+postId +
+                                "           ,1" +
+                                "           ," + "CONVERT(datetime,'" +create_date+"',120)"+
+                                "           ,N'"+user.name+" đã gửi yêu cầu đánh giá bài viết'" +
+                                "           ,N'Hãy đánh giá bài viết này cho "+user.name+"'" +
+                                "           ,3)";
+
+                        _database.excuteCommand(con, queryNotification);
+                        con.close();
+                        Toast.makeText(getContext(),"Đã gửi yêu cầu đánh giá",Toast.LENGTH_LONG).show();
+
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+                dlogPostActor.cancel();
+
+
+
+            }
+        };
+
+        return listener;
     }
 
     //Button Approve
