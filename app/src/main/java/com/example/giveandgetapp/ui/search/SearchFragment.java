@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -37,8 +38,10 @@ public class SearchFragment extends Fragment {
     private SearchViewModel searchViewModel;
     private ResultSearchAdapter _adapter;
     private ArrayList<ResultSearch> _listResultSearchFragment;
+    private Button _btnLoadMore;
     private Bitmap _postImage;
     private String _postTitle;
+    private int _lastIdListSearch;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -48,6 +51,7 @@ public class SearchFragment extends Fragment {
         _txtTypeTitleSearch = root.findViewById(R.id.searchtypetitle);
         _imgbtnSearch = root.findViewById(R.id.imgbtnsearch);
         _listviewSearch = root.findViewById(R.id.listviewResultSearch);
+        _btnLoadMore = root.findViewById(R.id.loadMoreSearh);
         _database = new Database(root.getContext());
 
         //Get text from Spinner and EditText
@@ -88,7 +92,7 @@ public class SearchFragment extends Fragment {
 
                _listResultSearchFragment.clear();
                if(_spinnerSelectCatalogi.getSelectedItem().toString().contains("Tất cả") && editText.isEmpty()){
-                   String queryAll = "SELECT TOP 10 * FROM [Post]";
+                   String queryAll = "SELECT TOP 5 * FROM [Post]";
                    ResultSet rsAllPost = _database.excuteCommand(con, queryAll);
                    try{
                        while (rsAllPost != null && rsAllPost.next()){
@@ -103,9 +107,8 @@ public class SearchFragment extends Fragment {
                    }catch (SQLException e){
                        e.printStackTrace();
                    }
-               }
-               if(_spinnerSelectCatalogi.getSelectedItem().toString().contains("Tất cả")){
-                   String queryAllPost = "SELECT * FROM [Post] WHERE [Post].Title LIKE N'%"+editText+"%'";
+               }else if(_spinnerSelectCatalogi.getSelectedItem().toString().contains("Tất cả")){
+                   String queryAllPost = "SELECT TOP 5 * FROM [Post] WHERE [Post].Title LIKE N'%"+editText+"%'";
                    ResultSet rsAllPost = _database.excuteCommand(con, queryAllPost);
                    try{
                        while (rsAllPost != null && rsAllPost.next()){
@@ -120,11 +123,9 @@ public class SearchFragment extends Fragment {
                    }catch (SQLException e){
                        e.printStackTrace();
                    }
-               }
-
-               else {
+               } else {
                    String catalogId = ((Catalog)_spinnerSelectCatalogi.getSelectedItem()).id+"";
-                   String querySearch = "SELECT * FROM [Post] WHERE CatalogId = "+catalogId+" and Title LIKE N'%"+editText+"%' ";
+                   String querySearch = "SELECT TOP 5 * FROM [Post] WHERE CatalogId = "+catalogId+" and Title LIKE N'%"+editText+"%' ";
                    ResultSet rsSearch = _database.excuteCommand(con, querySearch);
                    //Get Post
                    try{
@@ -143,10 +144,90 @@ public class SearchFragment extends Fragment {
                        e.printStackTrace();
                    }
                }
+
+               if(_listResultSearchFragment.size() > 0){
+                   _lastIdListSearch = _listResultSearchFragment.get(_listResultSearchFragment.size()-1).postId;
+
+               }
+
                _adapter = new ResultSearchAdapter(getActivity() ,root.getContext(), _listResultSearchFragment);
                _listviewSearch.setAdapter(_adapter);
            }
        });
+
+       //Button load more
+        _btnLoadMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Connection con = _database.connectToDatabase();
+
+                String editText = _txtTypeTitleSearch.getText().toString();
+
+                if(_spinnerSelectCatalogi.getSelectedItem().toString().contains("Tất cả") && editText.isEmpty()){
+                    String queryAll = "SELECT TOP 5 * FROM [Post] WHERE Id>"+_lastIdListSearch;
+                    ResultSet rsAllPost = _database.excuteCommand(con, queryAll);
+                    try{
+                        while (rsAllPost != null && rsAllPost.next()){
+                            int _postid = rsAllPost.getInt("Id");
+                            String _posttitle = rsAllPost.getString("Title");
+                            Bitmap _postimage = _database.getImageInDatabase(con,rsAllPost.getInt("Image"));
+                            int _poststatus = rsAllPost.getInt("Status");
+                            ResultSearch item = new ResultSearch(_postid,_posttitle,_postimage, _poststatus);
+                            _adapter._listResultSearch.add(item);
+                        }
+
+                    }catch (SQLException e){
+                        e.printStackTrace();
+                    }
+                } else if(_spinnerSelectCatalogi.getSelectedItem().toString().contains("Tất cả")){
+                    String queryAllPost = "SELECT TOP 5 * FROM [Post] WHERE [Post].Title LIKE N'%"+editText+"%' AND Id>"+_lastIdListSearch;
+                    ResultSet rsAllPost = _database.excuteCommand(con, queryAllPost);
+                    try{
+                        while (rsAllPost != null && rsAllPost.next()){
+                            int _postid = rsAllPost.getInt("Id");
+                            String _posttitle = rsAllPost.getString("Title");
+                            Bitmap _postimage = _database.getImageInDatabase(con,rsAllPost.getInt("Image"));
+                            int _poststatus = rsAllPost.getInt("Status");
+                            ResultSearch item = new ResultSearch(_postid,_posttitle,_postimage, _poststatus);
+                            _adapter._listResultSearch.add(item);
+                        }
+
+                    }catch (SQLException e){
+                        e.printStackTrace();
+                    }
+                }
+
+                else {
+                    String catalogId = ((Catalog)_spinnerSelectCatalogi.getSelectedItem()).id+"";
+                    String querySearch = "SELECT TOP 5 * FROM [Post] WHERE CatalogId = "+catalogId+" AND Title LIKE N'%"+editText+"%' AND Id>"+_lastIdListSearch;
+                    ResultSet rsSearch = _database.excuteCommand(con, querySearch);
+                    //Get Post
+                    try{
+                        if(rsSearch != null){
+                            while (rsSearch.next()){
+                                int _postid = rsSearch.getInt("Id");
+                                String _posttitle = rsSearch.getString("Title");
+                                Bitmap _postimage = _database.getImageInDatabase(con,rsSearch.getInt("Image"));
+                                int _poststatus = rsSearch.getInt("Status");
+                                ResultSearch item = new ResultSearch(_postid,_posttitle,_postimage,_poststatus);
+                                _adapter._listResultSearch.add(item);
+                            }
+                        }
+                        con.close();
+                    }catch (SQLException e){
+                        e.printStackTrace();
+                    }
+                }
+
+                if(_adapter._listResultSearch.size()>0){
+                    _lastIdListSearch = _adapter._listResultSearch.get(_adapter._listResultSearch.size()-1).postId;
+                }
+
+                _adapter.notifyDataSetChanged();
+
+
+            }
+        });
         return root;
     }
     @Override

@@ -10,7 +10,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <LinearLayout
@@ -57,9 +57,16 @@
                 <ListView
                     android:id="@+id/listviewResultSearch"
                     android:layout_width="match_parent"
-                    android:layout_height="1000dp">
+                    android:layout_height="300dp">
                 </ListView>
             </LinearLayout>
+            <Button
+                android:id="@+id/loadMoreSearh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Xem thêm">
+            </Button>
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

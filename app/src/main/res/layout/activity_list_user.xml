@@ -32,17 +32,93 @@
                 </TextView>
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/linearsearchfragment2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+<!--            <LinearLayout-->
+<!--                android:id="@+id/linearsearchfragment2"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="vertical">-->
 
-                <ListView
-                    android:id="@+id/listUser"
+<!--                <ListView-->
+<!--                    android:id="@+id/listUser"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="500dp">-->
+<!--                </ListView>-->
+<!--            </LinearLayout>-->
+            <LinearLayout
+                android:id="@+id/linearLayout3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="0dp"
+                android:orientation="horizontal"
+                android:padding="20dp">
+
+                <TabHost
+                    android:id="@+id/tabhost"
                     android:layout_width="match_parent"
-                    android:layout_height="500dp">
-                </ListView>
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <TabWidget
+                            android:id="@android:id/tabs"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                        </TabWidget>
+
+                        <FrameLayout
+                            android:id="@android:id/tabcontent"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            //tab1
+
+                            <LinearLayout
+                                android:id="@+id/tab1"
+                                android:layout_width="match_parent"
+                                android:layout_height="550dp"
+                                android:background="#dadada"
+                                android:orientation="vertical">
+
+                                <ListView
+                                    android:id="@+id/lstUserLike"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:columnWidth="100dp"
+                                    android:gravity="center"
+                                    android:horizontalSpacing="10dp"
+                                    android:numColumns="auto_fit"
+                                    android:stretchMode="columnWidth"
+                                    android:verticalSpacing="10dp" />
+
+                            </LinearLayout>
+
+                            //tab2
+
+                            <LinearLayout
+                                android:id="@+id/tab2"
+                                android:layout_width="match_parent"
+                                android:layout_height="550dp"
+                                android:background="#dadada"
+                                android:orientation="vertical">
+
+                                <ListView
+                                    android:id="@+id/lstUserRegister"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:columnWidth="100dp"
+                                    android:gravity="center"
+                                    android:horizontalSpacing="10dp"
+                                    android:numColumns="auto_fit"
+                                    android:stretchMode="columnWidth"
+                                    android:verticalSpacing="10dp" />
+                            </LinearLayout>
+                        </FrameLayout>
+                    </LinearLayout>
+                </TabHost>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
