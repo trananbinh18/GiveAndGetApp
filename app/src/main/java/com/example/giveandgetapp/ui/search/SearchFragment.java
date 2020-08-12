@@ -96,6 +96,7 @@ public class SearchFragment extends Fragment {
                    ResultSet rsAllPost = _database.excuteCommand(con, queryAll);
                    try{
                        while (rsAllPost != null && rsAllPost.next()){
+                           _btnLoadMore.setVisibility(View.VISIBLE);
                            int _postid = rsAllPost.getInt("Id");
                            String _posttitle = rsAllPost.getString("Title");
                            Bitmap _postimage = _database.getImageInDatabase(con,rsAllPost.getInt("Image"));
@@ -103,6 +104,7 @@ public class SearchFragment extends Fragment {
                            ResultSearch item = new ResultSearch(_postid,_posttitle,_postimage, _poststatus);
                            _listResultSearchFragment.add(item);
                        }
+
 
                    }catch (SQLException e){
                        e.printStackTrace();
@@ -112,6 +114,7 @@ public class SearchFragment extends Fragment {
                    ResultSet rsAllPost = _database.excuteCommand(con, queryAllPost);
                    try{
                        while (rsAllPost != null && rsAllPost.next()){
+                           _btnLoadMore.setVisibility(View.VISIBLE);
                            int _postid = rsAllPost.getInt("Id");
                            String _posttitle = rsAllPost.getString("Title");
                            Bitmap _postimage = _database.getImageInDatabase(con,rsAllPost.getInt("Image"));
@@ -131,6 +134,7 @@ public class SearchFragment extends Fragment {
                    try{
                        if(rsSearch != null){
                            while (rsSearch.next()){
+                               _btnLoadMore.setVisibility(View.VISIBLE);
                                int _postid = rsSearch.getInt("Id");
                                String _posttitle = rsSearch.getString("Title");
                                Bitmap _postimage = _database.getImageInDatabase(con,rsSearch.getInt("Image"));
@@ -152,11 +156,29 @@ public class SearchFragment extends Fragment {
 
                _adapter = new ResultSearchAdapter(getActivity() ,root.getContext(), _listResultSearchFragment);
                _listviewSearch.setAdapter(_adapter);
+
+               //Button load more
+               _btnLoadMore.setOnClickListener(eventClickLoadMore());
            }
+
        });
 
-       //Button load more
-        _btnLoadMore.setOnClickListener(new View.OnClickListener() {
+
+
+        return root;
+    }
+    @Override
+    public void onDestroy() {
+        for (ResultSearch resultSearch: _listResultSearchFragment) {
+            if(resultSearch.postImage != null){
+                resultSearch.postImage.recycle();
+            }
+        }
+        super.onDestroy();
+    }
+
+    private View.OnClickListener eventClickLoadMore(){
+        View.OnClickListener listener = (new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Connection con = _database.connectToDatabase();
@@ -228,15 +250,7 @@ public class SearchFragment extends Fragment {
 
             }
         });
-        return root;
-    }
-    @Override
-    public void onDestroy() {
-        for (ResultSearch resultSearch: _listResultSearchFragment) {
-            if(resultSearch.postImage != null){
-                resultSearch.postImage.recycle();
-            }
-        }
-        super.onDestroy();
+
+        return listener;
     }
 }
